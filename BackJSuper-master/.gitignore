@@ -1,0 +1,11 @@
+nbproject/
+api-jsuper/build/
+persistence/build/
+api-jsuper/target/
+persistence/target/
+api-jsuper/nbproject/
+persistence/nbproject/
+boot/target/
+api/target/
+api-jsuper/target/
+api-jsuper/src/main/resources/log4j.properties

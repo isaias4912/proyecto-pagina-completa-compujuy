@@ -1,0 +1,146 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package ar.com.jsuper.domain;
+
+import java.io.Serializable;
+import java.math.BigDecimal;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.FetchType;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.JoinColumn;
+import javax.persistence.ManyToOne;
+import javax.persistence.Table;
+import javax.persistence.Transient;
+
+@Entity
+@Table(name = "pago_cbte")
+public class PagoCbteVen implements Serializable {
+
+	@Id
+	@Column(name = "id")
+	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	private int id;
+	@Column(name = "descripcion")
+	private String descripcion;
+	@Column(name = "monto")
+	private BigDecimal monto;
+	@Column(name = "pago_con")
+	private BigDecimal pagoCon;
+	@Transient
+	private BigDecimal interes;
+	@Transient
+	private BigDecimal montoConInteres;
+	@Column(name = "numero")
+	private String numero;
+	@Column(name = "tarjeta")
+	private String tarjeta;
+	@Column(name = "tipo")
+	private String tipo;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "formapagos_id")
+	private FormaPagos formaPago;
+	@ManyToOne(fetch = FetchType.LAZY)
+	@JoinColumn(name = "cbte_enc_id")
+	private CbteEnc cbteEnc;
+//    @OneToOne(optional = false, fetch = FetchType.LAZY)
+//    @JoinColumn(name = "id", nullable = true)
+//    private MovimientosCtaCte movimientoCtaCte;
+
+	public PagoCbteVen() {
+	}
+
+	public int getId() {
+		return id;
+	}
+
+	public void setId(int id) {
+		this.id = id;
+	}
+
+	public String getDescripcion() {
+		return descripcion;
+	}
+
+	public void setDescripcion(String descripcion) {
+		this.descripcion = descripcion;
+	}
+
+	public BigDecimal getMonto() {
+		return monto;
+	}
+
+	public void setMonto(BigDecimal monto) {
+		this.monto = monto;
+	}
+
+	public String getNumero() {
+		return numero;
+	}
+
+	public void setNumero(String numero) {
+		this.numero = numero;
+	}
+
+	public String getTarjeta() {
+		return tarjeta;
+	}
+
+	public void setTarjeta(String tarjeta) {
+		this.tarjeta = tarjeta;
+	}
+
+	public FormaPagos getFormaPago() {
+		return formaPago;
+	}
+
+	public void setFormaPago(FormaPagos formaPago) {
+		this.formaPago = formaPago;
+	}
+
+	public CbteEnc getCbteEnc() {
+		return cbteEnc;
+	}
+
+	public void setCbteEnc(CbteEnc cbteEnc) {
+		this.cbteEnc = cbteEnc;
+	}
+
+	public String getTipo() {
+		return tipo;
+	}
+
+	public void setTipo(String tipo) {
+		this.tipo = tipo;
+	}
+
+	public BigDecimal getPagoCon() {
+		return pagoCon;
+	}
+
+	public void setPagoCon(BigDecimal pagoCon) {
+		this.pagoCon = pagoCon;
+	}
+
+	public BigDecimal getInteres() {
+		return interes;
+	}
+
+	public void setInteres(BigDecimal interes) {
+		this.interes = interes;
+	}
+
+	public BigDecimal getMontoConInteres() {
+		return montoConInteres;
+	}
+
+	public void setMontoConInteres(BigDecimal montoConInteres) {
+		this.montoConInteres = montoConInteres;
+	}
+
+}

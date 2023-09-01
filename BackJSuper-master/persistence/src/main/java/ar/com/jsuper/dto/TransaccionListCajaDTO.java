@@ -1,0 +1,78 @@
+/*
+ * To change this license header, choose License Headers in Project Properties.
+ * To change this template file, choose Tools | Templates
+ * and open the template in the editor.
+ */
+package ar.com.jsuper.dto;
+
+import com.fasterxml.jackson.annotation.JsonFormat;
+import java.io.Serializable;
+import java.util.Date;
+
+/**
+ *
+ * @author rafael
+ */
+public class TransaccionListCajaDTO implements Serializable {
+
+    private int id;
+    private Integer estado;
+    private String detalle;
+    private CajaListDTO caja;
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    private Date fechaApertura;
+    @JsonFormat(pattern = "dd-MM-yyyy HH:mm:ss")
+    private Date fechaCierre;
+
+    public TransaccionListCajaDTO() {
+    }
+
+    public int getId() {
+        return id;
+    }
+
+    public void setId(int id) {
+        this.id = id;
+    }
+
+    public String getDetalle() {
+        return detalle;
+    }
+
+    public void setDetalle(String detalle) {
+        this.detalle = detalle;
+    }
+
+    public Integer getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Integer estado) {
+        this.estado = estado;
+    }
+
+    public CajaListDTO getCaja() {
+        return caja;
+    }
+
+    public void setCaja(CajaListDTO caja) {
+        this.caja = caja;
+    }
+
+    public Date getFechaApertura() {
+        return fechaApertura;
+    }
+
+    public void setFechaApertura(Date fechaApertura) {
+        this.fechaApertura = fechaApertura;
+    }
+
+    public Date getFechaCierre() {
+        return fechaCierre;
+    }
+
+    public void setFechaCierre(Date fechaCierre) {
+        this.fechaCierre = fechaCierre;
+    }
+
+}

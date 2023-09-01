@@ -1,0 +1,565 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- Created with Jaspersoft Studio version 6.6.0.final using JasperReports Library version 6.6.0  -->
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="detalleProductoReport" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="06cfb51a-5942-4376-acc7-8dc76cbfb51e">
+	<style name="Table_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 1_TH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 1_CH" mode="Opaque" backcolor="#E3E3E3">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 1_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 2_TH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 2_CH" mode="Opaque" backcolor="#E3E3E3">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 2_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 3_TH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 4_TH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 4_CH" mode="Opaque" backcolor="#E3E3E3">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 4_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 5_TH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 5_CH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 5_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 7_TH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 7_CH" mode="Opaque" backcolor="#E3E3E3">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 7_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 6_TH" mode="Opaque" backcolor="#F0F8FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 6_CH" mode="Opaque" backcolor="#BFE1FF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 6_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 8_TH" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 8_CH" mode="Opaque" backcolor="#E3E3E3">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<style name="Table 8_TD" mode="Opaque" backcolor="#FFFFFF">
+		<box>
+			<pen lineWidth="0.5" lineColor="#000000"/>
+			<topPen lineWidth="0.5" lineColor="#000000"/>
+			<leftPen lineWidth="0.5" lineColor="#000000"/>
+			<bottomPen lineWidth="0.5" lineColor="#000000"/>
+			<rightPen lineWidth="0.5" lineColor="#000000"/>
+		</box>
+	</style>
+	<subDataset name="dataSetTableProdComp" uuid="b3a277c5-24f3-46ab-abe3-18eb2eb634dd">
+		<field name="id" class="java.lang.Integer"/>
+		<field name="cantidad" class="java.math.BigDecimal"/>
+		<field name="producto.nombreFinal" class="java.lang.String"/>
+		<field name="producto.codigoEspecial" class="java.lang.String"/>
+	</subDataset>
+	<subDataset name="dataSetTableCodigos" uuid="022bb76e-9543-4f3d-8932-97cde529d281">
+		<field name="codigo" class="java.lang.String"/>
+	</subDataset>
+	<subDataset name="dataSetTableProveedores" uuid="15294c51-a5d1-4b74-8c39-b63dba896bf1">
+		<field name="razonSocial" class="java.lang.String"/>
+		<field name="id" class="java.lang.Integer"/>
+		<field name="cuit" class="java.lang.String"/>
+	</subDataset>
+	<parameter name="encabezado" class="java.awt.image.BufferedImage"/>
+	<parameter name="logo" class="java.awt.image.BufferedImage"/>
+	<parameter name="leyenda" class="java.lang.String"/>
+	<parameter name="producto" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[]]>
+	</queryString>
+	<field name="nombre" class="java.lang.String"/>
+	<field name="codigoBarras" class="java.util.Collection"/>
+	<field name="productoPadre.familia.nombre" class="java.lang.String"/>
+	<field name="unidad.nombre" class="java.lang.String"/>
+	<field name="precioCosto" class="java.math.BigDecimal"/>
+	<field name="precioVenta" class="java.math.BigDecimal"/>
+	<field name="proveedores" class="java.util.Collection"/>
+	<field name="productoPadre.nombre" class="java.lang.String"/>
+	<field name="productosCompuestos" class="java.util.Set"/>
+	<variable name="Nombre del producto" class="java.lang.String">
+		<variableExpression><![CDATA[$F{productoPadre.nombre}+" "+$F{nombre}]]></variableExpression>
+	</variable>
+	<variable name="tipo" class="java.lang.String">
+		<variableExpression><![CDATA[($F{productosCompuestos}.isEmpty())?"Producto Simple":"Producto compuesto"]]></variableExpression>
+	</variable>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="43" splitType="Stretch">
+			<image>
+				<reportElement positionType="FixRelativeToBottom" x="0" y="0" width="60" height="40" uuid="acae7da3-9e00-4831-9193-d9d6bacc4f64"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
+			<image scaleImage="FillFrame">
+				<reportElement positionType="FixRelativeToBottom" x="60" y="0" width="495" height="32" uuid="b37d94e3-412f-4741-9e40-454c3ed0840c"/>
+				<imageExpression><![CDATA[$P{encabezado}]]></imageExpression>
+			</image>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="31" splitType="Stretch">
+			<line>
+				<reportElement x="1" y="2" width="554" height="1" uuid="1c324129-7cf4-4440-9c98-6827e5e8bf47"/>
+			</line>
+			<line>
+				<reportElement x="1" y="30" width="554" height="1" uuid="7ee78404-1896-4174-81f4-7625e1ce9c1f"/>
+			</line>
+			<staticText>
+				<reportElement stretchType="ElementGroupHeight" x="0" y="3" width="179" height="14" uuid="6530eb2c-749e-411f-b9ca-74c42cba1118"/>
+				<textElement>
+					<font size="10" isBold="true" isUnderline="false" isStrikeThrough="false"/>
+				</textElement>
+				<text><![CDATA[Detalle de Producto]]></text>
+			</staticText>
+			<textField pattern="MMMMM dd, yyyy">
+				<reportElement x="450" y="3" width="100" height="13" uuid="bbd9f16f-5a2e-4b4a-a485-68c4b8f4c9ce"/>
+				<textFieldExpression><![CDATA[new SimpleDateFormat("dd/MM/yyyy HH:mm").format(new Date())]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="17" width="550" height="12" uuid="a4ea77a6-b8e1-4f27-a9a2-470a6f1c242b"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+			</textField>
+		</band>
+	</pageHeader>
+	<detail>
+		<band height="57" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="2" width="44" height="12" uuid="9b0305ad-0125-4e4e-a30f-ff30208af398"/>
+				<text><![CDATA[Nombre:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="273" y="2" width="28" height="12" uuid="018380e0-66a2-4e21-b208-31d53db95442"/>
+				<text><![CDATA[Tipo:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="14" width="44" height="12" uuid="67208490-c140-43a5-b11b-fb39ed4bb52e"/>
+				<text><![CDATA[Familia:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="26" width="44" height="12" uuid="980ab917-9e95-45d6-bc02-2b320daeddd1"/>
+				<text><![CDATA[Unidad:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="38" width="86" height="12" uuid="d5729ab5-61c9-46b4-abaf-725573ef232b"/>
+				<text><![CDATA[Precio de costo:]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="157" y="38" width="83" height="12" uuid="a5f956af-3a47-48b7-809d-336349264488"/>
+				<text><![CDATA[Precio de Venta:]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="45" y="26" width="112" height="12" uuid="604b9c1b-7d0f-40e7-9df7-ad988a7596b6"/>
+				<textFieldExpression><![CDATA[$F{unidad.nombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="240" y="38" width="100" height="12" uuid="71a37dc5-72c0-4f2c-968b-beea98854ad8"/>
+				<textFieldExpression><![CDATA[$F{precioVenta}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="86" y="38" width="71" height="12" uuid="2c77661e-26d4-4a28-8b4f-beb707ab7547"/>
+				<textFieldExpression><![CDATA[$F{precioCosto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="45" y="14" width="168" height="12" uuid="40bf8d62-de69-4868-8e18-ff4659efa85b"/>
+				<textFieldExpression><![CDATA[$F{productoPadre.familia.nombre}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="45" y="2" width="212" height="12" uuid="0bac7d30-cffb-42db-a9cf-0797aeff6850"/>
+				<textFieldExpression><![CDATA[$V{Nombre del producto}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="301" y="2" width="121" height="12" uuid="f5a9733c-457c-49b4-bb74-3b9bf89e782a"/>
+				<textFieldExpression><![CDATA[$V{tipo}]]></textFieldExpression>
+			</textField>
+		</band>
+		<band height="60">
+			<printWhenExpression><![CDATA[(!Objects.isNull($F{codigoBarras}) &&  !$F{codigoBarras}.isEmpty()) ||
+(!Objects.isNull($F{proveedores}) &&  !$F{proveedores}.isEmpty())]]></printWhenExpression>
+			<componentElement>
+				<reportElement key="table" positionType="Float" stretchType="RelativeToTallestObject" x="4" y="9" width="144" height="50" isPrintWhenDetailOverflows="true" uuid="d6ee6d3c-0cae-4ee0-85c3-ce439b5e236e">
+					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 1_TH"/>
+					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 1_CH"/>
+					<property name="com.jaspersoft.studio.table.style.detail" value="Table 1_TD"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="dataSetTableCodigos" uuid="4edef4cd-d866-45ac-a9c3-d09e5a670da1">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{codigoBarras})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:column width="144" uuid="c10327dc-bfdf-4990-bd46-ce344e01c0c5">
+						<jr:tableHeader style="Table 1_TH" height="18" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="144" height="18" uuid="22a7fa3f-68b7-4907-9972-c79332f2e23f"/>
+								<textElement>
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Códigos de barra]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:columnHeader style="Table 1_CH" height="15" rowSpan="1">
+							<staticText>
+								<reportElement mode="Opaque" x="0" y="0" width="144" height="15" backcolor="#E3E3E3" uuid="1a749fd2-9fbc-44a1-885c-d7b81a974233"/>
+								<text><![CDATA[Código]]></text>
+							</staticText>
+						</jr:columnHeader>
+						<jr:detailCell style="Table 1_TD" height="15" rowSpan="1">
+							<textField>
+								<reportElement x="0" y="0" width="144" height="15" backcolor="#FF0C08" uuid="79d22a17-395f-4364-949a-8387b51316d2"/>
+								<textFieldExpression><![CDATA[$F{codigo}]]></textFieldExpression>
+							</textField>
+						</jr:detailCell>
+					</jr:column>
+				</jr:table>
+			</componentElement>
+			<componentElement>
+				<reportElement key="table" x="150" y="9" width="359" height="50" uuid="dd515600-9a9f-4725-8738-ad029196b5ed">
+					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 7_TH"/>
+					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 7_CH"/>
+					<property name="com.jaspersoft.studio.table.style.detail" value="Table 7_TD"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="dataSetTableProveedores" uuid="e86f72c4-0b3a-4905-8a18-ee0c472f0469">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{proveedores})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:columnGroup width="359" uuid="d76b5b2e-3aee-4bfd-b131-216c13664f5f">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Columns [3]"/>
+						<jr:tableHeader style="Table 7_TH" height="18" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="359" height="18" uuid="61a66c82-d63e-4ea0-8440-3e983eebc09c"/>
+								<textElement>
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Proveedores]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:column width="102" uuid="8932bad7-d891-4fbd-a3c2-0dc82e6e9870">
+							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
+							<jr:columnHeader style="Table 7_CH" height="15" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="102" height="15" uuid="b30bc735-374c-4724-ab82-8cd3b81df7a6"/>
+									<text><![CDATA[CUIT/CUIL]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="Table 7_TD" height="15" rowSpan="1">
+								<textField>
+									<reportElement x="0" y="0" width="102" height="15" uuid="179661ee-0115-4ee4-9f90-bb8eb27309f2"/>
+									<textFieldExpression><![CDATA[$F{cuit}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="167" uuid="d3c8193a-f7d7-4c74-a567-2a31732261f6">
+							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
+							<jr:columnHeader style="Table 7_CH" height="15" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="167" height="15" uuid="5d204d70-7e10-4b94-86e7-bfe82310bcd1"/>
+									<text><![CDATA[Razón Social]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="Table 7_TD" height="15" rowSpan="1">
+								<textField>
+									<reportElement x="0" y="0" width="167" height="15" uuid="5b55708c-d7cb-401a-9c99-5b668c7d8ef2"/>
+									<textFieldExpression><![CDATA[$F{razonSocial}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="90" uuid="dc86fde2-70e9-49e8-ad78-3ff2fc314213">
+							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
+							<jr:columnHeader style="Table 7_CH" height="15" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="90" height="15" uuid="caa9f92b-992a-4600-adc0-b699d6967e32"/>
+									<text><![CDATA[Código]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="Table 7_TD" height="15" rowSpan="1">
+								<textField>
+									<reportElement x="0" y="0" width="90" height="15" uuid="b0281b10-954d-48a0-b567-038f22ad0a1c"/>
+									<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+					</jr:columnGroup>
+				</jr:table>
+			</componentElement>
+		</band>
+		<band height="51">
+			<componentElement>
+				<reportElement x="5" y="3" width="504" height="47" uuid="6559a3ef-fce2-480b-84ba-892ddc43385f">
+					<property name="com.jaspersoft.studio.layout" value="com.jaspersoft.studio.editor.layout.VerticalRowLayout"/>
+					<property name="com.jaspersoft.studio.table.style.table_header" value="Table 8_TH"/>
+					<property name="com.jaspersoft.studio.table.style.column_header" value="Table 8_CH"/>
+					<property name="com.jaspersoft.studio.table.style.detail" value="Table 8_TD"/>
+				</reportElement>
+				<jr:table xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd">
+					<datasetRun subDataset="dataSetTableProdComp" uuid="87c766fd-62d4-4410-b94d-0995cd49891b">
+						<dataSourceExpression><![CDATA[new net.sf.jasperreports.engine.data.JRBeanCollectionDataSource($F{productosCompuestos})]]></dataSourceExpression>
+					</datasetRun>
+					<jr:columnGroup width="504" uuid="fe91ba24-e778-4ec6-98bc-84f9933f4a6b">
+						<property name="com.jaspersoft.studio.components.table.model.column.name" value="Columns [4]"/>
+						<jr:tableHeader style="Table 8_TH" height="18" rowSpan="1">
+							<staticText>
+								<reportElement x="0" y="0" width="504" height="18" uuid="393fc904-5696-45fc-a454-68c6a41d12ec"/>
+								<textElement>
+									<font isBold="true"/>
+								</textElement>
+								<text><![CDATA[Productos componentes]]></text>
+							</staticText>
+						</jr:tableHeader>
+						<jr:column width="58" uuid="208d958f-cbf4-4def-b895-98b6b91354bc">
+							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column1"/>
+							<jr:columnHeader style="Table 8_CH" height="15" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="58" height="15" uuid="10353260-c596-4aee-af4a-e3a9553b2f95"/>
+									<text><![CDATA[Cód./Id]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="Table 8_TD" height="15">
+								<textField>
+									<reportElement x="0" y="0" width="58" height="15" uuid="e9259ae1-e7f0-49b8-8414-38a2d62c9167"/>
+									<textFieldExpression><![CDATA[$F{id}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="116" uuid="fdacbc0b-a195-46c2-bd71-e3152b45ade2">
+							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column2"/>
+							<jr:columnHeader style="Table 8_CH" height="15">
+								<staticText>
+									<reportElement x="0" y="0" width="116" height="15" uuid="f2c28f90-ba87-4cee-9723-53ac9d3332fd"/>
+									<text><![CDATA[Cód. especial]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="Table 8_TD" height="15">
+								<textField>
+									<reportElement x="0" y="0" width="116" height="15" uuid="b3ad4739-4289-4948-9205-be2e38b7ee16"/>
+									<textFieldExpression><![CDATA[$F{producto.codigoEspecial}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="115" uuid="2043ef94-4479-4bf7-b814-e1b00ffc3da9">
+							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column3"/>
+							<jr:columnHeader style="Table 8_CH" height="15" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="115" height="15" uuid="3ddfc9df-724d-4834-821b-90ff50068348"/>
+									<text><![CDATA[Cantidad]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="Table 8_TD" height="15">
+								<textField>
+									<reportElement x="0" y="0" width="115" height="15" uuid="c35a1013-58c2-4b17-b6dd-370023d0630e"/>
+									<textFieldExpression><![CDATA[$F{cantidad}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+						<jr:column width="215" uuid="e475428c-be38-487e-98dc-9c50e82f933e">
+							<property name="com.jaspersoft.studio.components.table.model.column.name" value="Column4"/>
+							<jr:columnHeader style="Table 8_CH" height="15" rowSpan="1">
+								<staticText>
+									<reportElement x="0" y="0" width="215" height="15" uuid="e64846dd-5d4d-45ff-a911-5c71fec38fd2"/>
+									<text><![CDATA[Nombre/Descr.]]></text>
+								</staticText>
+							</jr:columnHeader>
+							<jr:detailCell style="Table 8_TD" height="15">
+								<textField>
+									<reportElement x="0" y="0" width="215" height="15" uuid="2772a1c1-f862-426e-a4cb-861771fb24d9"/>
+									<textFieldExpression><![CDATA[$F{producto.nombreFinal}]]></textFieldExpression>
+								</textField>
+							</jr:detailCell>
+						</jr:column>
+					</jr:columnGroup>
+				</jr:table>
+			</componentElement>
+		</band>
+	</detail>
+	<pageFooter>
+		<band height="12" splitType="Stretch">
+			<textField>
+				<reportElement x="520" y="1" width="35" height="10" uuid="b2f16d57-62cf-4dc5-8c91-d08166321293"/>
+				<textElement>
+					<font size="8"/>
+				</textElement>
+				<textFieldExpression><![CDATA["Pag." + $V{PAGE_NUMBER}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+</jasperReport>

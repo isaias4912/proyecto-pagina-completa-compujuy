@@ -1,0 +1,89 @@
+<?xml version='1.0' encoding='UTF-8' ?>
+<beans xmlns="http://www.springframework.org/schema/beans"
+       xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns:p="http://www.springframework.org/schema/p"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop" xmlns:mvc="http://www.springframework.org/schema/mvc"
+       xmlns:tx="http://www.springframework.org/schema/tx"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+       http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context.xsd
+       http://www.springframework.org/schema/mvc http://www.springframework.org/schema/mvc/spring-mvc-4.2.xsd
+       http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+       http://www.springframework.org/schema/tx http://www.springframework.org/schema/tx/spring-tx-4.1.xsd">
+
+    <!-- <bean -->
+    <!-- class="org.springframework.web.servlet.mvc.support.ControllerClassNameHandlerMapping" 
+    /> -->
+    <!-- <bean id="urlMapping" -->
+    <!-- class="org.springframework.web.servlet.handler.SimpleUrlHandlerMapping"> -->
+    <!-- <property name="mappings"> -->
+    <!-- <props> -->
+    <!-- <prop key="index.htm">indexController</prop> -->
+    <!-- </props> -->
+    <!-- </property> -->
+    <!-- </bean> -->
+
+    <!-- <bean id="viewResolver" -->
+    <!-- class="org.springframework.web.servlet.view.InternalResourceViewResolver" -->
+    <!-- p:prefix="/WEB-INF/jsp/" p:suffix=".jsp" /> -->
+
+    <!-- <bean name="indexController" -->
+    <!-- class="org.springframework.web.servlet.mvc.ParameterizableViewController" -->
+    <!-- p:viewName="index" /> -->
+    <tx:annotation-driven />
+    <context:annotation-config />
+    <context:component-scan base-package="ar.com.jsuper" />
+    <context:property-placeholder location="classpath:config.properties" />
+     
+    <aop:aspectj-autoproxy />
+
+
+    <bean
+        class="org.springframework.web.servlet.view.ContentNegotiatingViewResolver">
+        <property name="viewResolvers">
+            <list>
+                <bean
+                    class="org.springframework.web.servlet.view.InternalResourceViewResolver">
+                    <property name="prefix" value="/WEB-INF/views/" />
+                    <property name="suffix" value=".jsp" />
+                </bean>
+            </list>
+        </property>
+        <property name="defaultViews">
+            <list>
+                <bean
+                    class="org.springframework.web.servlet.view.json.MappingJackson2JsonView" />
+            </list>
+        </property>
+    </bean>
+    <mvc:interceptors>
+        <mvc:interceptor>
+            <mvc:mapping path="/public/**" />
+            <bean class="ar.com.jsuper.security.TenantInterceptor"></bean>
+        </mvc:interceptor>
+    </mvc:interceptors>
+    <mvc:annotation-driven>
+        <mvc:message-converters>
+            <bean
+                class="org.springframework.http.converter.json.MappingJackson2HttpMessageConverter">
+                <property name="objectMapper">
+                    <bean class="ar.com.jsuper.api.utils.HibernateAwareObjectMapper" />
+                </property>
+            </bean>
+        </mvc:message-converters>
+    </mvc:annotation-driven>
+    <bean id="jsonTransformer" class="ar.com.jsuper.api.utils.JsonTransformerImplJackson" />
+    <bean id="multipartResolver"
+          class="org.springframework.web.multipart.commons.CommonsMultipartResolver" />
+
+    <mvc:cors>
+        <mvc:mapping path="/**" />
+    </mvc:cors>
+    <mvc:resources mapping="/images/**" location="/images/" />
+    <!--    <mvc:resources mapping="/images-products/**" location="file:/home/rafa22/Imágenes/"/> -->
+    <mvc:resources mapping="/images-products/**" location="file:${pathImagenesProductos}" /> 
+    <mvc:resources mapping="/images-app/**" location="file:${pathImagenesApp}" /> 
+    
+    <!--aspectos-->
+    <bean id="loggingAspect" class="ar.com.jsuper.aspect.LoggingAspect" />
+
+</beans>

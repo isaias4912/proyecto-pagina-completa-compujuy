@@ -1,0 +1,20 @@
+<div style="text-align: center;">
+    <h2>Recupera tu contraseña en Newstock</h2>
+    <a href="https://newstock.compujuy.com.ar" >
+        <img src="https://i.ibb.co/z7rQjh4/logo-Newstock2.png" alt="logo-Newstock2" width="250" height="60" border="0" />
+    </a>
+</div>
+<p>Hola <span th:text="${nombre}"></span></p>
+<p>Para recuperar tu contraseña hace click en el siguiente enlace:</p>
+<p><a th:href="@{https://app.newstock.compujuy.com.ar/#/auth/recuperar-password/} + ${token}">Recuperar contraseña</a></p>
+<br>
+<p>Si no funciona, copiá la siguiente URL en la barra de direcciones de tu navegador:</p>
+<p><a th:href="@{https://app.newstock.compujuy.com.ar/#/auth/recuperar-password/} + ${token}">
+        <span th:text="@{https://app.newstock.compujuy.com.ar/#/auth/recuperar-password/} + ${token}"></span>
+    </a>
+</p>
+<br>
+<p>Si no solicitaste cambio de contraseña, ignorá este mensaje.</p>
+<br>
+<br>
+<div th:replace="fragments :: signature"></div>
