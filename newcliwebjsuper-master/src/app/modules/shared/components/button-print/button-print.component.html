@@ -1,0 +1,7 @@
+<button [disabled]="!(dataCount?.getSize()>0)" (click)="print()" class="btn-sm btn-transition btn btn-outline-secondary">
+  <div *ngIf="typePrint=='pdf'"><i class="fa fa-file-pdf-o red"></i>&nbsp;PDF</div>
+  <div *ngIf="typePrint=='xls'"><i class="fa fa-file-excel-o green"></i>&nbsp;XLS</div>
+  <div *ngIf="typePrint=='doc'"><i class="fa fa fa-file-word-o blue"></i>&nbsp;DOC</div>
+  <div *ngIf="typePrint=='csv'"><i class="fa fa-file-archive-o green-strong"></i>&nbsp;CSV</div>
+  <div *ngIf="typePrint=='html'"><i class="fa fa-file-text yellow"></i>&nbsp;HTML</div>
+</button>

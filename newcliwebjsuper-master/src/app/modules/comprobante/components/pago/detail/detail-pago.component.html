@@ -1,0 +1,117 @@
+<div *ngIf="pagos$ | async as pagos; else loading;">
+    <ng-container *ngIf="pagos.length; else noItems">
+        <table *ngIf="pagos.length && pagos.length > 0" class="table table-nano table-striped">
+            <thead>
+                <tr>
+                    <th class="text-center" style="width: 200px;">Tipo</th>
+                    <th class="text-center">Detalle del pago</th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngFor="let item of pagos; let $index = index;">
+                    <tr>
+                        <td>
+                            <div class="form-row">
+                                <div class="col-md-12">
+                                    <div class="position-relative form-group margin-bottom-0">
+                                        <label class="label-table-sm" for="selTipoPago{{$index}}">Tipo</label>
+                                        <span class="d-block">{{item.formaPago.descripcion}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                        <td>
+                            <!-- efectivo -->
+                            <div *ngIf="item.formaPago.descripcion=='EFECTIVO'" class="form-row">
+                                <div class="col-md-2">
+                                    <div class="position-relative form-group margin-bottom-0">
+                                        <label for="monto{{$index}}" class="label-table-sm">Monto</label>
+                                        <span class="d-block">{{item.monto}}</span>
+                                    </div>
+                                </div>
+                                <ng-container *ngIf="item.asociadaId">
+                                    <div class="col-md-5">
+                                        <div class="position-relative form-group margin-bottom-0">
+                                            <label for="asociadaId{{$index}}" class="label-table-sm">Asociación</label>
+                                            <span class="d-block">{{item.asociadaId}}</span>
+                                        </div>
+                                    </div>
+                                </ng-container>
+                                <div [ngClass]="{'col-md-10':!item.asociadaId, 'col-md-5':item.asociadaId }">
+                                    <div class="position-relative form-group">
+                                        <label for="exampleState" class="label-table-sm">Descripción</label>
+                                        <span class="d-block">{{item.descripcion}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- tarjeta credito -->
+                            <div *ngIf="item.formaPago.descripcion=='TARJETA DE CREDITO'" class="form-row">
+                                <div class="col-md-2">
+                                    <div class="position-relative form-group margin-bottom-0">
+                                        <label for="monto{{$index}}" class="label-table-sm">Monto</label>
+                                        <span class="d-block">{{item.monto}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="position-relative form-group margin-bottom-0">
+                                        <label for="tarjetaCred{{$index}}" class="label-table-sm">Tarjeta</label>
+                                        <span class="d-block">{{item.tarjeta}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="position-relative form-group margin-bottom-0">
+                                        <label for="numero{{$index}}" class="label-table-sm">Número de trans.</label>
+                                        <span class="d-block">{{item.numero}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="position-relative form-group margin-bottom-0">
+                                        <label for="exampleState" class="label-table-sm">Descripción</label>
+                                        <span class="d-block">{{item.descripcion}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- tarjeta debito -->
+                            <div *ngIf="item.formaPago.descripcion=='TARJETA DE DEBITO'" class="form-row">
+                                <div class="col-md-2">
+                                    <div class="position-relative form-group margin-bottom-0">
+                                        <label for="monto{{$index}}" class="label-table-sm">Monto</label>
+                                        <span class="d-block">{{item.monto}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="position-relative form-group margin-bottom-0">
+                                        <label for="tarjetaCred{{$index}}" class="label-table-sm">Tarjeta</label>
+                                        <span class="d-block">{{item.tarjeta}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-3">
+                                    <div class="position-relative form-group margin-bottom-0">
+                                        <label for="numero{{$index}}" class="label-table-sm">Número de trans.</label>
+                                        <span class="d-block">{{item.numero}}</span>
+                                    </div>
+                                </div>
+                                <div class="col-md-4">
+                                    <div class="position-relative form-group margin-bottom-0">
+                                        <label for="exampleState" class="label-table-sm">Descripción</label>
+                                        <span class="d-block">{{item.descripcion}}</span>
+                                    </div>
+                                </div>
+                            </div>
+                        </td>
+
+                    </tr>
+                </ng-container>
+            </tbody>
+        </table>
+    </ng-container>
+    <ng-template #noItems>
+        <div class="form-group row alert alert-warning">
+            Sin datos
+        </div>
+    </ng-template>
+</div>
+<ng-template #loading>
+    <app-loading></app-loading>
+</ng-template>

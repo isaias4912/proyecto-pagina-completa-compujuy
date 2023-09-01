@@ -1,0 +1,158 @@
+<form id="formApp" [formGroup]="formApp" class="form-group-min">
+    <app-panel [idCollapse]="'panelAPP'" [collapse]="false" [title]="'App/Empresa/Negocio'">
+        <div class="row form-group">
+            <label class="col-form-label col-md-2" for="logo">Logo</label>
+            <div class="col-md-1">
+                <image-preview *ngIf="imagen" [path]="pathService.getUrl('/images/app/')" [image]="imagen" [text]="false"
+                    [tags]="false" [width]="50" [height]="50">
+                </image-preview>
+            </div>
+            <div class="col-md-2">
+                <image-upload [path]="'app/upload/image'" (loadImage)="loadImage($event)" [dataImage]="dataImage"
+                    [target]="'addImageApp'"></image-upload>&nbsp;
+            </div>
+        </div>
+        <div class="row form-group">
+            <label class="col-form-label col-md-2" for="txtNombreNegEmp">Nombre</label>
+            <div class="col-md-5">
+                <input id="txtNombreNegEmp" name="txtNombreNegEmp" class="form-control form-control-sm" type="text"
+                    formControlName="nombre" enter="txtDescripcion" required minlength="4" maxlength="25"
+                    focus-me="true" />
+                <div *ngIf="dataForm.submitted && formApp.invalid">
+                    <div *ngIf="f.nombre.errors?.required" class="text-danger">
+                        Campo obligatorio
+                    </div>
+                    <div *ngIf="f.nombre.errors?.maxlength" class="text-danger">
+                        Campo muy largo
+                    </div>
+                    <div *ngIf="f.nombre.errors?.minlength" class="text-danger">
+                        Campo muy corto
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <label class="col-form-label col-md-2" for="txtDescripcion">Descripción</label>
+            <div class="col-md-8">
+                <input id="txtDescripcion" name="txtDescripcion" class="form-control form-control-sm"
+                    formControlName="descripcion" enter="txtNombreSuc" maxlength="5000" />
+                <div *ngIf="dataForm.submitted && formApp.invalid">
+                    <div *ngIf="f.descripcion.errors?.required" class="text-danger">
+                        Campo obligatorio
+                    </div>
+                </div>
+            </div>
+        </div>
+    </app-panel>
+    <app-panel [idCollapse]="'panelSucPrincipal'" [collapse]="false" [title]="'Sucursal principal'">
+        <div formGroupName="sucursalPrincipal">
+            <div class="row form-group">
+                <label class="col-form-label col-md-2" for="txtNombreSuc">Nombre de la suc.</label>
+                <div class="col-md-5">
+                    <input id="txtNombreSuc" name="txtNombreSuc" class="form-control form-control-sm" type="text"
+                        formControlName="nombre" enter="txtDirSuc" required minlength="4" maxlength="30" />
+                    <div *ngIf="dataForm.submitted && formApp.invalid">
+                        <div *ngIf="fs.nombre.errors?.required" class="text-danger">
+                            Campo obligatorio
+                        </div>
+                        <div *ngIf="fs.nombre.errors?.maxlength" class="text-danger">
+                            Campo muy largo
+                        </div>
+                        <div *ngIf="fs.nombre.errors?.minlength" class="text-danger">
+                            Campo muy corto
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="col-form-label col-md-2" for="txtDirSuc">Dirección</label>
+                <div class="col-md-5">
+                    <input id="txtDirSuc" name="txtDirSuc" class="form-control form-control-sm" type="text"
+                        formControlName="direccion" enter="txtPrefijoTelSuc" minlength="4" maxlength="150" />
+                    <div *ngIf="dataForm.submitted && formApp.invalid">
+                        <div *ngIf="fs.direccion.errors?.required" class="text-danger">
+                            Campo obligatorio
+                        </div>
+                        <div *ngIf="fs.direccion.errors?.maxlength" class="text-danger">
+                            Campo muy largo
+                        </div>
+                        <div *ngIf="fs.direccion.errors?.minlength" class="text-danger">
+                            Campo muy corto
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="col-form-label col-md-2">Tel. Celular</label>
+                <div class="col-md-2" style="padding-right: 2px !important;">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">0</span>
+                        </div>
+                        <input id="txtPrefijoTelSuc" name="txtPrefijoTelSuc" formControlName="prefijoTelCel"
+                            class="form-control form-control-sm" type="number" enter="txtNumeroTelefono" required
+                            [cantDigits]="5" placeholder="Ej:11" />
+                    </div>
+                    <div *ngIf="dataForm.submitted && formApp.invalid">
+                        <div *ngIf="fs.prefijoTelCel.errors?.required" class="text-danger">
+                            Campo obligatorio
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">15</span>
+                        </div>
+                        <input id="txtNumeroTelSuc" name="txtNumeroTelSuc" formControlName="numeroTelCel"
+                            class="form-control form-control-sm border-izq-0" type="text" enter="txtPrefijoTelFijSuc"
+                            required maxlength="15" placeholder="Ej:17897980" />
+                    </div>
+                    <div *ngIf="dataForm.submitted && formApp.invalid">
+                        <div *ngIf="fs.numeroTelCel.errors?.required" class="text-danger">
+                            Campo obligatorio
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="col-form-label col-md-2">Tel. Fijo</label>
+                <div class="col-md-2" style="padding-right: 2px !important;">
+                    <div class="input-group input-group-sm">
+                        <div class="input-group-prepend">
+                            <span class="input-group-text">0</span>
+                        </div>
+                        <input id="txtPrefijoTelFijSuc" name="txtPrefijoTelFijSuc" formControlName="prefijoTelFijo"
+                            class="form-control form-control-sm border-izq-0" type="text" enter="txtNumeroTelFijSuc"
+                            required maxlength="5" placeholder="Ej:11" />
+                    </div>
+                    <div *ngIf="dataForm.submitted && formApp.invalid">
+                        <div *ngIf="fs.prefijoTelFijo.errors?.required" class="text-danger">
+                            Campo obligatorio
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-3">
+                    <div class="input-group">
+                        <input id="txtNumeroTelFijSuc" name="txtNumeroTelFijSuc" formControlName="numeroTelFijo"
+                            class="form-control form-control-sm" type="text" enter="txtDescripcionSuc" required
+                            maxlength="15" placeholder="Ej:17897980" />
+                    </div>
+                    <div *ngIf="dataForm.submitted && formApp.invalid">
+                        <div *ngIf="fs.numeroTelFijo.errors?.required" class="text-danger">
+                            Campo obligatorio
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="col-form-label col-md-2" for="txtDescripcionSuc">Detalle</label>
+                <div class="col-md-8">
+                    <input type="text" id="txtDescripcionSuc" name="txtDescripcionSuc"
+                        class="form-control form-control-sm" formControlName="detalle" enter="btnEditApp"
+                        maxlength="5000" />
+                </div>
+            </div>
+        </div>
+    </app-panel>
+</form>

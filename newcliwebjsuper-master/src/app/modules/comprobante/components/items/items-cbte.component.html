@@ -1,0 +1,263 @@
+<div class="table-responsive">
+    <table class="table table-hover table-striped margin-bottom-5">
+        <thead>
+            <tr>
+                <th style="width: auto !important;" class="label-help">Producto
+                    <i title="Producto que desea facturar, busquelo ingresando la descripción o parte de ella, puede tambien buscarlo presionando en el boton <i class='fa fa-list green-strong'></i>."
+                        class="help-ns fa fa-question-circle"></i>
+                </th>
+                <th style="width: 10% !important;" class="label-help">Cantidad
+                    <i title="Cantidad que desea facturar para el producto seleccionado."
+                        class="help-ns fa fa-question-circle"></i>
+                </th>
+                <th *ngIf="enableIva" style="width: 10% !important;" class="label-help-iva">Precio s/IVA<i
+                        title="Precio sin IVA del producto seleccionado." class="help-ns fa fa-question-circle"></i>
+                </th>
+                <th *ngIf="enableIva" style="width: 10% !important;" class="label-help-iva">IVA<i
+                        title="IVA del producto seleccionado." class="help-ns fa fa-question-circle"></i>
+                </th>
+                <th style="width: 10% !important;" class="label-help">Precio c/IVA<i
+                        title="Precio con IVA del producto seleccionado." class="help-ns fa fa-question-circle"></i>
+                </th>
+                <th style="width: 10% !important;" class="label-help">% Bonif.<i
+                        title="Descuento que se aplica al item." class="help-ns fa fa-question-circle"></i>
+                </th>
+                <th style="width: 10% !important;" class="label-help">Subtotal<i
+                        title="Subtotal del item calculo de acuerdo al precio, IVA, cantidad y descuento."
+                        class="help-ns fa fa-question-circle"></i>
+                </th>
+                <th style="width: 8% !important;"></th>
+                <!-- <th style="min-width: 75px !important;"></th> -->
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngFor="let item of $any(fi).controls; let $index = index;" [formGroup]="item">
+                <tr class="row-cbte-item">
+                    <td class="center">
+                        <input formControlName="index" type="hidden">
+                        <select-prod #selectsProd formControlName="$$producto" [name]="'txtProducto'+$index" [type]="1"
+                            [precios]="1" [nextFocus]="'cantProd'+$index" [index]="$index" [class]="'item-cbte'"
+                            [typeSearch]="typeSearch">
+                        </select-prod>
+                    </td>
+                    <td>
+
+                        <input id="cantProd{{$index}}" name="cantProd{{$index}}" type="number"
+                            formControlName="cantidad" (input)="changeValueCantidad(item)"
+                            class="form-control form-control-sm item-cantidad"
+                            enter="{{enableIva?'precioSIProd'+$index:'precioCIProd'+$index}}" />
+                    </td>
+                    <td *ngIf="enableIva">
+                        <div class="input-group input-group-sm item-precio-si">
+                            <div class="input-group-prepend">
+                                <span class="blue input-group-text fa fa-dollar"></span>
+                            </div>
+                            <input id="precioSIProd{{$index}}" name="precioSIProd{{$index}}" type="number"
+                                formControlName="precioSinIva" (input)="changeValuePriceSinIVA(item)"
+                                class="form-control form-control-sm" enter="{{'cmbIvaProd'+$index}}" />
+                        </div>
+                    </td>
+                    <td *ngIf="enableIva">
+                        <select id="cmbIvaProd{{$index}}" name="cmbIvaProd{{$index}}" formControlName="iva"
+                            (change)="changeValueIVA(item)" class="form-control form-control-sm item-iva"
+                            enter="{{'precioCIProd'+$index}}">
+                            <option *ngFor="let iva of data.ivas" [ngValue]="iva">{{iva.descripcion}}
+                            </option>
+                        </select>
+                    </td>
+                    <td>
+                        <div class="input-group input-group-sm item-precio-ci">
+                            <div class="input-group-prepend">
+                                <span class="blue input-group-text fa fa-dollar"></span>
+                            </div>
+                            <input id="precioCIProd{{$index}}" name="precioCIProd{{$index}}" type="number"
+                                formControlName="precioConIva" (input)="changeValuePriceConIVA(item)"
+                                class="form-control form-control-sm" enter="{{'descuento'+$index}}" />
+                        </div>
+                    </td>
+                    <td>
+                        <div class="input-group input-group-sm item-desc">
+                            <input id="descuento{{$index}}" name="descuento{{$index}}" type="number"
+                                formControlName="porcentajeDescuento" (input)="changeValueDescuento(item)"
+                                class="form-control form-control-sm" enter="{{'subTotalProd'+$index}}" />
+                            <div class="input-group-append">
+                                <span class="blue input-group-text">%</span>
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        <div class="input-group input-group-sm item-subtotal">
+                            <div class="input-group-prepend">
+                                <span class="blue input-group-text fa fa-dollar"></span>
+                            </div>
+                            <input id="subTotalProd{{$index}}" name="subTotalProd{{$index}}" type="number"
+                                formControlName="subtotal" class="form-control form-control-sm"
+                                enter="{{'buttonAdd'+$index}}" />
+                        </div>
+                    </td>
+                    <td class="buttons-small">
+                        <div class="float-right">
+                            <button [hidden]="!($index== (fi.controls.length-1))" id="buttonAdd{{$index}}"
+                                name="buttonAdd{{$index}}" (click)="addItem($index + 1);" type="button"
+                                class="btn-sm btn-transition btn btn-outline-success">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                            <button [hidden]="$index== 0 && ($index== (fi.controls.length-1))"
+                                id="buttonRemoveBarCode{{$index}}" name="buttonRemoveBarCode{{$index}}"
+                                (click)="removeItem(item);" type="button"
+                                class="btn-sm btn-transition btn btn-outline-danger">
+                                <i class="fa fa-remove"></i>
+                            </button>
+                            <!-- <div> -->
+                            <button id="buttonRemoveBarCode{{$index}}" name="buttonRemoveBarCode{{$index}}"
+                                type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                class="btn-sm btn-transition btn btn-outline-primary">
+                                <i class="fa fa-ellipsis-v"></i>
+                            </button>
+                            <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-left">
+                                <ul class="nav flex-column">
+                                    <li *ngIf="!item.controls.$$showInfoAdic.value" class="nav-item">
+                                        <a (click)="showOrHideInfoAdic(item, true)" class="nav-link">
+                                            <span>
+                                                Agregar Detalle
+                                            </span>
+                                            <div class="ml-auto">
+                                                <span class="fa fa-plus-circle"></span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                    <li *ngIf="item.controls.$$showInfoAdic.value" class="nav-item">
+                                        <a (click)="showOrHideInfoAdic(item, false)" class="nav-link">
+                                            <span>
+                                                Quitar Detalle
+                                            </span>
+                                            <div class="ml-auto">
+                                                <span class="fa fa-minus-circle"></span>
+                                            </div>
+                                        </a>
+                                    </li>
+                                </ul>
+                                <!-- </div> -->
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                <tr *ngIf="item.controls.$$showInfoAdic.value">
+                    <td colspan="5" style="margin: 0px !important; padding: 0px !important;">
+                        <textarea rows="2" formControlName="infoProdAdic"
+                            class=" form-control form-control-sm"></textarea>
+                    </td>
+                </tr>
+                <tr *ngIf="dataForm?.submitted && fi.invalid">
+                    <td>
+                        <div class="align-top" *ngIf="dataForm?.submitted && item.controls.producto.errors?.required"
+                            class="text-danger">
+                            Debe ingresar un producto
+                        </div>
+                    </td>
+                    <td>
+                        <div class="align-top" *ngIf="dataForm?.submitted && item.controls.cantidad.errors?.required"
+                            class="text-danger">
+                            Debe ingresar una cantidad
+                        </div>
+                        <div class="align-top" *ngIf="dataForm?.submitted && item.controls.cantidad.errors?.min"
+                            class="text-danger">
+                            Debe ingresar una cantidad mayor a 0
+                        </div>
+                    </td>
+                    <td *ngIf="enableIva">
+                        <div class="align-top"
+                            *ngIf="dataForm?.submitted && item.controls.precioSinIva.errors?.required"
+                            class="text-danger">
+                            Debe ingresar un valor
+                        </div>
+                        <div class="align-top" *ngIf="dataForm?.submitted && item.controls.precioSinIva.errors?.min"
+                            class="text-danger">
+                            Debe ingresar una valor mayor a 0
+                        </div>
+                    </td>
+                    <td *ngIf="enableIva">
+                        <div class="align-top" *ngIf="dataForm?.submitted && item.controls.iva.errors?.required"
+                            class="text-danger">
+                            Debe ingresar el iva
+                        </div>
+                    </td>
+                    <td>
+                        <div class="align-top"
+                            *ngIf="dataForm?.submitted && item.controls.precioConIva.errors?.required"
+                            class="text-danger">
+                            Debe ingresar un valor
+                        </div>
+                        <div class="align-top" *ngIf="dataForm?.submitted && item.controls.precioConIva.errors?.min"
+                            class="text-danger">
+                            Debe ingresar una valor mayor a 0
+                        </div>
+                    </td>
+                    <td></td>
+                    <td>
+                        <div class="align-top" *ngIf="dataForm?.submitted && item.controls.subtotal.errors?.required"
+                            class="text-danger">
+                            Debe existir un subtotal
+                        </div>
+                    </td>
+                </tr>
+            </ng-container>
+        </tbody>
+        <tfoot>
+            <tr [hidden]="dataView.showTributo" >
+            <!-- <tr> -->
+                <td [attr.colspan]="enableIva?5:3">
+                    <tributos [showAddItem]="false" [tributos]="data.tributos" [baseImponible]="dataCbte.baseImponible" #tributos>
+                    </tributos>
+                </td>
+                <td [attr.colspan]="enableIva?4:2"></td>
+            </tr>
+            <tr>
+                <td [attr.colspan]="enableIva?7:5">
+                    <table class="table  table-bordered">
+                        <tr>
+                            <td>
+                                Descuentos $ <b>{{formatDecimal(dataCbte.totalDescuentos)}}</b>
+                            </td>
+                            <td>
+                                Adicionales $ <b>{{formatDecimal(dataCbte.totalAdicionales)}}</b> </td>
+                            <td *ngIf="enableIva">
+                                IVA $ <b>{{formatDecimal(dataCbte.totalIVAs)}}</b> </td>
+                            <td *ngIf="enableIva">
+                                Subtotal (s/IVA) $ <b>{{formatDecimal(dataCbte.totalBaseImp)}}</b>
+                            </td>
+                            <td>
+                                Subtotal (c/IVA) $ <b>{{formatDecimal(dataCbte.subtotal)}}</b>
+                            </td>
+                            <td>
+                                Tributos $ <b>{{formatDecimal(dataCbte.totalTributos)}}</b>
+                            </td>
+                            <td>
+                                <div class="col text-center justify-content-center align-self-center">
+                                    <span>
+                                        TOTAL
+                                    </span>
+                                    <span class="float-right text-24"> $
+                                        <b>{{formatDecimal(dataCbte.total)}}</b>
+                                    </span>
+                                </div>
+                            </td>
+                        </tr>
+                    </table>
+                </td>
+                <td>
+                </td>
+            </tr>
+            <tr *ngIf="dataView.showTributo || dataView.showObservacion" >
+                <td [attr.colspan]="enableIva?5:3" class="text-12">
+                    <a *ngIf="dataView.showTributo" (click)="selectTributo();" id="addTributo" class="hand">Agregar un tributo&nbsp;<i
+                        class="green-strong fa fa-plus"></i></a>&nbsp;&nbsp;
+                    <a *ngIf="dataView.showObservacion" (click)="selectObservacion();" id="addObservacion" class="hand">Agregar una observación&nbsp;<i
+                        class="green-strong fa fa-plus"></i></a>
+                </td>
+                <td [attr.colspan]="enableIva?4:2"></td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+<app-size-detector></app-size-detector>

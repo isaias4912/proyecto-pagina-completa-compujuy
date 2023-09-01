@@ -1,0 +1,229 @@
+<div id="div" class="row">
+    <div class="col-md-12">
+        <app-panel [idCollapse]="'panelFiltro'">
+            <form id="formFilter" class="form-group-min">
+                <div class="row">
+                    <div class="col-lg-11 col-md-11 col-sm-12">
+                        <div class="row form-group">
+                            <label class="col-form-label col-md-2" for="txtFiltroNombre">Nombre/Razón socialr</label>
+                            <div class="col-md-5">
+                                <input type="text" id="txtFiltroNombre" name="txtFiltroNombre"
+                                    class="form-control form-control-sm" [(ngModel)]="filterProveedor.nombre"
+                                    maxlength="30" />
+                            </div>
+                            <label class="col-form-label col-md-2" for="cmbFiltroTipo">Tipo</label>
+                            <div class="col-md-2">
+                                <select id="cmbFiltroTipo" name="cmbFiltroTipo" class="form-control form-control-sm"
+                                    [(ngModel)]="filterProveedor.tipoProveedor">
+                                    <option *ngFor="let opcion of dataOptions.filterTipo" [ngValue]="opcion.value">
+                                        {{opcion.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-form-label col-md-2" for="txtFiltroDNI"
+                                title="Filtro  para personas">DNI</label>
+                            <div class="col-md-2">
+                                <input type="number" id="txtFiltroDNI" name="txtFiltroDNI"
+                                    class="form-control form-control-sm" [(ngModel)]="filterProveedor.dni" minlength="5"
+                                    maxlength="11" digits="true" focus-me="true" />
+                            </div>
+                            <label class="col-form-label col-md-1" for="txtFiltroCUIT"
+                                title="Filtro para empresas">CUIT</label>
+                            <div class="col-md-2">
+                                <input type="number" id="txtFiltroCUIT" name="txtFiltroCUIT"
+                                    class="form-control form-control-sm" [(ngModel)]="filterProveedor.cuit"
+                                    minlength="9" maxlength="12" digits="true" focus-me="true" />
+                            </div>
+                            <label class="col-form-label col-md-2" for="cmbFiltroActivo">Activos</label>
+                            <div class="col-md-2">
+                                <select id="cmbFiltroActivo" name="cmbFiltroActivo" class="form-control form-control-sm"
+                                    [(ngModel)]="filterProveedor.activo">
+                                    <option *ngFor="let opcion of dataOptions.filterActivo" [ngValue]="opcion.value">
+                                        {{opcion.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-1 col-md-1 col-sm-12">
+                        <div class="row form-group">
+                            <div class="btn-group btn-group-sm btn-block" role="group">
+                                <button type="submit" (click)="query()"
+                                    class="btn btn-transition btn btn-outline-light">
+                                    <i class="fa fa-search green-strong"></i>
+                                </button>
+                                <button type="button" (click)="reset()" class="btn-transition btn btn-outline-light">
+                                    <i class="fa fa-trash-o blue"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </app-panel>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6 buttons-small">
+        <button *ngIf="typeView=='LIST'" (click)="enabledOrDisabled(true)" [disabled]="disabledButtonsTable"
+            class="btn-sm btn-transition btn btn-outline-success">
+            <i class="fa fa-check"></i>&nbsp;Activar
+        </button>
+        <button *ngIf="typeView=='LIST'" (click)="enabledOrDisabled(false)" [disabled]="disabledButtonsTable"
+            class="btn-sm btn-transition btn btn-outline-danger">
+            <i class="fa fa-remove"></i>&nbsp;Desactivar
+        </button>
+        <button *ngIf="typeView=='LIST'" routerLink="/proveedores/nuevo"
+            class="btn-sm btn-transition btn btn-outline-primary">
+            <i class="fa fa-plus"></i>&nbsp;Nuevo
+        </button>
+    </div>
+    <div class="col-md-6 float-right">
+        <div class="float-right">
+            <app-resgister [paramPagination]="paramPagination" (registerChanged)="pageChanged()">
+            </app-resgister>
+        </div>
+    </div>
+</div>
+<div *ngIf="proveedores$ | async as proveedores; else loading;">
+    <ng-container *ngIf="proveedores.length; else noItems">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th *ngIf="typeView=='LIST'">
+                                    <div class="pretty p-icon p-curve p-pulse mr-0">
+                                        <input type="checkbox" [(ngModel)]="checkAll"
+                                            (change)="checkAllRow(checkAll, proveedores)" />
+                                        <div class="state p-primary">
+                                            <label></label>
+                                        </div>
+                                    </div>
+                                </th>
+                                <th style="width: 8%;">
+                                    <!-- <app-sort [text]="'DNI'" [order]="'persona.dni'"
+                                        [paramPagination]="paramPagination" (sortChanged)="pageChanged()"></app-sort> -->
+                                    Tipo Doc.
+                                </th>
+                                <th style="width: 12%;">
+                                    <!-- <app-sort [text]="'CUIL'" [order]="'persona.cuil'"
+                                        [paramPagination]="paramPagination" (sortChanged)="pageChanged()"></app-sort>|
+                                    <app-sort [text]="'CUIT'" [order]="'empresa.cuit'"
+                                        [paramPagination]="paramPagination" (sortChanged)="pageChanged()"></app-sort> -->
+                                    <app-sort [text]="'Nro. Doc.'" [order]="'nroDocProveedor'"
+                                        [paramPagination]="paramPagination" (sortChanged)="pageChanged()"></app-sort>
+                                </th>
+                                <!-- <th style="width: 10%;">
+                                </th> -->
+                                <th style="width: 25%;">
+                                    <app-sort [text]="'Apellido'" [order]="'persona.apellido'"
+                                        [paramPagination]="paramPagination" (sortChanged)="pageChanged()"></app-sort>
+                                    <app-sort [text]="'Nombre'" [order]="'persona.nombre'"
+                                        [paramPagination]="paramPagination" (sortChanged)="pageChanged()"></app-sort>|
+                                    <app-sort [text]="'Razón social'" [order]="'empresa.razonSocial'"
+                                        [paramPagination]="paramPagination" (sortChanged)="pageChanged()"></app-sort>
+                                </th>
+                                <th>
+                                    <span>Tipo entidad</span>
+                                </th>
+                                <th>
+                                    <span>Tipo proveedor</span>
+                                </th>
+                                <th style="width: 140px;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let proveedor of proveedores">
+                                <td *ngIf="typeView=='LIST'">
+                                    <div class="pretty p-icon p-curve p-pulse mr-0">
+                                        <input type="checkbox" [(ngModel)]="proveedor.$$activo"
+                                            (change)="checkRow(proveedores)" />
+                                        <div class="state p-primary">
+                                            <label></label>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <!-- <span
+                                        *ngIf="proveedor.entidad.tipo=='PERSONA'">{{proveedor.entidad.persona.dni}}</span>
+                                    <span *ngIf="proveedor.entidad.tipo=='EMPRESA'">-</span> -->
+                                    {{proveedor.tipoDocProveedor}}
+                                </td>
+                                <td>
+                                    <!-- <span
+                                        *ngIf="proveedor.entidad.tipo=='PERSONA'">{{proveedor.entidad.persona.cuil}}</span>
+                                    <span
+                                        *ngIf="proveedor.entidad.tipo=='EMPRESA'">{{proveedor.entidad.empresa.cuit}}</span> -->
+                                    {{proveedor.nroDocProveedor}}
+                                </td>
+                                <td>
+                                    <span
+                                        *ngIf="proveedor.entidad.tipo=='PERSONA'">{{proveedor.entidad.persona.apellido}}
+                                        {{proveedor.entidad.persona.nombre}}</span>
+                                    <span
+                                        *ngIf="proveedor.entidad.tipo=='EMPRESA'">{{proveedor.entidad.empresa.razonSocial}}</span>
+                                </td>
+                                <td>
+                                    {{proveedor.entidad.tipo}}
+                                </td>
+                                <td>
+                                    {{proveedor.tipoProveedor}}
+                                </td>
+                                <td class="buttons-small">
+                                    <div class="float-right">
+                                        <button *ngIf="typeView=='LIST'"
+                                            [routerLink]="['/proveedores/modificar', encrypt(proveedor.id)]"
+                                            title="Modificar el proveedor {{getEntidadString(proveedor.entidad)}}"
+                                            class="btn-sm btn-transition btn btn-outline-primary">
+                                            <i class="fa fa-edit"></i>
+                                        </button>
+                                        <button *ngIf="typeView=='SELECT_PROV'" (click)="select(proveedor)"
+                                            title="Seleccionar el proveedor {{getEntidadString(proveedor.entidad) }}"
+                                            class="btn-sm btn-transition btn btn-outline-primary">
+                                            <i class="fa fa-hand-o-up"></i>
+                                        </button>
+                                        <button (click)="detail(proveedor)"
+                                            title="Ver detalle del proveedor {{getEntidadString(proveedor.entidad) }}"
+                                            class="btn-sm btn-transition btn btn-outline-info">
+                                            <i class="fa fa-eye"></i>
+                                        </button>
+                                        <button *ngIf="typeView=='LIST'" (click)="remove(proveedor)"
+                                            title="Eliminar el proveedor {{getEntidadString(proveedor.entidad) }}"
+                                            class="btn-sm btn-transition btn btn-outline-danger">
+                                            <i class="fa fa-remove"></i>
+                                        </button>
+                                        <button *ngIf="typeView=='LIST' && proveedor.cuentaCorriente"
+                                            [routerLink]="['/proveedores/cta-cte/movimientos']"
+                                            [queryParams]="{proveedor: encrypt(proveedor.id), estado:0}"
+                                            title="Ver cuenta corriente con el proveedor {{getEntidadString(proveedor.entidad)}}"
+                                            class="btn-sm btn-transition btn btn-outline-secondary">
+                                            <i class="fa fa-money"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="container-fluid">
+                <ngb-pagination [(page)]="paramPagination.page" [pageSize]="paramPagination.pageSize"
+                    [collectionSize]="paramPagination.totalItems" (pageChange)="pageChanged()"
+                    [maxSize]="5" [boundaryLinks]="true" class="d-flex justify-content-center">
+                </ngb-pagination>
+            </div>
+        </div>
+    </ng-container>
+    <ng-template #noItems>
+        <div class="form-group row alert alert-warning">
+            Sin datos
+        </div>
+    </ng-template>
+</div>
+<ng-template #loading>
+    <app-loading></app-loading>
+</ng-template>

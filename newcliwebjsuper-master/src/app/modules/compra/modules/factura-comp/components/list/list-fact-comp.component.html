@@ -1,0 +1,226 @@
+<div id="div" class="row">
+    <div class="col-md-12">
+        <app-panel [idCollapse]="'panelFiltro'">
+            <form id="formFilter" class="form-group-min">
+                <div class="row">
+                    <div class="col-lg-11 col-md-11 col-sm-12">
+                        <div class="row form-group margin-bottom-0">
+                            <label class="col-form-label col-md-1" for="txtProveedor">Proveedor</label>
+                            <div class="col-md-3">
+                                <select-prov [(ngModel)]="filterFacturas.proveedor" [name]="'selProveedor'">
+                                </select-prov>
+                            </div>
+                            <label class="col-form-label col-md-1" for="fechaDesdeFilter">Desde</label>
+                            <div class="col-md-3">
+                                <app-date [(ngModel)]="filterFacturas.fechaInicial" [name]="'fechaDesdeFilter'">
+                                </app-date>
+                            </div>
+                            <label class="col-form-label col-md-1" for="fechaHastaFilter">Hasta</label>
+                            <div class="col-md-3">
+                                <app-date [(ngModel)]="filterFacturas.fechaFinal" [name]="'fechaHastaFilter'">
+                                </app-date>
+                            </div>
+                        </div>
+                        <div class="row form-group margin-bottom-0">
+                            <label class="col-form-label col-md-1" for="fechaDesdeFilter">Monto Desde</label>
+                            <div class="col-md-3">
+                                <input [(ngModel)]="filterFacturas.totalMinimo" type="number" step=".01"
+                                    class="form-control form-control-sm" id="montoDesdeFilter"
+                                    name="montoDesdeFilter" />
+                            </div>
+                            <label class="col-form-label col-md-1" for="montoHastaFilter">Monto Hasta</label>
+                            <div class="col-md-3">
+                                <input [(ngModel)]="filterFacturas.totalMaximo" type="number" step=".01"
+                                    class="form-control form-control-sm" id="montoHastaFilter"
+                                    name="montoHastaFilter" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-1 col-md-1 col-sm-12">
+                        <div class="row form-group">
+                            <div class="btn-group btn-group-sm btn-block" role="group">
+                                <button type="submit" (click)="query()"
+                                    class="btn btn-transition btn btn-outline-light">
+                                    <i class="fa fa-search green-strong"></i>
+                                </button>
+                                <button type="button" (click)="reset()" class="btn-transition btn btn-outline-light">
+                                    <i class="fa fa-trash-o blue"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </app-panel>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6 buttons-small">
+        <button *ngIf="typeView=='LIST'" routerLink="/compras/facturas/nueva-compra"
+            class="btn-sm btn-transition btn btn-outline-primary">
+            <i class="fa fa-plus"></i>&nbsp;Nueva
+        </button>
+    </div>
+    <div class="col-md-6 float-right">
+        <div class="float-right">
+            <app-resgister [paramPagination]="paramPagination" (registerChanged)="pageChanged()">
+            </app-resgister>
+        </div>
+    </div>
+</div>
+<div *ngIf="facturas$ | async as facturas; else loading;">
+    <ng-container *ngIf="facturas.length; else noItems">
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-hover table-striped ">
+                    <thead>
+                        <tr>
+                            <th>
+                                <app-sort [text]="'Id/Cód.'" [order]="'id'" [paramPagination]="paramPagination"
+                                    (sortChanged)="pageChanged()"></app-sort>
+                            </th>
+                            <th>
+                                <app-sort [text]="'Fecha cbte.'" [order]="'fechaCbte'" [paramPagination]="paramPagination"
+                                    (sortChanged)="pageChanged()"></app-sort>
+                            </th>
+                            <th>
+                                <app-sort [text]="'Fecha carga'" [order]="'fechaCarga'" [paramPagination]="paramPagination"
+                                    (sortChanged)="pageChanged()"></app-sort>
+                            </th>
+                            <th>
+                                <span>Proveedor</span>
+                            </th>
+                            <th>
+                                <span>Número</span>
+                            </th>
+                          
+                            <th>
+                                <app-sort [text]="'Total'" [order]="'total'" [paramPagination]="paramPagination"
+                                    (sortChanged)="pageChanged()"></app-sort>
+                            </th>
+                            <th>
+                                <span>Saldo</span>
+                            </th>
+                            <th>
+                                <app-sort [text]="'Stock'" [order]="'cargada'" [paramPagination]="paramPagination"
+                                    (sortChanged)="pageChanged()"></app-sort>
+                            </th>
+                            <th>
+                                <app-sort [text]="'Pagada'" [order]="'pagada'" [paramPagination]="paramPagination"
+                                    (sortChanged)="pageChanged()"></app-sort>
+                            </th>
+                            <th></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let factura of facturas">
+                            <td>
+                                {{factura.id}}
+                            </td>
+                            <td>
+                                {{factura.fechaCbte}}
+                            </td>
+                            <td>
+                                {{factura.fechaCarga}}
+                            </td>
+                            <td>
+                                {{factura.proveedor.entidad.descripcion}}
+                            </td>
+                            <td>
+                                {{factura.numero}}
+                            </td>
+                           
+                            <td class="text-right">
+                                {{formatDecimal(factura.total)}}
+                            </td>
+                            <td *ngIf="factura.movimientosCtaCteProv != null" class="text-right">
+                                {{formatDecimal(factura.movimientosCtaCteProv.saldo)}}
+                            </td>
+                            <td *ngIf="factura.movimientosCtaCteProv == null" class="text-right">
+                                0.00
+                            </td>
+                            <td *ngIf="factura.cargada == 0 || factura.cargada == null">
+                                <div title="No se cargo en stock" class="mr-1 ml-1 badge badge-pill badge-danger">
+                                    Sin agregar
+                                </div>
+                            </td>
+                            <td *ngIf="factura.cargada == 1">
+                                <div title="Stock cargado parcialmente"
+                                    class="mr-1 ml-1 badge badge-pill badge-warning">
+                                    Ag. parcial
+                                </div>
+                            </td>
+                            <td *ngIf="factura.cargada == 2">
+                                <div title="Stock cargado" class="mr-1 ml-1 badge badge-pill badge-success">
+                                    Agregado
+                                </div>
+                            </td>
+                            <td *ngIf="!factura.pagada || factura.pagada == null">
+                                <div title="Factura NO pagada" class="mr-1 ml-1 badge badge-pill badge-danger">
+                                    No pagada
+                                </div>
+                            </td>
+                            <td *ngIf="factura.pagada">
+                                <div title="Factura pagada" class="mr-1 ml-1 badge badge-pill badge-success">
+                                    Pagada
+                                </div>
+                            </td>
+                            <td class="buttons-small">
+                                <div class="float-right">
+                                    <button *ngIf="typeView=='SELECT_PROD' || typeView=='SELECT_INV'"
+                                        (click)="selectFactura(factura);"
+                                        class="btn-sm btn-transition btn btn-outline-primary" title="Seleccionar">
+                                        <i class="ace-icon fa fa-check bigger-120"></i>
+                                    </button>
+                                    <button (click)="showDetail(factura)"
+                                        title="Ver detalle de la factura de compra | {{factura.id}}"
+                                        class="btn-sm btn-transition btn btn-outline-primary">
+                                        <i class="fa fa-eye"></i>
+                                    </button>
+                                    <button *ngIf="typeView=='LIST'" [routerLink]="['/productos/stock/add']"
+                                        [queryParams]="{factura: encrypt(factura.id)}" [disabled]="factura.cargada==2"
+                                        title="Agregar al stock esta factura de compra | {{factura.id}}"
+                                        class="btn-sm btn-transition btn btn-outline-secondary">
+                                        <i class="fa fa-plus-circle"></i>
+                                    </button>
+                                    <button *ngIf="typeView=='LIST'" [routerLink]="['/compras/cta-cte/movimientos']"
+                                        [queryParams]="{proveedor: encrypt(factura.proveedor.id), estado:factura.pagada?1:0, idFacturaCompra: factura.id}"
+                                        [disabled]="!isCuentaCorriente(factura.pagos)"
+                                        title="Factura {{isCuentaCorriente(factura.pagos)?'':'NO'}} pagada mediante cta. cte., ver detalle de la factura de compra | {{factura.id}}"
+                                        class="btn-sm btn-transition btn btn-outline-secondary">
+                                        <i class="fa fa-money"></i>
+                                    </button>
+                                </div>
+                            </td>
+                            <!-- <td *ngIf="typeView=='SELECT_PROD' || typeView=='SELECT_INV'" class="buttons-small">
+                                <button (click)="selectFactura(factura);"
+                                    class="btn-sm btn-transition btn btn-outline-primary" title="Seleccionar">
+                                    <i class="ace-icon fa fa-check bigger-120"></i>
+                                </button>
+                                <button (click)="showDetail(factura);"
+                                    class="btn-sm btn-transition btn btn-outline-info" title="Seleccionar">
+                                    <i class="ace-icon fa fa-eye bigger-120"></i>
+                                </button>
+                            </td> -->
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row">
+            <div class="mx-auto">
+                <ngb-pagination [(page)]="paramPagination.page" [pageSize]="paramPagination.pageSize"
+                    [collectionSize]="paramPagination.totalItems" (pageChange)="pageChanged()">
+                </ngb-pagination>
+            </div>
+        </div>
+    </ng-container>
+    <ng-template #noItems>
+        <div class="form-group row alert alert-warning">
+            Sin datos
+        </div>
+    </ng-template>
+</div>
+<ng-template #loading>
+    <div class="spinner-border text-primary" role="status"></div>Cargando informacion...
+</ng-template>

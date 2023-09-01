@@ -1,0 +1,36 @@
+<div *ngIf="!update">{{value}}
+    &nbsp;<span *ngIf="!update" class="hand fa fa-edit" href (click)="updateValue()"></span>
+</div>
+<div *ngIf="update">
+    <form id="formNewValue" [formGroup]="formNewValue">
+        <div id="formSearch" class="input-group input-group-sm">
+            <input id="{{name}}" name="{{name}}" type="text" mask="00-00-0000 00:00" [dropSpecialCharacters]="false"
+                [clearIfNotMatch]="true" [showMaskTyped]="true" [readonly]="updating" formControlName="newValue"
+                (keyup.enter)="save()" class="form-control form-control-sm" />
+            <div *ngIf="updating" class="input-group-append">
+                <span class="input-group-text">
+                    <div class="spinner-border spinner-border-sm" role="status">
+                        <span class="sr-only">Loading...</span>
+                    </div>
+                </span>
+            </div>
+            <div (click)="save()" *ngIf="update && !updating" class="input-group-append">
+                <span class="blue input-group-text fa fa-save hand"></span>
+            </div>
+            <div (click)="cancel()" *ngIf="update && !updating" class="input-group-append">
+                <span class="red input-group-text fa fa-remove hand"></span>
+            </div>
+        </div>
+        <div *ngIf="dataForm.submitted && formNewValue.invalid">
+            <div *ngIf="f.newValue.errors?.required" class="text-danger">
+                Campo obligatorio
+            </div>
+            <div *ngIf="f.newValue.errors?.invalidDate" class="text-danger">
+                La fecha y hora debe tener un formato valido (DD-MM-AAAA HH:mm)
+            </div>
+            <div *ngIf="f.newValue.errors?.invalidDateNow" class="text-danger">
+                La fecha desde deber ser mayor a la fecha actual
+            </div>
+        </div>
+    </form>
+</div>

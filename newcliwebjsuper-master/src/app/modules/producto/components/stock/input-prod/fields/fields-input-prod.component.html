@@ -1,0 +1,98 @@
+<form id="formInputProd" [formGroup]="formFactura" class="form-group-min" >
+    <div [formGroup]="$any(mo.controls[0])" class="row form-group">
+        <label class="col-form-label col-md-2 label-help">Busque el producto
+            <i title="Busque el producto que desea cambiar el precio, tipee y presione enter o presione en el boton (<i class='fa fa-list green-strong'></i>) que esta a la derecha del campo de busqueda."
+            class="help-ns fa fa-question-circle"></i>
+        </label>
+        <div class="col-md-5">
+            <select-prod formControlName="producto" [name]="'txtProducto'" [type]="1" [nextFocus]="'txtCantidadMov'">
+            </select-prod>
+            <span *ngIf="dataForm.submitted && formFactura.invalid">
+                <span *ngIf="mo.controls[0]['controls'].producto.errors?.required" class="text-danger">
+                    Campo obligatorio
+                </span>
+            </span>
+        </div>
+    </div>
+    <div class="row form-group">
+        <label class="col-form-label col-md-2 label-help" for="txtCantidadMov">Cantidad
+            <i title="Cantidad que ingresa al stock del producto."
+            class="help-ns fa fa-question-circle"></i>
+        </label>
+        <div [formGroup]="$any(mo.controls[0])" class="col-md-2">
+            <input id="txtCantidadMov" name="txtCantidadMov" class="form-control form-control-sm" type="number"
+                formControlName="cantidad" enter="fechaFacturaOtro" min="1" max="9999999" />
+            <span *ngIf="dataForm.submitted && formFactura.invalid">
+                <span *ngIf="mo.controls[0]['controls'].cantidad.errors?.required" class="text-danger">
+                    Campo obligatorio
+                </span>
+            </span>
+        </div>
+        <label class="col-form-label col-md-1 label-help" for="fechaFacturaOtro">Fecha
+            <i title="Fecha que se registro el ingreso, puede ser diferente a la fecha en que se esta cargando."
+            class="help-ns fa fa-question-circle"></i>
+        </label>
+        <div class="col-md-2">
+            <app-date #fechaIngresoForm formControlName="fechaIngreso" [name]="'fechaFacturaOtro'" [enter]="'cmbSucursal'" ></app-date>
+            <div *ngIf="dataForm.submitted && formFactura.invalid">
+                <div *ngIf="ff.fechaIngreso.errors?.required" class="text-danger">
+                    Campo obligatorio
+                </div>
+                <div *ngIf="ff.fechaIngreso.errors?.invalidDate" class="text-danger">
+                   Ingrese una fecha valida (dd-mm-aaaa)
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row form-group">
+        <label class="col-form-label col-md-2 label-help" for="cmbSucursal">Sucursal
+            <i title="Sucursal a donde esta ingresando el stock"
+            class="help-ns fa fa-question-circle"></i>
+        </label>
+        <div class="col-md-5">
+            <select id="cmbSucursal" name="cmbSucursal" formControlName="sucursal" class="form-control form-control-sm"
+                enter="txtNumFacMov">
+                <option [ngValue]="null">Sel. sucursal</option>
+                <option *ngFor="let sucursal of sucursales" [ngValue]="sucursal">{{sucursal.nombre}}</option>
+            </select>
+            <span *ngIf="dataForm.submitted && formFactura.invalid">
+                <span *ngIf="ff.sucursal.errors?.required" class="text-danger">
+                    Campo obligatorio
+                </span>
+            </span>
+        </div>
+    </div>
+    <div class="row form-group">
+        <label class="col-form-label col-md-2 label-help" for="txtNumFacMov">Num. Factura/Ref.
+            <i title="Número de comprobante o cualquier referencia, si no tiene ninguna ingrese '- 'o '0'."
+            class="help-ns fa fa-question-circle"></i>
+        </label>
+        <div class="col-md-5">
+            <input id="txtNumFacMov" name="txtNumFacMov" class="form-control form-control-sm" type="text"
+                formControlName="numero" enter="txtDescMov" />
+            <span *ngIf="dataForm.submitted && formFactura.invalid">
+                <span *ngIf="ff.numero.errors?.required" class="text-danger">
+                    Campo obligatorio
+                </span>
+                <span *ngIf="ff.numero.errors?.maxlength" class="text-danger">
+                    Campo con demasiados caracteres
+                </span>
+            </span>
+        </div>
+    </div>
+    <div class="row form-group">
+        <label class="col-form-label col-md-2 label-help" for="txtDescMov">Detalle
+            <i title="Detalle adicional para resaltar."
+            class="help-ns fa fa-question-circle"></i>
+        </label>
+        <div class="col-md-9">
+            <input id="txtDescMov" name="txtDescMov" class="form-control form-control-sm" type="text"
+                formControlName="descripcion" enter="btnSaveNew" />
+            <span *ngIf="dataForm.submitted && formFactura.invalid">
+                <span *ngIf="ff.descripcion.errors?.maxlength" class="text-danger">
+                    Campo con demasiados caracteres
+                </span>
+            </span>
+        </div>
+    </div>
+</form>

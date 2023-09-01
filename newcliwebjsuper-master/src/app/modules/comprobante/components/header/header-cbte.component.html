@@ -1,0 +1,167 @@
+<form [formGroup]="formHeaderCbte">
+    <div class="row form-group margin-0">
+        <div class="col-md-6" style="border-right: solid 1px #e9ecef;">
+            <div class="row form-group">
+                <label class="col-form-label col-md-2 label-help" for="selCliCbte">Cliente
+                    <i title="Si el cliente esta dado de alta busquelo y seleccione, tambien puede buscarlo en el boton (<i class='fa fa-list green-strong'></i>) que esta a la derecha del campo de ingreso"
+                        class="help-ns fa fa-question-circle"></i>
+                </label>
+                <div class="col-md-10">
+                    <select-cli formControlName="cliente" [name]="'selCliCbte'"
+                        [typeSearch]="typeSearch" [nextFocus]="'selTipoCbte'">
+                    </select-cli>
+                    <div *ngIf="dataForm.submitted && formHeaderCbte.invalid">
+                        <div *ngIf="f.cliente.errors?.required" class="text-danger">
+                            Campo obligatorio
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-2"></div>
+                <div class="col-md-10">
+                    <span *ngIf="f.nroDocCliente.value">
+                        <span class="p-10 badge badge-primary mr-2" style="font-size: 12px;">
+                            {{f.tipoDocCliente.value}} : {{f.nroDocCliente.value}}
+                        </span>
+                    </span>
+                    <span *ngIf="f.cliente && f.cliente?.value?.tipoCliente" lass="col-md-4">
+                        <span class="p-10 badge badge-info" style="font-size: 12px;">
+                            {{getDescTipoCliente(f.cliente.value.tipoCliente)}}
+                        </span>
+                    </span>
+                    <span *ngIf="f.cliente && f.cliente?.value?.cuentaCorriente">
+                        <span *ngIf="f.cliente.value.cuentaCorriente.activo" class="p-10 badge badge-success mr-2"
+                            style="font-size: 12px;">
+                            Cta. cte. activa
+                        </span>
+                        <span *ngIf="!f.cliente.value.cuentaCorriente.activo" class="p-10 badge badge-danger mr-2"
+                            style="font-size: 12px;">
+                            Cta. cte. inactiva
+                        </span>
+                        <span class="p-10 badge badge-info mr-2" style="font-size: 12px;">
+                            Margen: <strong>
+                                ${{formatDecimal(f.cliente.value.cuentaCorriente.margen)}}</strong>
+                        </span>
+                    </span>
+                    <span *ngIf="f.cliente?.value && !f.cliente?.value?.cuentaCorriente" class="col-md-4">
+                        <span class="p-10 badge badge-danger" style="font-size: 12px;">
+                            Sin cuenta cte.
+                        </span>
+                    </span>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-6">
+            <div class="row form-group">
+                <label class="col-form-label col-md-2 label-help" for="selTipoCbte">Cbte.
+                    <i title="Tipo de comprobante a emitir." class="help-ns fa fa-question-circle"></i>
+                </label>
+                <div *ngIf="TipoCbte.CBTE_VENTA==tipoCbte" class="col-md-4">
+                    <select id="selTipoCbte" name="selTipoCbte" formControlName="tipoCbte" (change)="changeTipoCbte()"
+                        class="form-control form-control-sm text-bold text-20" enter="selConceptoCbte">
+                        <option *ngFor="let cbte of data.comprobantes" title="{{cbte.descripcion}}"
+                            [ngValue]="cbte.nombre">
+                            {{cbte.nombre}}</option>
+                    </select>
+                    <div *ngIf="dataForm.submitted && formHeaderCbte.invalid">
+                        <div *ngIf="f.tipoCbte.errors?.required" class="text-danger">
+                            Campo obligatorio
+                        </div>
+                    </div>
+                </div>
+                <div *ngIf="TipoCbte.CBTE_PRESUPUESTO==tipoCbte" class="col-md-4">
+                    <select id="selTipoCbte" name="selTipoCbte" class="form-control form-control-sm text-bold text-20"
+                        enter="selConceptoCbte">
+                        <option> PR</option>
+                    </select>
+                </div>
+                <label class="col-form-label col-md-2 label-help" for="selConceptoCbte">Concepto
+                    <i title="El concepto puede producto o servicio." class="help-ns fa fa-question-circle"></i>
+                </label>
+                <div class="col-md-4">
+                    <select id="selConceptoCbte" name="selConceptoCbte" formControlName="concepto"
+                        class="form-control form-control-sm" enter="fechaCbte">
+                        <option *ngFor="let conc of data.conceptos" title="{{conc.descripcion}}" [ngValue]="conc.nombre"
+                            [disabled]="conc.id==2 || conc.id==3">
+                            {{conc.descripcion}}</option>
+                    </select>
+                    <div *ngIf="dataForm.submitted && formHeaderCbte.invalid">
+                        <div *ngIf="f.tipoCbte.errors?.required" class="text-danger">
+                            Campo obligatorio
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="col-form-label col-md-2 label-help" for="fechaCbte">Fec. Cbte.
+                    <i title="Fecha de emision del comprobante, para comprobantes validos no puede ser menor al utlimo comprobante emitido, ni hace 10 días a tras, verifique informacion en AFIP."
+                        class="help-ns fa fa-question-circle"></i>
+                </label>
+                <div class="col-md-4">
+                    <app-date #fechaCbte [name]="'fechaCbte'" formControlName="fechaCbte" [enter]="getEnterFecCbte()">
+                    </app-date>
+                    <div *ngIf="dataForm.submitted && formHeaderCbte.invalid">
+                        <div *ngIf="f.fechaCbte.errors?.required" class="text-danger">
+                            Campo obligatorio
+                        </div>
+                    </div>
+                </div>
+                <ng-container  *ngIf="TipoCbte.CBTE_VENTA==tipoCbte" >
+                    <label class="col-form-label col-md-2 label-help" for="fechaVencCbte">Fec. Venc.
+                        <i title="Fecha de vencimiento del comprobante." class="help-ns fa fa-question-circle"></i>
+                    </label>
+                    <div class="col-md-4">
+                        <app-date #fechaVencCbte [name]="'fechaVencCbte'" formControlName="fechaVencCbte"
+                            [enter]="'txtProducto0'">
+                        </app-date>
+                        <div *ngIf="dataForm.submitted && formHeaderCbte.invalid">
+                            <div *ngIf="f.fechaVencCbte.errors?.required" class="text-danger">
+                                Campo obligatorio
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+                <ng-container  *ngIf="TipoCbte.CBTE_PRESUPUESTO==tipoCbte" >
+                    <label class="col-form-label col-md-2 label-help" for="fechaVigencia">Fecha vig.
+                        <i title="Fecha de vencimiento del comprobante." class="help-ns fa fa-question-circle"></i>
+                    </label>
+                    <div class="col-md-4">
+                        <app-date #fechaVigencia [name]="'fechaVigencia'" formControlName="fechaVigencia"
+                            [enter]="'txtProducto0'">
+                        </app-date>
+                        <div *ngIf="dataForm.submitted && formHeaderCbte.invalid">
+                            <div *ngIf="f.fechaVigencia.errors?.required" class="text-danger">
+                                Campo obligatorio
+                            </div>
+                        </div>
+                    </div>
+                </ng-container>
+            </div>
+            <div *ngIf="f.concepto.value==2 || f.concepto.value==3" class="row form-group">
+                <label class="col-form-label col-md-2" for="fechaServDesde">Fec. serv. desde</label>
+                <div class="col-md-4">
+                    <app-date #fechaServDesde [name]="'fechaServDesde'" formControlName="fechaServDesde"
+                        [enter]="'fechaServHasta'">
+                    </app-date>
+                    <div *ngIf="dataForm.submitted && formHeaderCbte.invalid">
+                        <div *ngIf="f.fechaCbte.errors?.required" class="text-danger">
+                            Campo obligatorio
+                        </div>
+                    </div>
+                </div>
+                <label class="col-form-label col-md-2" for="fechaServHasta">Fec. serv. hasta</label>
+                <div class="col-md-4">
+                    <app-date #fechaServHasta [name]="'fechaServHasta'" formControlName="fechaServHasta"
+                        [enter]="'txtProducto0'">
+                    </app-date>
+                    <div *ngIf="dataForm.submitted && formHeaderCbte.invalid">
+                        <div *ngIf="f.fechaVencCbte.errors?.required" class="text-danger">
+                            Campo obligatorio
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

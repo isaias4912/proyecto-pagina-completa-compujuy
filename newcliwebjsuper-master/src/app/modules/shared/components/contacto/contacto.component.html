@@ -1,0 +1,83 @@
+<app-panel [idCollapse]="'panelFiltro'" [title]="'Contactos'" [collapse]="false">
+    <div class="row">
+        <div [hidden]="fc?.length > 0" class="col-md-12">
+            <a (click)="addContacto();" id="firstAddBarCode" #firstAddBarCode [routerLink]="" class="hand">Agregar un
+                contacto&nbsp;<i class="green-strong fa fa-plus"></i></a>
+        </div>
+        <div class="table-responsive">
+            <table *ngIf="fc.length && fc.length > 0" class="table table-hover table-striped">
+                <thead>
+                    <tr>
+                        <th>Tipo</th>
+                        <th style="width: 30%;">Cuenta</th>
+                        <th>Observación</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngFor="let contac of $any(fc).controls; let $index = index;" [formGroup]="contac">
+                        <tr>
+                            <td class="center">
+                                <select id="txtTipoContacto{{$index}}" formControlName="tipo"
+                                    name="txtTipoContacto{{$index}}" (change)="changeTipo(contac)"
+                                    class="input form-control form-control-sm item-cont-tipo" enter="txtDescContacto{{$index}}"
+                                    required>
+                                    <option *ngFor="let opcion of tiposContacto" [ngValue]="opcion.id">{{opcion.value}}
+                                    </option>
+                                </select>
+                            </td>
+                            <td class="center">
+                                <input id="txtDescContacto{{$index}}" formControlName="descripcion"
+                                    name="txtDescContacto{{$index}}" class="form-control form-control-sm item-cont-cuenta" type="text"
+                                    enter="txtDetalleContacto{{$index}}" required maxlength="80" />
+                            </td>
+                            <td class="center">
+                                <input id="txtDetalleContacto{{$index}}" name="txtDetalleContacto{{$index}}"
+                                    formControlName="detalle" class="form-control form-control-sm" type="text"
+                                    enter="buttonAddContact{{$index}}" maxlength="300" />
+                            </td>
+                            <td class="buttons-small">
+                                <div class="float-right">
+                                    <button [hidden]="!($index== (fc.controls.length-1))" type="button"
+                                        id="buttonAddContact{{$index}}" name="buttonAddContact{{$index}}"
+                                        class="btn-sm btn-transition btn btn-outline-success" (click)="addContacto()">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                    <button type="button" id="buttonRemoveContact{{$index}}"
+                                        name="buttonRemoveContact{{$index}}"
+                                        class="btn-sm btn-transition btn btn-outline-danger"
+                                        (click)="removeContacto(contac);">
+                                        <i class="red ace-icon fa fa-remove bigger-120"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr *ngIf="fc.invalid">
+                            <td>
+                                <div class="align-top"
+                                    *ngIf="dataForm?.submitted && contac.controls.tipo.errors?.required"
+                                    class="text-danger">
+                                    Debe ingresar un tipo
+                                </div>
+                            </td>
+                            <td>
+                                <div *ngIf="dataForm?.submitted && contac.controls.descripcion.errors?.required"
+                                    class="text-danger">
+                                    Debe ingresar una cuenta
+                                </div>
+                                <div *ngIf="dataForm?.submitted && contac.controls.descripcion.errors?.email"
+                                    class="text-danger">
+                                    Debe ingresar una cuenta de email valida
+                                </div>
+                            </td>
+                            <td></td>
+                            <td>
+                            </td>
+                            <td></td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</app-panel>

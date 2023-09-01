@@ -1,0 +1,7 @@
+<form class="form-inline" (ngSubmit)="changeRegister()">
+    <span class="text-info">{{paramPagination.totalItems}} registro/s en total</span><b>&nbsp;|&nbsp;</b>
+    <span class="text-info">Cantidad de regitros a mostrar</span>&nbsp;
+    <input style="width: 60px; height: 20px;" name="txtPageSize"
+        [(ngModel)]="pagesize" class="form-control form-control-sm"
+        type="number" />
+</form>

@@ -1,0 +1,319 @@
+<div *ngIf="dataFilter$ | async" id="div" class="row">
+    <div class="col-md-12">
+        <form id="formFilter">
+            <div id="divFilter" class="row">
+                <div class="col-lg-12">
+                    <div class="card mb-2">
+                        <div class="card-header" id="headingOne" style="height: 2.5rem;">
+                            <div class="container-fluid" style="padding-right: 0px !important; padding-left: 0px;">
+                                <div class="row">
+                                    <div class="col-md-12" style="padding-left: 0px;">
+                                        <span class="float-sm-left">
+                                            <a class="btn-link float-sm-right hand ml-2" data-toggle="collapse"
+                                                (click)="bandera=collapsedArea.classList.contains('show')"
+                                                data-target="#collapseOne" aria-expanded="true"
+                                                aria-controls="collapseOne">
+                                                <i class="fa fa-filter"></i> &nbsp; Filtro de presupuestos
+                                            </a>
+                                        </span>
+                                        <a class="btn-link float-sm-right hand ml-2" data-toggle="collapse"
+                                            (click)="bandera=collapsedArea.classList.contains('show')"
+                                            data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                            <i [hidden]="bandera" class="fa fa-chevron-up"></i>
+                                            <i [hidden]="!bandera" class="fa fa-chevron-down"></i>
+                                        </a>
+                                        <div class="float-sm-right">
+                                            <span class="font-size-12 text-primary label-help">Filtro <i
+                                                    title="Más o menos filtros"
+                                                    class="help-ns fa fa-question-circle"></i></span>&nbsp;
+                                            <div class="pretty p-switch">
+                                                <input [(ngModel)]="filterPres.extraFilter" id="extraFilter"
+                                                    name="extraFilter" type="checkbox"
+                                                    (change)="showOrHideExtraFilter()" />
+                                                <div class="state p-primary">
+                                                    <label></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="collapseOne" #collapsedArea class="collapse show" aria-labelledby="headingOne"
+                            data-parent="#divFilter">
+                            <div class="card-body padding-top-bottom-8">
+                                <form class="">
+                                    <div class="row">
+                                        <div class="col-lg-11">
+                                            <div class="row form-group  margin-bottom-5">
+                                                <label class="col-form-label col-md-1"
+                                                    for="fechaDesdeFilter">Desde</label>
+                                                <div class="col-md-3">
+                                                    <app-date #fechaInicialForm [(ngModel)]="filterPres.fechaInicial"
+                                                        [name]="'fechaDesdeFilter'">
+                                                    </app-date>
+                                                </div>
+                                                <label class="col-form-label col-md-1"
+                                                    for="fechaHastaFilter">Hasta</label>
+                                                <div class="col-md-3">
+                                                    <app-date #fechaFinalForm [(ngModel)]="filterPres.fechaFinal"
+                                                        [name]="'fechaHastaFilter'">
+                                                    </app-date>
+                                                </div>
+                                                <label class="col-form-label col-md-1"
+                                                    for="cmbFiltroEstado">Estado</label>
+                                                <div class="col-md-3">
+                                                    <select id="cmbFiltroEstado" name="cmbFiltroEstado"
+                                                        class="form-control form-control-sm"
+                                                        [(ngModel)]="filterPres.estadoCbte">
+                                                        <option
+                                                            *ngFor="let opcion of [{id: 0, nombre: 'Todas'},{id: 11, nombre: 'Pendiente'}, {id: 12, nombre: 'Aprobada'}]"
+                                                            [ngValue]="opcion.id">
+                                                            {{opcion.nombre}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div class="row form-group margin-bottom-5">
+                                                <label for="txtUsuario"
+                                                    class="col-md-1 col-form-label padding-right-left-4">Usuario</label>
+                                                <div class="col-md-3">
+                                                    <select2-usu [(ngModel)]="filterPres.usuario" [name]="'txtUsuario'"
+                                                        [multiple]="false" [typeResult]="2" [allowClear]="true">
+                                                    </select2-usu>
+                                                </div>
+                                                <label for="cmbTipo"
+                                                    class="col-md-1 col-form-label padding-right-left-4">Sucursal</label>
+                                                <div class="col-sm-3">
+                                                    <select-sucursal-simple [name]="'cmbSucursal'"
+                                                        [(ngModel)]="filterPres.sucursales" [textFirstOpt]="'Todas'"
+                                                        [enter]="'cmbSucursalDes'" [typeResult]="3" #sucursalOrigen>
+                                                    </select-sucursal-simple>
+                                                </div>
+                                                <label class="col-form-label-label col-md-1"
+                                                    for="productSel">Productos</label>
+                                                <div class="col-md-3">
+                                                    <select2-prod [(ngModel)]="filterPres.productos"
+                                                        [name]="'productSel'" [multiple]="true"
+                                                        (finishRender)="finishRenderSel2Prod()">
+                                                    </select2-prod>
+                                                </div>
+                                            </div>
+                                            <div id="divFilterExtra" #collapsedAreaFilt
+                                                class="row form-group margin-bottom-5 collapse show">
+                                                <label class="col-form-label-label col-md-1"
+                                                    for="montoDesdeFilter">Monto Desde</label>
+                                                <div class="col-md-1">
+                                                    <input [(ngModel)]="filterPres.totalMinimo" type="number" step=".01"
+                                                        class="form-control form-control-sm" id="montoDesdeFilter"
+                                                        name="montoDesdeFilter" min="0" />
+                                                </div>
+                                                <label class="col-form-label-label col-md-1"
+                                                    for="montoHastaFilter">Monto Hasta</label>
+                                                <div class="col-md-1">
+                                                    <input [(ngModel)]="filterPres.totalMaximo" type="number" step=".01"
+                                                        class="form-control form-control-sm" id="montoHastaFilter"
+                                                        name="montoHastaFilter" min="0" />
+                                                </div>
+
+                                            </div>
+                                            <!-- <div class="row form-group margin-bottom-5">
+                                                <a class="btn-link float-sm-right hand ml-2" data-toggle="collapse"
+                                                    (click)="filterExtra=collapsedAreaFilt.classList.contains('show')"
+                                                    [attr.data-target]="'#divFilterExtra'" aria-expanded="true"
+                                                    [attr.aria-controls]="'divFilterExtra'">
+                                                    <span [hidden]="!filterExtra"><span
+                                                            class="fa fa-plus"></span>&nbsp;Más filtros</span>
+                                                    <span [hidden]="filterExtra"><span
+                                                            class="fa fa-minus"></span>&nbsp;Menos filtros</span>
+                                                </a>
+                                            </div> -->
+                                        </div>
+                                        <div class="col-lg-1">
+                                            <button type="submit" (click)="query()" #btnQuery id="btnQuery"
+                                                name="btnQuery" title="Realice la busqueda segun los filtros aplicados"
+                                                class="btn-sm btn-block btn-transition btn btn-outline-info">
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                            <button type="button" (click)="reset()"
+                                                title="Limpiar los campos de busqueda"
+                                                class="btn-sm btn-block btn-transition btn btn-outline-secondary">
+                                                <i class="fa fa-trash-o"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 buttons-small">
+
+
+        <button routerLink="/presupuestos/cbtes/nuevo" class="btn-sm btn-transition btn btn-outline-primary"
+            title="Ingrese un nuevo presupuesto">
+            <i class="fa fa-plus"></i>Nuevo
+        </button>
+
+
+        <!-- <button-print [typePrint]="'pdf'"
+            [service]="presupuestoHTTPService.printList(filterPres, paramPagination, 'pdf')" [(dataCount)]="paramPagination">
+        </button-print>
+        <button-print [typePrint]="'xls'"
+            [service]="presupuestoHTTPService.printList(filterPres, paramPagination, 'xls')" [(dataCount)]="paramPagination">
+        </button-print>
+        <button-print [typePrint]="'csv'"
+            [service]="presupuestoHTTPService.printList(filterPres, paramPagination, 'csv')" [(dataCount)]="paramPagination">
+        </button-print> -->
+
+
+        <!-- 
+        <button-print [(dataCount)]="paramPagination" [typePrint]="'pdf'"
+            [service]="presupuestoHTTPService.printList(filterPres, paramPagination, 'pdf')">
+        </button-print>
+      
+        <button-print [(dataCount)]="paramPagination" [typePrint]="'doc'"
+            [service]="presupuestoHTTPService.printList(filterPres, paramPagination, 'doc')">
+        </button-print>
+        <button-print [(dataCount)]="paramPagination" [typePrint]="'csv'"
+            [service]="presupuestoHTTPService.printList(filterPres, paramPagination, 'csv')">
+        </button-print>
+        <button-print [(dataCount)]="paramPagination" [typePrint]="'html'"
+            [service]="presupuestoHTTPService.printList(filterPres, paramPagination, 'html')"></button-print> -->
+    </div>
+    <div class="col-md-6 float-right">
+        <div class="float-right">
+            <app-resgister [paramPagination]="paramPagination" (registerChanged)="pageChanged()">
+            </app-resgister>
+        </div>
+    </div>
+</div>
+<div *ngIf="presupuestos$ | async as presupuestos; else loading;">
+    <ng-container *ngIf="presupuestos.data.length; else noItems">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table id="tablePresupuestosList" class="table table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width: 8%;">
+                                    <app-sort [text]="'Id/Cód.'" [order]="'id'" [paramPagination]="paramPagination"
+                                        (sortChanged)="pageChanged()"></app-sort>
+                                </th>
+                                <th style="width: 15%;">
+                                    <app-sort [text]="'Fecha/Hora'" [order]="'fecha_carga'"
+                                        [paramPagination]="paramPagination" (sortChanged)="pageChanged()"></app-sort>
+                                </th>
+                                <th style="width: 8%;">
+                                    <span>Tipo Factura</span>
+                                </th>
+
+                                <th class="text-center" style="width: 15%;">
+                                    <span>Cliente</span>
+                                </th>
+                                <th class="text-center">
+                                    <span>Usuario/Cajero</span>
+                                </th>
+                                <th style="width: 10%;" class="text-center">
+                                    <app-sort [text]="'Estado'" [order]="'estadoCbte'"
+                                        [paramPagination]="paramPagination" (sortChanged)="pageChanged()"></app-sort>
+                                </th>
+                                <th style="width: 8%;" class="text-right" title="Monto total del comprobante">
+                                    <app-sort [text]="'Monto'" [order]="'total'" [paramPagination]="paramPagination"
+                                        (sortChanged)="pageChanged()"></app-sort>
+                                </th>
+                                <th style="width: 120px !important;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let presupuesto of presupuestos.data">
+                                <td>
+                                    {{presupuesto.id}}
+                                </td>
+                                <td>
+                                    {{presupuesto.fechaCarga}}
+                                </td>
+                                <td>
+                                    Cbte. {{presupuesto.tipoCbte}}
+                                </td>
+                                <td>
+                                    {{presupuesto.nombreCliente}}
+                                </td>
+                                <td class="text-center">
+                                    <info-usu [usuario]="presupuesto.usuario"></info-usu>
+                                </td>
+                                <td class="text-center">
+                                    <span *ngIf="presupuesto.estadoCbte=='PRES_PENDIENTE'" title="Presupuesto pendiente"
+                                        class="mr-1 ml-1 badge badge-pill badge-info">Pendiente</span>
+                                    <span *ngIf="presupuesto.estadoCbte=='PRES_APROBADO'" title="Presupuesto aprobado"
+                                        class="mr-1 ml-1 badge badge-pill badge-primary">Aprobado</span>
+                                </td>
+                                <td class="text-right">
+                                    <b>$&nbsp;{{formatDecimal(presupuesto.total)}}</b>&nbsp;&nbsp;
+                                </td>
+                                <td class="buttons-small">
+                                    <div class="float-right">
+                                        <button (click)="detailPresupuesto(presupuesto)"
+                                            title="Ver detalle de la factura electronica de venta - {{presupuesto.id}}"
+                                            class="btn-sm border-0 btn-transition btn btn-outline-primary">
+                                            <i class="fa fa-eye"></i>
+                                        </button>
+                                        <ng-container *authRolView="roles.level3">
+                                            <button *ngIf="presupuesto.estadoCbte=='PRES_PENDIENTE'"
+                                                (click)="updateEstadoCbtePresupuesto(presupuesto, 12)"
+                                                title="Aprobar el presupuesto - {{presupuesto.id}}"
+                                                class="btn-sm border-0 btn-transition btn btn-outline-success">
+                                                <i class="fa fa-check"></i>
+                                            </button>
+                                            <button *ngIf="presupuesto.estadoCbte=='PRES_APROBADO'"
+                                                (click)="updateEstadoCbtePresupuesto(presupuesto, 11)"
+                                                title="Pasar a pendiente el presupuesto - {{presupuesto.id}}"
+                                                class="btn-sm border-0 btn-transition btn btn-outline-danger">
+                                                <i class="fa fa-minus"></i>
+                                            </button>
+                                        </ng-container>
+                                        <button (click)="sendEmailCbte(presupuesto)"
+                                            title="Enviar por email el presupuesto - {{presupuesto.id}}"
+                                            class="btn-sm border-0 btn-transition btn btn-outline-secondary">
+                                            <i class="fa fa-envelope"></i>
+                                        </button>
+                                        <ng-container *authRolView="roles.level3">
+                                            <button [routerLink]="['/ventas/facturas/nueva']"
+                                                [queryParams]="{presupuesto : presupuesto.id}"
+                                                [disabled]="presupuesto.estadoCbte!='PRES_APROBADO'"
+                                                title="Ejecute la venta de este presupuesto - {{presupuesto.id}}"
+                                                class="btn-sm border-0 btn-transition btn btn-outline-info">
+                                                <i class="fa fa-flash"></i>
+                                            </button>
+                                        </ng-container>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="container-fluid">
+                <ngb-pagination [(page)]="paramPagination.page" [pageSize]="paramPagination.pageSize"
+                    [collectionSize]="paramPagination.totalItems" (pageChange)="pageChanged()" [maxSize]="5"
+                    [boundaryLinks]="true" class="d-flex justify-content-center">
+                </ngb-pagination>
+            </div>
+        </div>
+    </ng-container>
+    <ng-template #noItems>
+        <div class="form-group row alert alert-warning">
+            Sin datos
+        </div>
+    </ng-template>
+</div>
+<ng-template #loading>
+    <app-loading></app-loading>
+</ng-template>

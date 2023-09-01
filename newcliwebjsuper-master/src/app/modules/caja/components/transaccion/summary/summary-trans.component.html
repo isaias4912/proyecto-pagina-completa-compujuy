@@ -1,0 +1,101 @@
+<div *ngIf="summary$ | async as summary; else loading;">
+    <ng-container *ngIf="summary; else noItems">
+        <div class="row form-group margin-bottom-5">
+            <label class="label-detail col-md-4">Caja:<span
+                    class="label-value-detail">{{summary.transaccionCaja.caja.id}} -
+                    {{summary.transaccionCaja.caja.nombre}} -
+                    v{{summary.transaccionCaja.caja.nombreMaquina}}</span></label>
+        </div>
+        <hr class="margin-2">
+        <div class="row form-group margin-bottom-5">
+            <label class="label-detail col-md-4">Transacción:<span
+                    class="label-value-detail">{{summary.transaccionCaja.id}}
+                    ({{summary.transaccionCaja.estado==1?'Abierta':'Cerrada'}})</span></label>
+            <label class="label-detail col-md-4">Fecha Apertura:<span
+                    class="label-value-detail">{{summary.transaccionCaja.fechaApertura}}</span></label>
+            <label class="label-detail col-md-4" *ngIf="summary.transaccionCaja.estado == 2">Fecha Cierre:<span
+                    class="label-value-detail">{{summary.transaccionCaja.fechaCierre}}</span></label>
+            <label class="label-detail col-md-4" *ngIf="summary.transaccionCaja.estado == 1">Fecha Cierre:<span
+                    class="label-value-detail">-</span></label>
+        </div>
+        <div class="row form-group">
+            <div class="col-md-12">
+                <table class="table table-striped table-fixed2">
+                    <thead>
+                        <tr>
+                            <th>Id/Cód. </th>
+                            <th>Fecha</th>
+                            <th>Tipo </th>
+                            <th>Motivo</th>
+                            <th>Usuario
+                            <th>Detalle</th>
+                            <th class="float-right" >Monto</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let detalle of detallesTransaccionCaja">
+                            <td>
+                                {{detalle?.id}}
+                            </td>
+                            <td>
+                                {{detalle?.fecha}}
+                            </td>
+                            <td>
+                                <span *ngIf="detalle?.tipo == 1">Apertura</span>
+                                <span *ngIf="detalle?.tipo == 2">Ingreso</span>
+                                <span *ngIf="detalle?.tipo == 3">Egreso</span>
+                                <span *ngIf="detalle?.tipo == 4">Anulación de fact. de Venta</span>
+                                <span *ngIf="detalle?.tipo == 20">Cierre</span>
+                            </td>
+                            <td>
+                                {{detalle?.motivo}}
+                            </td>
+                            <td>
+                                {{detalle?.usuario?.usuario}}
+                            </td>
+                            <td>
+                                {{detalle?.observacion}}
+                            </td>
+                            <td class="text-right">
+                                <span *ngIf="detalle?.tipo != 20"> $&nbsp;{{formatDecimal(detalle?.monto)}}</span>
+                                <span *ngIf="detalle?.tipo == 20">-</span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div class="row form-group margin-bottom-5">
+            <label class="label-detail col-md-4">Total dinero en efectivo en caja:<span
+                    class="label-value-detail">{{summary.totalDineroEfectivo}}</span></label>
+        </div>
+        <div class="row form-group margin-bottom-5">
+            <label class="label-detail col-md-4">Total ventas en efectivo:<span
+                    class="label-value-detail">{{summary.totalEfectivo}}</span></label>
+        </div>
+        <div class="row form-group margin-bottom-5">
+            <label class="label-detail col-md-4">Total Cuenta Cte.:<span
+                    class="label-value-detail">{{summary.totalCtaCte}}</span></label>
+        </div>
+        <div class="row form-group margin-bottom-5">
+            <label class="label-detail col-md-4">Total Tarjeta Crédito:<span
+                    class="label-value-detail">{{summary.totalTarjetaCredito}}</span></label>
+        </div>
+        <div class="row form-group margin-bottom-5">
+            <label class="label-detail col-md-4">Total Tarjeta Débito:<span
+                    class="label-value-detail">{{summary.totalTarjetaDebito}}</span></label>
+        </div>
+        <div class="row form-group margin-bottom-5">
+            <label class="label-detail col-md-4">Total Tarjetas:<span
+                    class="label-value-detail">{{summary.totalTarjeta}}</span></label>
+        </div>
+    </ng-container>
+    <ng-template #noItems>
+        <div class="row form-group row alert alert-warning">
+            Sin datos
+        </div>
+    </ng-template>
+</div>
+<ng-template #loading>
+    <app-loading></app-loading>
+</ng-template>

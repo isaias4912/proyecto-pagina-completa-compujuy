@@ -1,0 +1,184 @@
+<div id="div" class="row">
+    <div class="col-md-12">
+        <app-panel [idCollapse]="'panelFiltro'">
+            <form id="formFilter" class="form-group-min">
+                <div class="row">
+                    <div class="col-lg-11 col-md-11 col-sm-12">
+                        <div class="row form-group">
+                            <label class="col-form-label col-md-2" for="txtFiltroNombre">Nombre/Razón social</label>
+                            <div class="col-md-5">
+                                <input type="text" id="txtFiltroNombre" name="txtFiltroNombre"
+                                    class="form-control form-control-sm" [(ngModel)]="filterEntidad.nombre"
+                                    maxlength="30" />
+                            </div>
+                            <label class="col-form-label col-md-2" for="cmbFiltroTipo">Tipo</label>
+                            <div class="col-md-2">
+                                <select id="cmbFiltroTipo"
+                                    ng-options="opcion.value as opcion.name for opcion in dataOptions.filterTipo"
+                                    name="cmbFiltroTipo" class="form-control form-control-sm"
+                                    [(ngModel)]="filterEntidad.tipoEntidad">
+                                    <option *ngFor="let opcion of dataOptions.filterTipo" [ngValue]="opcion.value">
+                                        {{opcion.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-form-label col-md-2" for="txtFiltroDNI"
+                                title="Filtro  para personas">DNI</label>
+                            <div class="col-md-2">
+                                <input type="number" id="txtFiltroDNI" name="txtFiltroDNI"
+                                    class="form-control form-control-sm" [(ngModel)]="filterEntidad.dni" minlength="5"
+                                    maxlength="11" digits="true" focus-me="true" />
+                            </div>
+                            <label class="col-form-label col-md-1" for="txtFiltroCUIT"
+                                title="Filtro para empresas">CUIT</label>
+                            <div class="col-md-2">
+                                <input type="number" id="txtFiltroCUIT" name="txtFiltroCUIT"
+                                    class="form-control form-control-sm" [(ngModel)]="filterEntidad.cuit" minlength="9"
+                                    maxlength="12" digits="true" focus-me="true" />
+                            </div>
+                            <label class="col-form-label col-md-2" for="cmbFiltroTipoEmpresa">Tipo de empresa</label>
+                            <div class="col-md-2">
+                                <select id="cmbFiltroTipoEmpresa"
+                                    ng-options="opcion.value as opcion.name for opcion in dataOptions.filterTipo"
+                                    name="cmbFiltroTipo" class="form-control form-control-sm"
+                                    [(ngModel)]="filterEntidad.tipoEmpresa">
+                                    <option *ngFor="let opcion of dataOptions.filterTipoEmpresa"
+                                        [ngValue]="opcion.value">
+                                        {{opcion.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-1 col-md-1 col-sm-12">
+                        <div class="row form-group">
+                            <div class="btn-group btn-group-sm btn-block" role="group">
+                                <button type="submit" (click)="query()"
+                                    class="btn btn-transition btn btn-outline-light">
+                                    <i class="fa fa-search green-strong"></i>
+                                </button>
+                                <button type="button" (click)="reset()" class="btn-transition btn btn-outline-light">
+                                    <i class="fa fa-trash-o blue"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </app-panel>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6 buttons-small">
+    </div>
+    <div class="col-md-6 float-right">
+        <div class="float-right">
+            <app-resgister [paramPagination]="paramPagination" (registerChanged)="pageChanged()">
+            </app-resgister>
+        </div>
+    </div>
+</div>
+<div *ngIf="entidades$ | async as entidades; else loading;">
+    <ng-container *ngIf="entidades.length; else noItems">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width: 15%;">
+                                    <app-sort [text]="'Id/Cód.'" [order]="'id'" [paramPagination]="paramPagination"
+                                        (sortChanged)="pageChanged()"></app-sort>
+                                </th>
+                                <th style="width: 8%;">
+                                    <app-sort [text]="'DNI'" [order]="'persona.dni'" [paramPagination]="paramPagination"
+                                        (sortChanged)="pageChanged()"></app-sort>
+                                </th>
+                                <th style="width: 14%;">
+                                    <app-sort [text]="'CUIL'" [order]="'persona.cuil'"
+                                        [paramPagination]="paramPagination" (sortChanged)="pageChanged()"></app-sort>|
+                                    <app-sort [text]="'CUIT'" [order]="'empresa.cuit'"
+                                        [paramPagination]="paramPagination" (sortChanged)="pageChanged()"></app-sort>
+                                </th>
+                                <!-- <th style="width: 10%;">
+                                </th> -->
+                                <th style="width: 24%;">
+                                    <app-sort [text]="'Apellido'" [order]="'persona.apellido'"
+                                        [paramPagination]="paramPagination" (sortChanged)="pageChanged()"></app-sort>
+                                    <app-sort [text]="'Nombre'" [order]="'persona.nombre'"
+                                        [paramPagination]="paramPagination" (sortChanged)="pageChanged()"></app-sort>|
+                                    <app-sort [text]="'Razón social'" [order]="'empresa.razonSocial'"
+                                        [paramPagination]="paramPagination" (sortChanged)="pageChanged()"></app-sort>
+                                </th>
+                                <th>
+                                    <span>Tipo entidad</span>
+                                </th>
+                                <th>
+                                    <span>Tipo empresa</span>
+                                </th>
+                                <th style="width: 120px;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let entidad of entidades">
+                                <td>
+                                    {{entidad.id}}
+                                </td>
+                                <td>
+                                    <span *ngIf="entidad.tipo=='PERSONA'">{{entidad.persona.dni}}</span>
+                                    <span *ngIf="entidad.tipo=='EMPRESA'">-</span>
+                                </td>
+                                <td>
+                                    <span *ngIf="entidad.tipo=='PERSONA'">{{entidad.persona.cuil}}</span>
+                                    <span *ngIf="entidad.tipo=='EMPRESA'">{{entidad.empresa.cuit}}</span>
+                                </td>
+                                <td>
+                                    <span *ngIf="entidad.tipo=='PERSONA'">{{entidad.persona.apellido}}
+                                        {{entidad.persona.nombre}}</span>
+                                    <span *ngIf="entidad.tipo=='EMPRESA'">{{entidad.empresa.razonSocial}}</span>
+                                </td>
+                                <td>
+                                    {{entidad.tipo}}
+                                </td>
+                                <td>
+                                    <span *ngIf="entidad.tipo=='PERSONA'">-</span>
+                                    <span *ngIf="entidad.tipo=='EMPRESA'">{{entidad.empresa.tipoEmpresa}}</span>
+                                </td>
+                                <td class="buttons-small">
+                                    <div class="float-right">
+                                        <button (click)="detail(entidad)"
+                                            title="Ver detalle de la antidad {{entidad.id}}"
+                                            class="btn-sm btn-transition btn btn-outline-info">
+                                            <i class="fa fa-eye"></i>
+                                        </button>
+                                        <button *ngIf="typeView=='SELECT_ENT'" (click)="select(entidad)"
+                                            title="Seleccionar la persona {{entidad.id}}"
+                                            class="btn-sm btn-transition btn btn-outline-primary">
+                                            <i class="fa fa-hand-o-up"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="container-fluid">
+                <ngb-pagination [(page)]="paramPagination.page" [pageSize]="paramPagination.pageSize"
+                    [collectionSize]="paramPagination.totalItems" (pageChange)="pageChanged()"
+                    [maxSize]="5" [boundaryLinks]="true" class="d-flex justify-content-center">
+                </ngb-pagination>
+            </div>
+        </div>
+    </ng-container>
+    <ng-template #noItems>
+        <div class="form-group row alert alert-warning">
+            Sin datos
+        </div>
+    </ng-template>
+</div>
+<ng-template #loading>
+    <app-loading></app-loading>
+</ng-template>

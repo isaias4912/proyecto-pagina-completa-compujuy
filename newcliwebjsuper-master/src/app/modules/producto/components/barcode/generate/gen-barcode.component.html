@@ -1,0 +1,237 @@
+<div id="div" class="row">
+    <div class="col-md-12">
+        <app-panel [idCollapse]="'panelFiltro'" [title]="'Filtro de generación de etiquetas'">
+            <form id="formFilter">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="row form-group">
+                            <label class="col-form-label col-md-1" for="cmbTipoStyle">Estilo</label>
+                            <div class="col-md-4">
+                                <select id="cmbTipoStyle" name="cmbTipoStyle" class="form-control form-control-sm">
+                                </select>
+                            </div>
+                            <label [hidden]="!dataBarCode.showTipoBarCode" class="col-form-label col-md-1"
+                                for="cmbTipoBarCode">Tipo</label>
+                            <div [hidden]="!dataBarCode.showTipoBarCode" class="col-md-2">
+                                <select id="cmbTipoBarCode" name="cmbTipoBarCode" [(ngModel)]="dataBarCode.tipoBarCode" (change)="changeTipo()"
+                                    class="form-control form-control-sm">
+                                    <option *ngFor="let cod of dataBarCode.codigos" [ngValue]="cod.id">{{cod.value}}
+                                    </option>
+                                </select>
+                            </div>
+                            <label class="col-form-label col-md-2" for="cmbTipoDescripcion">Descripción</label>
+                            <div class="col-md-2">
+                                <select id="cmbTipoDescripcion" name="cmbTipoDescripcion"
+                                    [(ngModel)]="dataBarCode.texto" ng-change="changueTipoTxt();"
+                                    class="form-control form-control-sm">
+                                    <option *ngFor="let txt of dataBarCode.textos" [ngValue]="txt">{{txt.value}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-form-label col-md-1" for="chkCantidad">Agregar cantidad</label>
+                            <div class="col-md-1">
+                                <div class="pretty p-switch">
+                                    <input [(ngModel)]="dataBarCode.cantidad" id="chkCantidad" name="chkCantidad"
+                                        (change)="changeDescripcion()" type="checkbox" />
+                                    <div class="state p-primary">
+                                        <label></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <label class="col-md-1 pull-left inline">
+                                <input id="chkCantidad" name="chkCantidad" [(ngModel)]="dataBarCode.cantidad"
+                                    ng-change="changeDescripcion();" type="checkbox"
+                                    class="ace ace-switch ace-switch-5" />
+                                <span class="lbl middle"></span>
+                            </label> -->
+                            <label class="col-form-label col-md-1" for="chkCodigo">Agregar código</label>
+                            <div class="col-md-1">
+                                <div class="pretty p-switch">
+                                    <input [(ngModel)]="dataBarCode.codigo" id="chkCodigo" name="chkCodigo"
+                                        (change)="changeDescripcion()" type="checkbox" />
+                                    <div class="state p-primary">
+                                        <label></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <label class="col-md-1 pull-left inline">
+                                <input id="chkCodigo" name="chkCodigo" [(ngModel)]="dataBarCode.codigo"
+                                    ng-change="changeDescripcion();" type="checkbox"
+                                    class="ace ace-switch ace-switch-5" />
+                                <span class="lbl middle"></span>
+                            </label> -->
+                            <label class="col-form-label col-md-1" for="chkCodigoEsp">Agregar código interno</label>
+                            <div class="col-md-1">
+                                <div class="pretty p-switch">
+                                    <input [(ngModel)]="dataBarCode.codigoEspecial" id="chkCodigoEsp"
+                                        name="chkCodigoEsp" (change)="changeDescripcion()" type="checkbox" />
+                                    <div class="state p-primary">
+                                        <label></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <label class="col-md-1 pull-left inline">
+                                <input id="chkCodigoEsp" name="chkCodigoEsp" [(ngModel)]="dataBarCode.codigoEspecial"
+                                    ng-change="changeDescripcion();" type="checkbox"
+                                    class="ace ace-switch ace-switch-5" />
+                                <span class="lbl middle"></span>
+                            </label> -->
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </app-panel>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <table class="table table-hover table-striped">
+            <thead>
+                <tr>
+                    <th>Producto</th>
+                    <th *ngIf="dataBarCode.texto.id == 1">Etiqueta</th>
+                    <th>Código de barra</th>
+                    <th>Tipo Precio - Precio</th>
+                    <th>Cantidad</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngFor="let item of $any(fi).controls; let $index = index;" [formGroup]="item">
+                    <tr>
+                        <td class="center">
+                            <select-prod formControlName="$$producto" [name]="'txtProducto'+$index" [type]="1" [precios]="1"
+                                [nextFocus]="'descripcion'+$index">
+                            </select-prod>
+                            <span *ngIf="dataForm.submitted && item.invalid">
+                                <div *ngIf="item.controls.$$producto.errors?.required" class="text-danger">
+                                    Debe seleccionar un producto
+                                </div>
+                            </span>
+                        </td>
+                        <td [hidden]="!(dataBarCode.texto.id == 1)" class="center">
+                            <input [hidden]="!(dataBarCode.texto.id == 1)" formControlName="descripcionNormal"
+                                id="descripcion{{$index}}" name="descripcion{{$index}}" type="text"
+                                class="form-control form-control-sm" enter="cmbCodigo{{$index}}" />
+                            <span *ngIf="dataForm.submitted && item.invalid">
+                                <div *ngIf="item.controls.descripcionNormal.errors?.required" class="text-danger">
+                                    Campo obligatorio
+                                </div>
+                            </span>
+                        </td>
+                        <td class="center">
+                            <select id="cmbCodigo{{$index}}" name="cmbCodigo{{$index}}" formControlName="codigo"
+                                class="form-control form-control-sm" enter="cmbPecio{{$index}}">
+                                <option *ngFor="let cod of item?.get('$$codigos').value" [ngValue]="cod.codigo">
+                                    {{cod.codigo}}</option>
+                            </select>
+                            <span *ngIf="dataForm.submitted && item.invalid">
+                                <div *ngIf="item.controls.codigo.errors?.required" class="text-danger">
+                                    Campo obligatorio
+                                </div>
+                                <div *ngIf="item.controls.codigo.errors?.invalidCode" class="text-danger">
+                                    Código invalido para el tipo EAN 13
+                                </div>
+                            </span>
+                        </td>
+                        <td class="center">
+                            <select id="cmbPecio{{$index}}" name="cmbPecio{{$index}}" formControlName="precio"
+                                class="form-control form-control-sm" enter="cantidad{{$index}}">
+                                <option *ngFor="let prec of item?.get('$$precios').value" [ngValue]="prec.precio">
+                                    {{prec.nombre +' - $ ' + prec.precio}}</option>
+                            </select>
+                            <span *ngIf="dataForm.submitted && item.invalid">
+                                <div *ngIf="item.controls.precio.errors?.required" class="text-danger">
+                                    Campo obligatorio
+                                </div>
+                            </span>
+                        </td>
+                        <td class="center">
+                            <input formControlName="cantidad" id="cantidad{{$index}}" name="cantidad{{$index}}"
+                                type="number" min="1" max="9999999" class="form-control form-control-sm"
+                                enter="buttonAdd{{$index}}" />
+                            <span *ngIf="dataForm.submitted && item.invalid">
+                                <div *ngIf="item.controls.cantidad.errors?.required" class="text-danger">
+                                    Campo obligatorio
+                                </div>
+                            </span>
+                        </td>
+                        <td class="buttons-small">
+                            <button [hidden]="!($index== (fi.controls.length-1))" id="buttonAdd{{$index}}"
+                                name="buttonAdd{{$index}}" (click)="addItem();" type="button"
+                                class="btn-sm btn-transition btn btn-outline-success">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                            <button [hidden]="$index== 0 && ($index== (fi.controls.length-1))"
+                                id="buttonRemoveBarCode{{$index}}" name="buttonRemoveBarCode{{$index}}"
+                                (click)="removeItem(item);" class="btn-sm btn-transition btn btn-outline-danger">
+                                <i class="fa fa-remove"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr [hidden]="!(dataBarCode.texto.id == 2)">
+                        <td class="label-detail" colspan="4" style="border:none !important;">
+                            <!-- <ckeditor [editor]="Editor" formControlName="descripcionHTML"></ckeditor> -->
+                            <div class="height:auto;">
+                                <quill-editor [modules]="editor_modules" formControlName="descripcionHTML" ></quill-editor>
+                            </div>
+        
+                            <span *ngIf="dataForm.submitted && item.invalid">
+                                <div *ngIf="item.controls.descripcionHTML.errors?.required" class="text-danger">
+                                    Campo obligatorio
+                                </div>
+                            </span>
+                        </td>
+                    </tr>
+                </ng-container>
+            </tbody>
+        </table>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <div class="row form-group">
+            <div class="col-md-3 mx-auto">
+                <button (click)="printBarCode()" class="btn btn-block btn-transition btn-outline-primary"><span
+                        class="fa fa-gears"></span>&nbsp;&nbsp;Generar
+                </button>
+            </div>
+        </div>
+    </div>
+</div>
+<div [hidden]="!dataBarCode.showIframe" class="row">
+    <div class="col-md-12">
+        <div class="row form-group">
+            <div class="col-md-10" >
+				<div id="my-container" class="ng-scope pdfobject-container">
+					<iframe #pdfBarcodeForm id="pdfBarcode" src="" type="application/pdf" width="100%" height="500px" >
+					</iframe>
+				</div>
+            </div>
+            <div class="col-md-2" >
+				<button (click)="downloadBarCode('pdf');" id="btnDownloadPDF" name="btnDownloadPDF" class="btn btn-block btn-transition btn-outline-danger">
+					<i class="ace-icon fa fa-download"></i>
+					PDF
+				</button>
+				<button (click)="downloadBarCode('doc');" id="btnDownloadDOC" name="btnDownloadDOC" class="btn btn-block btn-transition btn-outline-primary">
+					<i class="ace-icon fa fa-download"></i>
+					DOC
+				</button>
+				<button (click)="downloadBarCode('xls');" id="btnDownloadXLS" name="btnDownloadXLS" class="btn btn-block btn-transition btn-outline-success">
+					<i class="ace-icon fa fa-download"></i>
+					XLS
+				</button>
+				<button (click)="downloadBarCode('html');" id="btnDownloadHTML" name="btnDownloadHTML" class="btn btn-block btn-transition btn-outline-warning">
+					<i class="ace-icon fa fa-download"></i>
+					HTML
+				</button>
+				<button (click)="downloadBarCode('csv');" id="btnDownloadCSV" name="btnDownloadCSV" class="btn btn-block btn-transition btn-outline-secondary">
+					<i class="ace-icon fa fa-download"></i>
+					CSV
+				</button>
+			</div>
+        </div>
+    </div>
+</div>

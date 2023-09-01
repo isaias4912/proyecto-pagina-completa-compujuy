@@ -1,0 +1,77 @@
+<div class="row text-center mt-4">
+    <aside class="col-md-8 col-sm-12 mx-auto">
+        <!-- <p>Login form style 3</p> -->
+        <div class="card">
+            <article class="card-body">
+                <h5 class="text-center mb-2 mt-1">Recuperar tu contraseña</h5>
+                <hr>
+                <div *ngIf="send" class="alert alert-success fade show" role="alert">
+                    Se envio un email a {{f.email.value}} con la información para que puedas recuperar tu contraseña.
+                </div>
+                <form *ngIf="!send" id="formPass" [formGroup]="formPass">
+                    <div class="alert alert-info fade show" role="alert">
+                        Ingresa tu email y te enviaremos un enlace a tu bandeja de entrada, para poder recuperar tu
+                        contraseña.
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-12">
+                            <div class="input-group" title="Ingrese su email">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"> <i class="text-primary fa fa-at"></i>
+                                    </span>
+                                </div>
+                                <input formControlName="email" id="mail" name="mail" #txtMailForm class="form-control"
+                                    placeholder="Ingresa tu email" type="email" enter="username">
+                            </div>
+                            <div *ngIf="dataForm.submitted && formPass.invalid">
+                                <div *ngIf="f.email.errors?.email" class="text-danger">
+                                    El mail debe tener un formato valido
+                                </div>
+                                <div *ngIf="f.email.errors?.required" class="text-danger">
+                                    Debes ingresar el email
+                                </div>
+                                <div *ngIf="f.email.errors?.maxlength" class="text-danger">
+                                    El mail tiene muchos caracteres
+                                </div>
+                                <div *ngIf="f.email.errors?.minlength" class="text-danger">
+                                    El mail tiene pocos caracteres
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-6 col-sm-12 mx-auto">
+                            <div style="transform:scale(0.7);transform-origin:0;">
+                                <re-captcha formControlName="captcha" (resolved)="resolved($event)"
+                                    siteKey="{{captchaKey}}"></re-captcha>
+                            </div>
+                            <div *ngIf="dataForm.submitted && formPass.invalid">
+                                <div *ngIf="f.captcha.errors?.required" class="text-danger">
+                                    El captcha se debe validar
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-8 col-sm-12 mx-auto">
+                            <button [disabled]="loading" type="button" id="btnLogin" name="btnLogin"
+                                (click)="recuperarPass()" class="btn-transition btn btn-ns btn-block">
+                                <span *ngIf="!loading">Enviar email</span>
+                                <span *ngIf="loading">
+                                    <span class="fa fa-circle-o-notch fa-spin">
+                                    </span>&nbsp;Enviando información
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <div class="float-left">
+                    <a [routerLink]="['/auth/login']" class="btn">Ir al login</a>
+                </div>
+                <div class="float-right">
+                    <a [routerLink]="['/auth/register']" class="btn">Registrarte</a>
+                </div>
+            </article>
+        </div>
+    </aside>
+</div>

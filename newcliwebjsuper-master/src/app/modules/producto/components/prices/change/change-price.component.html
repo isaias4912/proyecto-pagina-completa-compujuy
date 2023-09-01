@@ -1,0 +1,120 @@
+<div class="input-group input-group-sm">
+    <input id="{{name}}" name="{{name}}" [(ngModel)]="preciofinal" #input
+        (input)="changeValue(input.value)" class="form-control form-control-sm" type="number" enter="{{enter}}" />
+    <div class="input-group-append hand">
+        <span id="{{tooltip}}" [attr.data-tooltip-content]="'#'+tooltip+'_tooltip_content'"
+            class="input-group-text red fa fa-rocket"
+            title="Ayuda para cambiar el precio por porcentaje y otras opciones.">
+        </span>
+    </div>
+</div>
+<!-- <i class="red fa fa-rocket" title="Ayuda para cambiar el precio por porcentaje y otras opciones."></i> -->
+<div class="tooltip_templates" [hidden]="true">
+    <div [attr.id]="tooltip+'_tooltip_content'" class="container-fluid">
+        <!-- <app-panel [idCollapse]="'panelFiltro'" [title]="Cambio"> -->
+        <div class="row form-group justify-content-end">
+            <div class="col-md-1">
+                <span class="text-danger fa fa-remove hand" (click)="closeHelpPrecioVenta()"></span>
+            </div>
+        </div>
+        <div class="row form-group">
+            <table class="table">
+                <tbody>
+                    <tr>
+                        <td>Escala 1%</td>
+                        <td>
+                            <button type="button" (click)="changuePrice('one', 'minus')"
+                                class="btn-sm btn-transition btn btn-outline-danger">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                            <div id="{{tooltip}}_txtValueOne" class="mr-1 ml-1 badge badge-pill badge-primary">
+                                {{porcentaje.one}}</div>
+                            <button type="button" (click)="changuePrice('one', 'add')"
+                                class="btn-sm btn-transition btn btn-outline-success">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Escala 5%</td>
+                        <td>
+                            <button type="button" (click)="changuePrice('five', 'minus')"
+                                class="btn-sm btn-transition btn btn-outline-danger">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                            <div id="{{tooltip}}_txtValueFive" class="mr-1 ml-1 badge badge-pill badge-primary">
+                                {{porcentaje.five}}</div>
+                            <button type="button" (click)="changuePrice('five', 'add')"
+                                class="btn-sm btn-transition btn btn-outline-success">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Escala 10%</td>
+                        <td>
+                            <button type="button" (click)="changuePrice('ten', 'minus')"
+                                class="btn-sm btn-transition btn btn-outline-danger">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                            <div id="{{tooltip}}_txtValueTen" class="mr-1 ml-1 badge badge-pill badge-primary">
+                                {{porcentaje.ten}}</div>
+                            <button type="button" (click)="changuePrice('ten', 'add')"
+                                class="btn-sm btn-transition btn btn-outline-success">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Escala 20%</td>
+                        <td>
+                            <button type="button" (click)="changuePrice('twenty', 'minus')"
+                                class="btn-sm btn-transition btn btn-outline-danger">
+                                <i class="fa fa-minus"></i>
+                            </button>
+                            <div id="{{tooltip}}_txtValueTwenty" class="mr-1 ml-1 badge badge-pill badge-primary">
+                                {{porcentaje.twenty}}</div>
+                            <button type="button" (click)="changuePrice('twenty', 'add')"
+                                class="btn-sm btn-transition btn btn-outline-success">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Porcentaje de</td>
+                        <td>
+                            <div class="input-group input-group-sm">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text fa fa-dollar"></span>
+                                </div>
+                                <input [(ngModel)]="precioAddPercent" id="{{tooltip}}_txtPrecioCustomPercent"
+                                    name="{{tooltip}}_txtPrecioCustomPercent" class="form-control form-control-sm"
+                                    type="number" (keyup.enter)="addPriceCustomPercent()" />
+                                <div (click)="addPriceCustomPercent()" class="input-group-append hand">
+                                    <span class="input-group-text blue fa fa-arrow-right"></span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>Sumar la cantida de</td>
+                        <td>
+                            <div class="input-group input-group-sm">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text fa fa-dollar"></span>
+                                </div>
+                                <input [(ngModel)]="precioAddValue" id="{{tooltip}}_txtPrecioCustomValue"
+                                    name="{{tooltip}}_txtPrecioCustomValue" class="form-control form-control-sm"
+                                    type="number" (keyup.enter)="addPriceCustomValue()" />
+                                <div (click)="addPriceCustomValue()" class="input-group-append hand">
+                                    <span class="input-group-text blue fa fa-arrow-right"></span>
+                                </div>
+                            </div>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <!-- </app-panel> -->
+    </div>
+</div>

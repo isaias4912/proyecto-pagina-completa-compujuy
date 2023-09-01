@@ -1,0 +1,30 @@
+<div class="menu" *ngIf="menuItems">
+    <ul *ngIf="menuItems" class="navbar-nav mr-auto">
+        <li #allTheseThings id="liMain{{menu1.id}}" *ngFor="let menu1 of filterBy(menuItems, 'orden')" [attr.data-xxx]="menu1.id"
+            class="nav-item li-main">
+            <a class="snav-link" id="aMenu{{menu1.id}}">{{menu1.nombre}}
+            </a>
+            <div id="{{'triangulo'+menu1.id}}" class="triangulo" style="display: none;"><span></span></div>
+            <ul *ngIf="menu1.menuItems?.length>0" class="ul-first">
+                <li *ngFor="let menu2 of filterBy(menu1.menuItems, 'orden')">
+                    <a [routerLink]="[menu2.routerLink?menu2.routerLink:'']" *ngIf="menu2.menuItems?.length==0"
+                        [attr.data-parents]="menu1.id" id="aMenu{{menu2.id}}" class="without-border">
+                        {{menu2.nombre}}
+                    </a>
+                    <a *ngIf="menu2.menuItems?.length>0" id="aMenu{{menu2.id}}" class="">
+                        {{menu2.nombre}}
+                    </a>
+                    <ul *ngIf="menu2.menuItems?.length>0">
+                        <li *ngFor="let menu3 of menu2.menuItems">
+                            <a [routerLink]="[menu3.routerLink?menu3.routerLink:'']"
+                                [attr.data-parents]="menu1.id+'-'+menu2.id" id="aMenu{{menu3.id}}" class="">
+                                <i class="metismenu-icon"></i>
+                                {{menu3.nombre}}
+                            </a>
+                        </li>
+                    </ul>
+                </li>
+            </ul>
+        </li>
+    </ul>
+</div>

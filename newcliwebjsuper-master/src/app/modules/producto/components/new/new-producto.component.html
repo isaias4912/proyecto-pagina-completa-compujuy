@@ -1,0 +1,12 @@
+<div *ngIf="dataNewUpdate$ | async; else loading">
+    <div class="row">
+        <div class="col-lg-12">
+            <fields-producto [type]="1" [tipoProducto]="tipoProducto" [dataNewUpdate]="dataNewUpdate"
+                [dataForm]="dataForm" (saveEvent)="save($event)" (cancelEvent)="cancel()">
+            </fields-producto>
+        </div>
+    </div>
+</div>
+<ng-template #loading>
+    <app-loading></app-loading>
+</ng-template>

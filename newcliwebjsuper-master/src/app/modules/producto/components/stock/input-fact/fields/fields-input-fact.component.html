@@ -1,0 +1,70 @@
+<form id="formFactura" [formGroup]="formFactura" class="form-group-min">
+    <div class="row form-group">
+        <label class="col-form-label col-md-2 label-help">Factura de compra
+            <i title="Busque la factura de compra por el numero de la misma, tipee y presione enter o presione en el boton (<i class='fa fa-list green-strong'></i>) que esta a la derecha del campo de busqueda."
+            class="help-ns fa fa-question-circle"></i>
+        </label>
+        <div class="col-md-5">
+            <select-fact-comp formControlName="$$factura" [name]="'txtFactura'" [showList]="true"></select-fact-comp>
+            <span *ngIf="dataForm.submitted && formFactura.invalid">
+                <span *ngIf="ff.$$factura.errors?.required" class="text-danger">
+                    Campo obligatorio
+                </span>
+            </span>
+        </div>
+        <div *ngIf="dataFacturaAddStock" class="col-md-3">
+            <span *ngIf="dataFacturaAddStock?.completa==0 || dataFacturaAddStock?.completa==null"
+                class="mr-1 mt-1 ml-1 badge badge-pill badge-danger">
+                Sin cargar
+            </span>
+            <span *ngIf="dataFacturaAddStock?.completa==1" class="mr-1 mt-1 ml-1 badge badge-pill badge-dark">
+                Cargada parcialmente
+            </span>
+            <span *ngIf="dataFacturaAddStock?.completa==2" class="mr-1 mt-1 ml-1 badge badge-pill badge-success">
+                Cargada completamente
+            </span>
+        </div>
+    </div>
+    <div class="row form-group">
+        <div *ngIf="ff.$$factura.value" class="col-md-12">
+            <table class="table  table-striped table-td-padding-2">
+                <thead>
+                    <tr>
+                        <td>Nombre del Producto</td>
+                        <td>Cant.</td>
+                        <td>Cant. ingresada</td>
+                        <td>Cant. restante</td>
+                        <td>Cantidad a ingresar</td>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let item of $any(it).controls; let i = index" [formGroup]="item">
+                        <td>
+                                <info-prod [name]="'nombreProducto'+i" [idProducto]="item.controls.idProducto.value"
+                                [nombreProducto]="item.controls.nombreProducto.value"></info-prod>
+                        </td>
+                        <td>{{item.controls.cantidadComprada.value}}</td>
+                        <td>{{item.controls.cantidadAgregada.value}}</td>
+                        <td>{{item.controls.maximo.value}}</td>
+                        <td>
+                            <input formControlName="cantidad" id="cantidadItem{{i}}" name="cantidadItem{{i}}"
+                                class="form-control form-control-sm" type="number"
+                                enter="{{i == (dataFacturaAddStock.items.length - 1) ? 'btnSaveNew' : ('cantidadItem' + (i + 1))}}" />
+                            <span *ngIf="dataForm.submitted && item.invalid">
+                                <span *ngIf="item.controls.cantidad.errors?.required" class="text-danger">
+                                    Campo obligatorio
+                                </span>
+                                <span *ngIf="item.controls.cantidad.errors?.min" class="text-danger">
+                                    Debe ingresar un valor superior
+                                </span>
+                                <span *ngIf="item.controls.cantidad.errors?.max" class="text-danger">
+                                    Debe ingresar un valor inferior
+                                </span>
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</form>

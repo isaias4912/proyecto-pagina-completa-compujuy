@@ -1,0 +1,29 @@
+<div class="row">
+    <div class="col-md-12">
+        <ol class="breadcrumb">
+            <li *ngFor="let breadcrumb of breadcrumbs; let i=index">
+                <a *ngIf="breadcrumb.url!='' && breadcrumb.url!=null" [routerLink]="[breadcrumb.url]">
+                    <span id="labelCustomText{{i}}"> {{ breadcrumb.label }} </span>
+                </a>
+                <span class="text" *ngIf="breadcrumb.url=='' || breadcrumb.url==null">
+                    <span id="labelCustomText{{i}}" class="text-bold"> {{ breadcrumb.label }} </span>
+                </span>
+            </li>
+        </ol>
+        <!-- <div *ngIf="extraData.maximize" > -->
+        <div>
+            <span *ngIf="!fullScreenMode" class="help fa fa-window-maximize hand blue float-right"
+                (click)="fullScreen()" title="Maximizar vista"></span>
+            <span *ngIf="fullScreenMode" class="help fa fa-window-close-o hand red float-right" (click)="resetScreen()"
+                title="Minimizar vista"></span>
+        </div>
+        <a *ngIf="help.url" href="{{help.url}}" target="_blank" title="Ir a la ayuda online sobre esta pantalla."><i
+                class="help fa fa fa-question-circle float-right"></i></a>
+    </div>
+    <!-- <div class="col-md-1 d-none d-sm-block" style="text-align:right">
+        <span *ngIf="!fullScreenMode" class="fa fa-window-maximize hand blue margin-5" (click)="fullScreen()"
+            title="Maximizar vista"></span>
+        <span *ngIf="fullScreenMode" class="fa fa-window-close-o hand red margin-5" (click)="resetScreen()"
+            title="Minimizar vista"></span>
+    </div> -->
+</div>

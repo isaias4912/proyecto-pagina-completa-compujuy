@@ -1,0 +1,202 @@
+<div *ngIf="persona$ | async as persona; else loading;">
+    <ng-container *ngIf="persona; else noItems">
+        <div class="row form-group">
+            <div class="col-md-12">
+                <div class="form-group margin-bottom-5">
+                    <label class="label-detail col-md-7">Apellido y Nombre/s:<span
+                            class="label-value-detail">{{persona.apellido}}&nbsp;{{persona.nombre}}</span></label>
+                </div>
+                <div class="form-group margin-bottom-5">
+                    <label class="label-detail col-md-5">DNI:<span
+                            class="label-value-detail">{{persona.dni}}</span></label>
+                    <label class="label-detail col-md-5">CUIL:<span
+                            class="label-value-detail">{{persona.cuil}}</span></label>
+                </div>
+                <div class="form-group margin-bottom-5">
+                    <label class="label-detail col-md-5">Sexo:<span
+                            class="label-value-detail">{{persona.sexo==1?'Masculino':persona.sexo==2?'Femenino':'Otro'}}</span></label>
+                    <label class="label-detail col-md-5">Fecha de nacimiento:<span
+                            class="label-value-detail">{{persona.fechaNac}}</span></label>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="persona.domicilios?.length > 0" class="form-group margin-bottom-5">
+            <label class="label-detail col-md-2">Domicilio/s:</label>
+            <div class="col-md-12">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Calle</th>
+                            <th>Número</th>
+                            <th>Piso</th>
+                            <th>Depto.</th>
+                            <th>Provincia</th>
+                            <th>Ciudad</th>
+                            <th>Observación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let domicilio of persona.domicilios">
+                            <td>{{domicilio.calle}}</td>
+                            <td>{{domicilio.numero}}</td>
+                            <td>{{domicilio.piso}}</td>
+                            <td>{{domicilio.dpto}}</td>
+                            <td>{{domicilio.provincia}}</td>
+                            <td>{{domicilio.ciudad}}</td>
+                            <td>{{domicilio.detale}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div *ngIf="persona.telefonos?.length > 0" class="form-group margin-bottom-5">
+            <label class="label-detail col-md-2">Telefonos/s:</label>
+            <div class="col-md-12">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Prefijo - Numero</th>
+                            <th>Empresa</th>
+                            <th>Observación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let telefono of persona.telefonos">
+                            <td>{{telefono.tipo==1?'Celular':'Fijo'}}</td>
+                            <td>{{telefono.prefijo}}-{{telefono.numero}}</td>
+                            <td>{{telefono.empresa}}</td>
+                            <td>{{telefono.detalle}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div *ngIf="persona.contactos?.length > 0" class="form-group margin-bottom-5">
+            <label class="label-detail col-md-2">Contacto/s:</label>
+            <div class="col-md-12">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Cuenta</th>
+                            <th>Observación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let contacto of persona.contactos">
+                            <td class="center" *ngIf="contacto.tipo==1" >Email</td>
+                            <td class="center" *ngIf="contacto.tipo==2" >Facebook</td>
+                            <td class="center" *ngIf="contacto.tipo==3" >Twiter</td>
+                            <td class="center" *ngIf="contacto.tipo==4" >Otro</td>
+                            <td class="center" *ngIf="contacto.tipo==1"><address>{{contacto.descripcion}}&nbsp;&nbsp;<a href="mailto:{{contacto.descripcion}}"><span class="fa fa-envelope"></span></a></address></td>
+                            <td class="center" *ngIf="contacto.tipo!=1">{{contacto.descripcion}}</td>
+                            <td>{{contacto.detalle}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </ng-container>
+    <ng-template #noItems>
+        <div class="form-group row alert alert-warning">
+            Sin datos
+        </div>
+    </ng-template>
+</div>
+<ng-template #loading>
+    <app-loading></app-loading>
+</ng-template>
+<!-- <div class="row form-group">
+    <div class="col-md-7">
+        <div class="form-group margin-bottom-5">
+            <label class="label-detail col-md-6">Nombre:<span
+                    class="label-value-detail">{{producto.productoPadre.nombre}}&nbsp;{{producto.nombre}}</span></label>
+            <label class="label-detail col-md-6">Nombre final:<span
+                    class="label-value-detail">{{producto.nombreFinal}}</span></label>
+        </div>
+        <div class="form-group margin-bottom-5">
+            <label class="label-detail col-md-6">Tipo:<span class="label-value-detail">Producto
+                    {{producto.productosCompuestos.length>0?'Compuesto':'Simple'}}</span></label>
+            <label class="label-detail col-md-6">Familia:<span
+                    class="label-value-detail">{{producto.productoPadre.familia.nombre}}</span></label>
+        </div>
+        <div class="form-group margin-bottom-5">
+            <label class="label-detail col-md-6">Contenido Neto:<span
+                    class="label-value-detail">{{producto.contenidoNeto}}</span></label>
+            <label class="label-detail col-md-6">Unidad:<span
+                    class="label-value-detail">{{producto.unidad.nombre}}</span></label>
+        </div>
+        <div class="form-group margin-bottom-5">
+            <label class="label-detail col-md-6">Precio de costo c/iva:<span class="label-value-detail">$
+                    {{producto.precioCosto}}</span></label>
+            <label class="label-detail col-md-6">Precio de venta:<span class="label-value-detail">$
+                    {{producto.precioVenta}}</span></label>
+        </div>
+        <div *ngIf="producto.detalle !== ''" class="form-group margin-bottom-5">
+            <label class="label-detail col-md-2">Detalle</label>
+            <div class="col-md-12">
+                <div [innerHTML]="producto.detalle | safeHtml"></div>
+            </div>
+        </div>
+    </div>
+    <div class="col-md-5">
+        <div *ngIf="producto.codigoBarras?.length > 0" class="form-group margin-bottom-5">
+            <label class="label-detail col-md-12">Código/s de barra:</label>
+            <div class="col-md-12">
+                <table class="table table-sm table-striped">
+                    <thead>
+                        <tr>
+                            <th>Código</th>
+                            <th>Tipo</th>
+                            <th>Detalle</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let codigo of producto.codigoBarras">
+                            <td>{{codigo.codigo}}</td>
+                            <td>{{codigo.tipo===1?'Normal':'Especial'}}</td>
+                            <td>{{codigo.descripcion}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div *ngIf="producto.proveedores?.length > 0" class="form-group margin-bottom-5">
+            <label class="label-detail col-md-2">Proveedores:</label>
+            <div class="col-md-12">
+                <table class="table table-sm table-striped">
+                    <thead>
+                        <tr>
+                            <th>Razón social</th>
+                            <th>CUIT</th>
+                            <th>Tipo</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let proveedor of producto.proveedores">
+                            <td>{{proveedor.razonSocial}}</td>
+                            <td>{{proveedor.cuit}}</td>
+                            <td *ngIf="proveedor.tipo == 0" class="">
+                                Sin especificar
+                            </td>
+                            <td *ngIf="proveedor.tipo == 1" class="">
+                                Consumidor Final
+                            </td>
+                            <td *ngIf="proveedor.tipo == 2" class="">
+                                Monotributo
+                            </td>
+                            <td *ngIf="proveedor.tipo == 3" class="">
+                                Responsable Inscripto
+                            </td>
+                            <td *ngIf="proveedor.tipo == 4" class="">
+                                Otro
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+</div> -->

@@ -1,0 +1,150 @@
+<app-modal [title]="title">
+    <div *ngIf="TipoSearch.SEARCH_FILTER==typeSearch" id="divFilter" class="row">
+        <div class="col-md-12">
+            <app-panel [idCollapse]="'panelFiltro'">
+                <form id="formFilter" [formGroup]="formFilter">
+                    <div class="row">
+                        <div class="col-md-11">
+                            <div class="row form-group  margin-bottom-5">
+                                <label for="txtFiltro"
+                                    class="col-md-1 col-form-label padding-right-left-4">Filtro</label>
+                                <div class="col-md-11">
+                                    <input type="text" id="txtFiltro" name="txtFiltro"
+                                        class="form-control form-control-sm" formControlName="q"
+                                        placeholder="Nombre del producto o codigo" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <button type="submit" (click)="pageChanged();" #btnQuery id="btnQuery" name="btnQuery"
+                                title="Realice la busqueda segun los filtros aplicados"
+                                class="btn-sm btn-block btn-transition btn btn-outline-info">
+                                <i class="fa fa-search"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </app-panel>
+        </div>
+    </div>
+    <div *ngIf="productos$ | async as productos; else loading;">
+        <ng-container *ngIf="productos.length; else noItems">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table id="tableProducts" [ngClass]="{'table-hover':tableHover}"
+                            class="table table-striped navigation-table">
+                            <thead>
+                                <tr class="first">
+                                    <th style="width: 5%;">
+                                        <app-sort *ngIf="TipoSearch.SEARCH_FILTER==typeSearch" [text]="'Id/Cód.'"
+                                            [order]="'id'" [paramPagination]="paramPagination"
+                                            (sortChanged)="pageChanged()"></app-sort>
+                                        <span *ngIf="TipoSearch.SEARCH_WITHOUT_FILTER==typeSearch">
+                                            Id/Cód.
+                                        </span>
+                                    </th>
+                                    <th style="width: 15%;">
+                                        <app-sort *ngIf="TipoSearch.SEARCH_FILTER==typeSearch" [text]="'Producto'"
+                                            [order]="'producto.nombre'" [paramPagination]="paramPagination"
+                                            (sortChanged)="pageChanged()">
+                                        </app-sort>
+                                        <span *ngIf="TipoSearch.SEARCH_FILTER==typeSearch">
+                                            |
+                                        </span>
+                                        <app-sort *ngIf="TipoSearch.SEARCH_FILTER==typeSearch" [text]="'Detalle'"
+                                            [order]="'nombre'" [paramPagination]="paramPagination"
+                                            (sortChanged)="pageChanged()">
+                                        </app-sort>
+                                        <span *ngIf="TipoSearch.SEARCH_WITHOUT_FILTER==typeSearch">
+                                            Producto | Detalle
+                                        </span>
+
+                                    </th>
+                                    <th>Nombre Final</th>
+                                    <th>Codigo/s de Barra/s</th>
+                                    <th>Familia</th>
+                                    <th>Cont. Neto</th>
+                                    <th>Unidad</th>
+                                    <th style="width: 120px;"></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let producto of productos; let j = index" [attr.data-row]="j"
+                                    id="{{'row'+j}}" tabindex="{{j}}">
+                                    <td>
+                                        {{producto.id}}
+                                    </td>
+                                    <td>
+                                        <info-product-parent [lnk]="3" [productParent]="producto.productoPadre">
+                                        </info-product-parent>
+                                        {{producto.nombre}}
+                                    </td>
+                                    <td>
+                                        {{producto.nombreFinal}}
+                                    </td>
+                                    <td>
+                                        <span *ngFor="let cod of producto.codigoBarras; let i = index">
+                                            <br *ngIf="i > 0">
+                                            <span id="spnCode{{i}}">{{cod.codigo}}
+                                            </span>
+                                        </span>
+                                    </td>
+                                    <td>
+                                        <info-family [lnk]="3" [familia]="producto.productoPadre.familia"></info-family>
+                                    </td>
+                                    <td>
+                                        {{producto.contenidoNeto}}
+                                    </td>
+                                    <td>
+                                        {{producto.unidad.nombre}}
+                                    </td>
+                                    <td class="buttons-small">
+                                        <div class="float-right">
+                                            <button (click)="selectProducto(producto);" id="btnSelectSearchProd{{j}}"
+                                                class="btn-sm btn-transition btn btn-outline-primary"
+                                                title="Seleccionar este producto  {{producto.nombreFinal}}">
+                                                <i class="fa fa-hand-o-up"></i>
+                                            </button>
+                                            <button (click)="showDetailProduct(producto);"
+                                                class="btn-sm btn-transition btn btn-outline-info"
+                                                title="Detalle del producto">
+                                                <i class="fa fa-eye"></i>
+                                            </button>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                    </div>
+                </div>
+            </div>
+            <div *ngIf="TipoSearch.SEARCH_FILTER==typeSearch" class="row">
+                <div class="container-fluid">
+                    <ngb-pagination [(page)]="paramPagination.page" [pageSize]="paramPagination.pageSize"
+                        [collectionSize]="paramPagination.totalItems" (pageChange)="pageChanged()"
+                        [maxSize]="5" [boundaryLinks]="true"
+                        class="d-flex justify-content-center">
+                    </ngb-pagination>
+                </div>
+            </div>
+            <div *ngIf="TipoSearch.SEARCH_WITHOUT_FILTER==typeSearch" class="row">
+                <div class="container-fluid">
+                    <navigation-table [nameTable]="'tableProducts'" [nameBtnMain]="'btnSelectSearchProd'"
+                        [documentTarget]="'modalBody'" (moreEvent)="more()" [paramPagination]="paramPagination"
+                        #navigationTableComponent>
+                    </navigation-table>
+                </div>
+            </div>
+        </ng-container>
+        <ng-template #noItems>
+            <div class="form-group row alert alert-warning">
+                Sin datos
+            </div>
+        </ng-template>
+    </div>
+    <ng-template #loading>
+        <app-loading></app-loading>
+    </ng-template>
+</app-modal>

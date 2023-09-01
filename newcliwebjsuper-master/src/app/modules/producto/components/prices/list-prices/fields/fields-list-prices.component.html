@@ -1,0 +1,75 @@
+<form id="formLista" [formGroup]="formLista" class="form-group-min" >
+    <div class="row form-group">
+        <label class="col-form-label col-md-2" for="txtNombre">Nombre</label>
+        <div class="col-md-3">
+            <input id="txtNombre" name="txtNombre" type="text" class="form-control form-control-sm"
+                formControlName="nombre" enter="cmbActivo" maxlength="180" />
+            <span *ngIf="dataForm.submitted && formLista.invalid">
+                <div *ngIf="f.nombre.errors?.required" class="text-danger">
+                    Campo obligatorio
+                </div>
+            </span>
+        </div>
+    </div>
+    <div class="row form-group">
+        <label class="col-form-label col-md-2" for="cmbActivo">Activos</label>
+        <div class="col-md-3">
+            <select id="cmbActivo" name="cmbActivo" class="form-control form-control-sm" enter="cmbTipo"
+                formControlName="activo">
+                <option *ngFor="let opcion of  dataOptions.optionsActivo" [ngValue]="opcion.value ">{{opcion.name}}
+                </option>
+            </select>
+            <span *ngIf="dataForm.submitted && formLista.invalid">
+                <div *ngIf="f.activo.errors?.required" class="text-danger">
+                    Campo obligatorio
+                </div>
+            </span>
+        </div>
+    </div>
+    <div class="row form-group">
+        <label class="col-form-label col-md-2" for="cmbTipo">Tipo</label>
+        <div class="col-md-3">
+            <select id="cmbTipo" name="cmbTipo" formControlName="tipo" class="form-control form-control-sm"
+                enter="txtValor">
+                <option *ngFor="let tipo of [{label: 'Por porcentaje', id: 1}, {label: 'Por cantidad en pesos', id: 2}]"
+                    [ngValue]="tipo.id ">{{tipo.label}}</option>
+            </select>
+            <span *ngIf="dataForm.submitted && formLista.invalid">
+                <div *ngIf="f.tipo.errors?.required" class="text-danger">
+                    Campo obligatorio
+                </div>
+            </span>
+        </div>
+    </div>
+    <div class="row form-group">
+        <label class="col-form-label col-md-2" for="txtValor">Valor</label>
+        <div class="col-md-3">
+            <div class="input-group input-group-sm">
+                <div [hidden]="f.tipo.value==2" class="input-group-prepend">
+                    <span class="input-group-text fa fa-dollar"></span>
+                </div>
+                <input id="txtValor" name="txtValor" type="number"
+                    class="form-control form-control-sm"
+                    formControlName="valor" enter="txtDescripcion" />
+                <div [hidden]="f.tipo.value==1" class="input-group-append">
+                    <span class="input-group-text fa fa-percent"></span>
+                </div>
+            </div>
+            <span *ngIf="dataForm.submitted && formLista.invalid">
+                <div *ngIf="f.valor.errors?.required" class="text-danger">
+                    Campo obligatorio
+                </div>
+                <div *ngIf="f.valor.errors?.min" class="text-danger">
+                    Valor invalido
+                </div>
+            </span>
+        </div>
+    </div>
+    <div class="row form-group">
+        <label class="col-form-label col-md-2" for="txtDescripcion">Detalle</label>
+        <div class="col-md-9">
+            <input id="txtDescripcion" name="txtDescripcion" type="text" class="form-control form-control-sm"
+                formControlName="detalle" enter="btnSaveLista" maxlength="500" />
+        </div>
+    </div>
+</form>

@@ -1,0 +1,214 @@
+<app-modal [title]="title">
+    <div id="div" class="row">
+        <div class="col-md-12">
+            <div *ngIf="listStock$ | async as listStock; else loadingStock;">
+                <ng-container *ngIf="listStock.length; else noItemsStock">
+                    <table class="table table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width: 18%;">Sucursal</th>
+                                <th style="width: 8%;" title="Stock de reposición">Stock rep.</th>
+                                <th style="width: 8%;" title="Stock minimo">Stock min.</th>
+                                <th>Ubicación Simple</th>
+                                <th>Detalle</th>
+                                <th>Stock Actual</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let sp of listStock">
+                                <td class="center">
+                                    {{sp.sucursal.nombre}}
+                                </td>
+                                <td class="center">
+                                    {{sp.puntoReposicion}}
+                                </td>
+                                <td class="center">
+                                    {{sp.stockMinimo}}
+                                </td>
+                                <td class="center">
+                                    {{sp.ubicacion}}
+                                </td>
+                                <td class="center">
+                                    {{sp.detalle}}
+                                </td>
+                                <td class="center">
+                                    <span *ngIf="sp.stock <= sp.puntoReposicion" class="font-weight-bold red">
+                                        {{sp.stock}}
+                                    </span>
+                                    <span *ngIf="sp.stock > sp.puntoReposicion" class="font-weight-bold green-strong">
+                                        {{sp.stock}}
+                                    </span>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </ng-container>
+                <ng-template #noItemsStock>
+                    <div class="form-group row alert alert-warning">
+                        Sin datos para el stock
+                    </div>
+                </ng-template>
+            </div>
+            <ng-template #loadingStock>
+                <div class="spinner-border text-primary" role="status"></div>Cargando informacion...
+            </ng-template>
+            <app-panel [idCollapse]="'panelFiltro'">
+                <form id="formFilter" class="form-group-min">
+                    <div class="row">
+                        <div class="col-lg-11 col-md-11 col-sm-12">
+                            <div class="row form-group">
+                                <label for="txtFiltro"
+                                    class="col-md-1 col-form-label padding-right-left-4">Sucursal</label>
+                                <div class="col-md-4">
+                                    <select-sucursal [name]="'cmbFiltroSucursalLisMov'"></select-sucursal>
+                                </div>
+                                <label class="col-md-1 col-form-label padding-right-left-4">Incluir prod.
+                                    asociados</label>
+                                <div class="col-md-2">
+                                    <div class="pretty p-switch">
+                                        <input [(ngModel)]="filterMovimiento.asociados" id="chkAsoc" name="chkAsoc"
+                                            (change)="pageChanged()" type="checkbox" />
+                                        <div class="state p-primary">
+                                            <label></label>
+                                        </div>
+                                    </div>
+                                </div>
+                                <label class="col-md-1 col-form-label padding-right-left-4">Incluir ventas
+                                </label>
+                                <div class="col-md-2">
+                                    <div class="pretty p-switch">
+                                        <input [(ngModel)]="filterMovimiento.ventas" id="chkVentas" name="chkVentas"
+                                            (change)="pageChanged()" type="checkbox" />
+                                        <div class="state p-primary">
+                                            <label></label>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-lg-1 col-md-1 col-sm-12">
+                            <div class="row form-group">
+                                <div class="btn-group btn-group-sm btn-block" role="group">
+                                    <button type="submit" (click)="pageChanged()"
+                                        class="btn btn-transition btn btn-outline-light">
+                                        <i class="fa fa-search green-strong"></i>
+                                    </button>
+                                    <!-- <button type="button" (click)="reset()"
+                                        class="btn-transition btn btn-outline-light">
+                                        <i class="fa fa-trash-o blue"></i>
+                                    </button> -->
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </form>
+            </app-panel>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 buttons-small">
+        </div>
+        <div class="col-md-6 float-right">
+            <div class="float-right">
+                <app-resgister [paramPagination]="paramPagination" (registerChanged)="pageChanged()">
+                </app-resgister>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="movimientos$ | async as movimientos; else loading;">
+        <ng-container *ngIf="movimientos.length; else noItems">
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="table-responsive">
+                        <table class="table  table-striped">
+                            <thead>
+                                <tr>
+                                    <th>
+                                        <app-sort [text]="'Fecha'" [order]="'factura.fechaCarga'"
+                                            [paramPagination]="paramPagination" (sortChanged)="pageChanged()">
+                                        </app-sort>
+                                    </th>
+                                    <th style="width: 200px;">Producto</th>
+                                    <th>
+                                        <app-sort [text]="'Tipo'" [order]="'tipo'" [paramPagination]="paramPagination"
+                                            (sortChanged)="pageChanged()"></app-sort>
+                                    </th>
+                                    <th>Sucursal</th>
+                                    <th>Stock inicial</th>
+                                    <th>Cantidad</th>
+                                    <th>Stock final</th>
+                                    <th>Referencia/Item asociado</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let mov of movimientos">
+                                    <td>
+                                        {{mov.fecha}}
+                                    </td>
+                                    <td>
+                                        {{mov.nombreProducto}}
+                                    </td>
+                                    <td *ngIf="mov.tipo == 2">
+                                        <span class="fa fa-dollar text-primary"></span>&nbsp;Venta
+                                    </td>
+                                    <td *ngIf="mov.tipo == 1">
+                                        <span
+                                            class="fa {{mov.movimiento.tipo==1?'fa-arrow-up green-strong':'fa-arrow-down red'}} "></span>
+                                        {{mov.movimiento.tipo==1?'Ingreso':'Salida'}}
+                                        {{mov.movimiento.factura.tipo==4?' - Pase':''}}
+                                    </td>
+                                    <td *ngIf="mov.tipo == 1">
+                                        {{mov.movimiento.factura.sucursal.nombre}}
+                                    </td>
+                                    <td *ngIf="mov.tipo == 2">
+                                        {{mov.venta.cbteEnc.sucursal.nombre}}
+                                    </td>
+                                    <td>
+                                        {{mov.valorInicial}}
+                                    </td>
+                                    <td class="red">
+                                        {{mov.cantidad}}
+                                    </td>
+                                    <td>
+                                        <b>{{mov.valorFinal}}</b>
+                                    </td>
+                                    <!-- <td>
+                                        {{mov.referencia}}
+                                    </td> -->
+                                    <td *ngIf="mov.tipo == 1 && mov.movimiento.factura.facturaCompra">
+                                        <a [routerLink]=""
+                                            (click)="showDetailInvoice(mov.movimiento.factura.facturaCompra);"
+                                            title="Detalle de la factura de compra asociada">{{mov.movimiento.factura.numero}}</a>
+                                    </td>
+                                    <td *ngIf="mov.tipo == 1 && !mov.movimiento.factura.facturaCompra">
+                                        {{mov.movimiento.factura.numero}}
+                                    </td>
+                                    <td *ngIf="mov.tipo == 2">
+                                        <a (click)="detailVenta({id: mov.venta.cbteEnc.id});" class="hand"
+                                            title="Detalle de la venta asociada">{{mov.venta.cbteEnc.id}}</a>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="container-fluid">
+                    <ngb-pagination [(page)]="paramPagination.page" [pageSize]="paramPagination.pageSize"
+                        [collectionSize]="paramPagination.totalItems" (pageChange)="pageChanged()" [maxSize]="5"
+                        [boundaryLinks]="true" class="d-flex justify-content-center">
+                    </ngb-pagination>
+                </div>
+            </div>
+        </ng-container>
+        <ng-template #noItems>
+            <div class="form-group row alert alert-warning">
+                Sin datos
+            </div>
+        </ng-template>
+    </div>
+    <ng-template #loading>
+        <app-loading></app-loading>
+    </ng-template>
+</app-modal>

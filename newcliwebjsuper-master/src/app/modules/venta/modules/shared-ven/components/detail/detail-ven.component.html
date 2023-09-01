@@ -1,0 +1,212 @@
+<div *ngIf="venta$ | async as venta; else loading;">
+    <ng-container *ngIf="venta; else noItems">
+        <div *ngIf="venta.tipoFactura=='FACTURA_ELECTRONICA' && !(venta.afipModo == 'prod')" class="alert alert-block alert-danger">
+            <span class="text-bold">Esta factura electrónica no fue realizada en produccion, no tiene validez ante la
+                AFIP</span>
+        </div>
+        <table class="table table-bordered padding-td-tb-2">
+            <tr>
+                <td class="label-detail" [attr.colspan]="2"></td>
+                <td class="label-detail text-center" [attr.colspan]="4"><span
+                        class="label-value-detail">{{venta.tipoCbte}}</span><br></td>
+                <td class="label-detail" [attr.colspan]="2"></td>
+            </tr>
+            <tr *ngIf="venta.tipoFactura=='FACTURA_ELECTRONICA'" >
+                <td [attr.colspan]="8" class="label-detail">
+                    CAE:<span class="label-value-detail">{{venta.cae}}</span>&nbsp;&nbsp;
+                    Fecha vto. CAE:<span class="label-value-detail">{{venta.caeVenc}}</span>&nbsp;&nbsp;&nbsp;&nbsp;
+                    Punto de venta:<span class="label-value-detail">{{venta.ptoVenta}}</span>&nbsp;&nbsp;
+                    Cbte. nro.:<span class="label-value-detail">{{venta.cbteNro}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="label-detail" [attr.colspan]="4">
+                    Fecha cbte.:<span class="label-value-detail">{{venta.fechaCbte}}</span>&nbsp;&nbsp;
+                    <br>
+                    Fecha vto. pago.:<span class="label-value-detail">{{venta.fechaCbte}}</span><br>
+                    <div *ngIf="venta.concepto == 'SERVICIOS'">
+                        Fecha desde:<span class="label-value-detail">{{venta.fechaDesde}}</span>&nbsp;&nbsp;
+                        Fecha hasta:<span class="label-value-detail">{{venta.fechaDesde}}</span><br>
+                    </div>
+                    Concepto:<span class="label-value-detail">{{venta.concepto}}</span><br>
+                </td>
+                <td class="label-detail" [attr.colspan]="4">
+                    Fecha de carga:<span class="label-value-detail">{{venta.fechaCarga}}</span><br>
+                    Código int.:<span class="label-value-detail">{{venta.id}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td [attr.colspan]="8" class="label-detail">
+                    <!--                        <label class="label-detail col-md-4" >Nombre final:<span class="label-value-detail">{{producto.nombreFinal}}</span></label>-->
+                    Cliente:<span class="label-value-detail">{{venta.nombreCliente}}</span>&nbsp;&nbsp;
+                    {{venta.tipoDocCliente}}:<span class="label-value-detail">{{venta.nroDocCliente}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td *ngIf="venta.listaPrecio" [attr.colspan]="venta.afipFe?'10':'9'" class="label-detail">Lista de
+                    precios:<span id="spnLista"> <a href>{{getListaPrecio(venta)}}</a></span></td>
+                <td *ngIf="!venta.listaPrecio" [attr.colspan]="venta.afipFe?'10':'9'" class="label-detail">Lista de
+                    precios:<span class="label-value-detail">Normal</span></td>
+            </tr>
+            <tr>
+                <td class="text-center" [attr.colspan]="8"><span class="label-value-detail">DETALLE</span></td>
+            </tr>
+            <tr>
+                <td class="label-detail">Cod. Prod<br></td>
+                <td class="label-detail">Descripción<br></td>
+                <td class="label-detail">Cantidad</td>
+                <td class="label-detail">Precio s/iva<br></td>
+                <td class="label-detail">IVA<br></td>
+                <td class="label-detail">Precio c/iva<br></td>
+                <td class="label-detail">Desc.</td>
+                <td class="label-detail">Subtotal</td>
+            </tr>
+            <tr *ngFor="let detalle of venta.detalleVentas; let i=index">
+                <td><span class="label-value-detail">{{detalle.producto.id}}</span></td>
+                <td *ngIf="detalle.producto != undefined && detalle.producto != null">
+                    <info-prod [name]="'prevProdu'+i" [idProducto]="detalle.producto.id"
+                        [nombreProducto]="detalle.descripcion"></info-prod>
+                    <span *ngIf="detalle.numeroSerie != null && detalle.numeroSerie != ''"> - <b>Núm. serie:</b>
+                        {{detalle.numeroSerie}}</span>
+                    <span *ngIf="detalle.infoProdAdic != null && detalle.infoProdAdic != ''"> - <b>Info. adic:</b>
+                        {{detalle.infoProdAdic}}</span>
+                </td>
+                <td *ngIf="detalle.producto == undefined || detalle.producto == null">
+                    <span class="label-value-detail">{{detalle.descripcion}}</span>
+                    <span *ngIf="detalle.numeroSerie != null && detalle.numeroSerie != ''"> - <b>Núm. serie:</b>
+                        {{detalle.numeroSerie}}</span>
+                    <span *ngIf="detalle.infoProdAdic != null && detalle.infoProdAdic != ''"> - <b>Info. adic:</b>
+                        {{detalle.infoProdAdic}}</span>
+                </td>
+                <td><span class="label-value-detail">{{formatDecimal(detalle.cantidad)}}</span></td>
+                <td class="text-right"><span class="label-value-detail">{{formatDecimal(detalle.precioSinIva)}}</span></td>
+                <td><span class="label-value-detail">{{detalle.ivaDes}}</span></td>
+                <td class="text-right"><span class="label-value-detail">{{formatDecimal(detalle.precioConIva)}}</span></td>
+                <td class="text-right"><span class="label-value-detail">{{formatDecimal(detalle.descuento)}}</span></td>
+                <td class="text-right"><span class="label-value-detail">$ {{formatDecimal(detalle.total)}}</span>
+                </td>
+            </tr>
+            <tr>
+                <td class="" [attr.colspan]="7"></td>
+                <td class="">
+                    <ul>
+                        <li>
+                            Subtotal B.I. {{venta.totalBaseImp}}
+                        </li>
+                        <li>
+                            IVA <span class="label-value-detail green-strong">{{venta.totalIva}}</span>
+                        </li>
+                        <li>
+                            Tributos <span class="label-value-detail blue">{{venta.totalTrib}}</span>
+                        </li>
+                        <li>
+                            <b>TOTAL {{formatDecimal(venta.total)}}</b>
+                        </li>
+                    </ul>
+                    <!--TOTAL:<b><span class="label-value-detail green-strong">$ {{venta.total}}</span></b>-->
+                </td>
+            </tr>
+        </table>
+        <br>
+        <table class="table table-bordered  padding-td-tb-2">
+            <tr>
+                <th>Cod. Pago</th>
+                <th>Forma Pago</th>
+                <th>Descripción</th>
+                <th>Detalle</th>
+                <th>Numero</th>
+                <th>Monto</th>
+            </tr>
+            <!--<tbody>-->
+            <tr *ngFor="let pago of venta.pagosCbte">
+                <td>
+                    {{pago.id}}
+                </td>
+                <td>
+                    {{pago.formaPago.descripcion}}
+                </td>
+                <td>
+                    {{pago.descripcion}}
+                </td>
+                <td>
+                    {{pago.tarjeta}}
+                </td>
+                <td>
+                    {{pago.numero}}
+                </td>
+                <td class="text-right">
+                    <b>$ {{formatDecimal(pago.monto)}}</b>
+                </td>
+            </tr>
+            <!--</tbody>-->
+        </table>
+        <br>
+        <table *ngIf="venta.ivas?.length > 0 && venta.totalIva >0" class="table table-bordered  padding-td-tb-2">
+            <tr>
+                <th>Base imponible</th>
+                <th>Alicuota</th>
+                <th>Id afip iva</th>
+                <th>Importe</th>
+            </tr>
+            <tr *ngFor="let iva of venta.ivas">
+                <td class="text-right">
+                    {{iva.baseImponible}}
+                </td>
+                <td class="text-right">
+                    {{iva.alicuota}}
+                </td>
+                <td>
+                    {{iva.idAfipIva}}
+                </td>
+                <td class="text-right">
+                    {{iva.importe}}
+                </td>
+            </tr>
+            <tr>
+                <td class="" [attr.colspan]="3"></td>
+                <td class="text-right">TOTAL:<b><span class="label-value-detail green-strong">$
+                            {{venta.totalIva}}</span></b></td>
+            </tr>
+        </table>
+        <br>
+        <table *ngIf="venta.tributos?.length > 0" class="table table-bordered  padding-td-tb-2">
+            <tr>
+                <th>Base imponible</th>
+                <th>Desc. tributo</th>
+                <th>Alicuota</th>
+                <th>Descripción</th>
+                <th>Importe</th>
+            </tr>
+            <tr *ngFor="let tributo of venta.tributos">
+                <td class="text-right">
+                    {{tributo.baseImponible}}
+                </td>
+                <td>
+                    {{tributo.descAfipTpoTributo}} / {{tributo.idAfipTpoTributo}}
+                </td>
+                <td class="text-right">
+                    {{tributo.alicuota}}
+                </td>
+                <td>
+                    {{tributo.descripcion}}
+                </td>
+                <td class="text-right">
+                    {{tributo.importe}}
+                </td>
+            </tr>
+            <tr>
+                <td class="" [attr.colspan]="4"></td>
+                <td class="text-right">TOTAL:<b><span class="label-value-detail blue">$
+                            {{venta.totalTrib}}</span></b></td>
+            </tr>
+        </table>
+    </ng-container>
+    <ng-template #noItems>
+        <div class="form-group row alert alert-warning">
+            Sin datos
+        </div>
+    </ng-template>
+</div>
+<ng-template #loading>
+    <app-loading></app-loading>
+</ng-template>

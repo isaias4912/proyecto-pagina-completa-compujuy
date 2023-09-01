@@ -1,0 +1,10 @@
+<app-modal [title]="title">
+    <div *ngIf="threes$ | async as threes; else loading;">
+        <ng-container *ngIf="threes">
+            <three-fam [familia]="familia" [familias]="threes.data" (doubleClickEvent)="selectedNode($event)" ></three-fam>
+        </ng-container>
+    </div>
+    <ng-template #loading>
+        <app-loading></app-loading>
+    </ng-template>
+</app-modal>

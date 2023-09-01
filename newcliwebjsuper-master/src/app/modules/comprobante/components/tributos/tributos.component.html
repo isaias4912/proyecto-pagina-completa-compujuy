@@ -1,0 +1,133 @@
+<div class="row">
+    <div *ngIf="showAddItem" [hidden]="fi?.length > 0" class="col-md-12">
+        <a (click)="addItem();" id="firstAdd" #firstAdd class="hand">Agregar un tributo&nbsp;<i
+                class="green-strong fa fa-plus"></i></a>
+    </div>
+    <div class="col-md-12">
+        <div class="table-responsive">
+            <table *ngIf="fi.length && fi.length > 0" class="table table-min table-striped">
+                <thead>
+                    <tr>
+                        <th style="width: 15% !important;">Tributo</th>
+                        <th style="width: 30% !important;">Descripción</th>
+                        <th style="width: 15% !important;">Base imp.</th>
+                        <th style="width: 12% !important;">Porcentaje</th>
+                        <th>Subtotal</th>
+                        <th style="min-width: 75px !important;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngFor="let item of $any(fi).controls; let $index = index;" [formGroup]="item">
+                        <tr>
+                            <td class="center">
+                                <select id="selTributo{{$index}}" name="selTributo{{$index}}" formControlName="tributo"
+                                    (change)="changeTributo(item)" class="form-control form-control-sm item-trib-tipo"
+                                    [enter]="item.get('tributo').value?.id==99?('txtDescAfip'+$index):('txtAlicuota'+$index)">
+                                    <option *ngFor="let opt of tributos" [ngValue]="opt">{{opt.descripcion}}
+                                    </option>
+                                </select>
+                            </td>
+                            <td>
+                                <input id="txtDescAfip{{$index}}" name="txtDescAfip{{$index}}" type="text"
+                                    formControlName="descAfipTpoTributo" [readonly]="item.get('tributo').value?.id!=99"
+                                    class="form-control form-control-sm item-trib-desc" enter="{{'txtAlicuota'+$index}}" />
+                            </td>
+                            <td>
+                                <div class="input-group input-group-sm item-trib-bi">
+                                    <div class="input-group-prepend">
+                                        <span class="blue input-group-text fa fa-dollar"></span>
+                                    </div>
+                                    <input id="txtBaseImp{{$index}}" name="txtBaseImp{{$index}}" type="number"
+                                        formControlName="baseImponible" readonly="true"
+                                        class="form-control form-control-sm" enter="{{'txtAlicuota'+$index}}" />
+                                </div>
+                            </td>
+                            <td>
+                                <div class="input-group input-group-sm item-trib-alic">
+                                    <input id="txtAlicuota{{$index}}" name="txtAlicuota{{$index}}" type="number"
+                                        (input)="changeAlicuota(item)" formControlName="alicuota"
+                                        class="form-control form-control-sm" enter="{{'buttonAddTrib'+$index}}" />
+                                    <div class="input-group-append">
+                                        <span class="blue input-group-text">%</span>
+                                    </div>
+                                </div>
+                            </td>
+                            <td>
+                                <div class="input-group input-group-sm item-trib-subtotal">
+                                    <div class="input-group-prepend">
+                                        <span class="blue input-group-text fa fa-dollar"></span>
+                                    </div>
+                                    <input id="txtSubtotal{{$index}}" name="txtSubtotal{{$index}}" type="number"
+                                        formControlName="importe" readonly="true" class="form-control form-control-sm"
+                                        enter="{{'buttonAddTrib'+$index}}" />
+                                </div>
+                            </td>
+
+                            <td class="buttons-small">
+                                <div class="float-right">
+                                    <button [hidden]="!($index== (fi.controls.length-1))" id="buttonAddTrib{{$index}}"
+                                        name="buttonAddTrib{{$index}}" (click)="addItem($index + 1);" type="button"
+                                        class="btn-sm btn-transition btn btn-outline-success">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                    <button id="buttonRemoveTrib{{$index}}" name="buttonRemoveTrib{{$index}}"
+                                        type="button" (click)="removeItem(item);"
+                                        class="btn-sm btn-transition btn btn-outline-danger">
+                                        <i class="fa fa-remove"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr *ngIf="fi.invalid">
+                            <td>
+                                <div class="align-top"
+                                    *ngIf="dataForm?.submitted && item.controls.tributo.errors?.required"
+                                    class="text-danger">
+                                    Debe ingresar un tributo
+                                </div>
+                            </td>
+                            <td>
+                                <div class="align-top"
+                                    *ngIf="dataForm?.submitted && item.controls.descAfipTpoTributo.errors?.required"
+                                    class="text-danger">
+                                    Debe ingresar una descripción del tributo
+                                </div>
+                            </td>
+                            <td>
+                                <div class="align-top"
+                                    *ngIf="dataForm?.submitted && item.controls.baseImponible.errors?.required"
+                                    class="text-danger">
+                                    Debe existir la base imponible
+                                </div>
+                            </td>
+                            <td>
+                                <div class="align-top"
+                                    *ngIf="dataForm?.submitted && item.controls.alicuota.errors?.required"
+                                    class="text-danger">
+                                    Debe ingresar la alicuota
+                                </div>
+                                <div class="align-top" *ngIf="dataForm?.submitted && item.controls.alicuota.errors?.min"
+                                    class="text-danger">
+                                    Debe ingresar un valor igual o mayor a 0 para la alicuota
+                                </div>
+                            </td>
+                            <td>
+                                <div class="align-top"
+                                    *ngIf="dataForm?.submitted && item.controls.importe.errors?.required"
+                                    class="text-danger">
+                                    Debe ingresar un importe
+                                </div>
+                                <div class="align-top" *ngIf="dataForm?.submitted && item.controls.importe.errors?.min"
+                                    class="text-danger">
+                                    Debe ingresar un importe mayor a 0
+                                </div>
+                            </td>
+                            <td></td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+<app-size-detector></app-size-detector>

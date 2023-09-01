@@ -1,0 +1,173 @@
+<app-modal [title]="'Detalle de la factura'">
+    <div *ngIf="invoice$ | async as factura; else loading">
+        <div class="widget-main padding-4 scrollable">
+            <div class="invoice-box">
+                <table cellpadding="0" cellspacing="0">
+                    <tr class="top">
+                        <td colspan="2">
+                            <table>
+                                <tr>
+                                    <td class="title">
+                                        <h4><b>{{factura.proveedor.razonSocial}}</b></h4>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+
+                    <tr class="information">
+                        <td colspan="2">
+                            <table>
+                                <tr>
+                                    <td>
+                                        Id/Código N°: <b>{{factura.id}}</b>
+                                        <br>
+                                        Factura N°: <b>{{factura.numero}}</b> - Tipo comprobante: <b>{{factura.tipoCbte}}</b>
+                                        <br>
+                                        Fecha de la factura: <b>{{factura.fechaCbte}}</b> - Fecha de Ingreso:
+                                        <b>{{factura.fechaCarga}}</b><br>
+                                    </td>
+                                </tr>
+                            </table>
+                        </td>
+                    </tr>
+                    <tr class="heading">
+                        <td>
+                            Item
+                        </td>
+                        <td>
+                            Cantidad
+                        </td>
+                        <td>
+                            Precio s/I.V.A.
+                        </td>
+                        <td>
+                            Precio c/I.V.A.
+                        </td>
+                        <td>
+                            Subtotal
+                        </td>
+                    </tr>
+
+                    <tr class="item"
+                        *ngFor="let item of factura.items">
+                        <td>
+                            {{item.nombreProducto}}
+                        </td>
+                        <td>
+                            {{item.cantidad}}
+                        </td>
+                        <td>
+                            {{item.precioSinIva}}
+                        </td>
+                        <td>
+                            {{item.precioConIva}}
+                        </td>
+                        <td>
+                            {{item.subtotal}}
+                        </td>
+                    </tr>
+                    <tr class="subtotal">
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                            Descuentos: ${{factura.totalDescuentos}}
+                        </td>
+                    </tr>
+                    <tr class="subtotal">
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                            Adicionales ${{factura.totalAdicionales}}
+                        </td>
+                    </tr>
+                    <tr class="subtotal">
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                            Subtotal: ${{factura.subtotal}}
+                        </td>
+                    </tr>
+                    <tr class="subtotal">
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                            Impuestos: ${{factura.totalImpuestos}}
+                        </td>
+                    </tr>
+                    <tr class="total">
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                        </td>
+                        <td>
+                            Total: ${{factura.total}}
+                        </td>
+                    </tr>
+                </table>
+                <table [hidden]="factura.impuestos?.length <= 0" class="table-fact-imp">
+                    <caption>Impuestos</caption>
+                    <tr *ngFor="let imp of factura.impuestos">
+                        <td>
+                            &nbsp;&nbsp;&nbsp;&nbsp;{{imp.nombre}}&nbsp;({{imp.porcentaje}})
+                        </td>
+                        <td>
+                            ${{imp.importe}}
+                        </td>
+                    </tr>
+                </table>
+                <table [hidden]="factura.descuentos?.length <= 0" class="table-fact-desc-adic">
+                    <caption>Descuentos</caption>
+                    <tr *ngFor="let desc of factura.descuentos">
+                        <td>
+                            &nbsp;&nbsp;&nbsp;&nbsp;{{desc.nombre}}
+                        </td>
+                        <td>
+                            ${{desc.importe}}
+                        </td>
+                    </tr>
+                </table>
+                <table [hidden]="factura.adicionales?.length <= 0" class="table-fact-desc-adic">
+                    <caption>Adicionales</caption>
+                    <tr *ngFor="let adic of factura.adicionales">
+                        <td>
+                            &nbsp;&nbsp;&nbsp;&nbsp;{{adic.nombre}}
+                        </td>
+                        <td>
+                            ${{adic.importe}}
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <ng-template #loading>Cargando informacion...</ng-template>
+</app-modal>

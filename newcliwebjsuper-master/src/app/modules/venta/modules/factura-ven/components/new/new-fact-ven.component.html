@@ -1,0 +1,32 @@
+<div class="row">
+    <div class="col-md-12">
+        <fields-fact-ven [dataForm]="dataForm"></fields-fact-ven>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <hr>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-3">
+        <button (click)="cancel()" class="btn btn-block btn-transition btn-outline-primary"><span
+                class="fa fa-remove"></span>&nbsp;&nbsp;Cancelar
+        </button>
+    </div>
+    <div class="col-md-3">
+        <button (click)="reset()" class="btn btn-block btn-transition btn-outline-primary"><span
+                class="fa fa-trash-o"></span>&nbsp;&nbsp;Limpiar
+        </button>
+    </div>
+    <div class="col-md-3">
+        <button (click)="save(1)" class="btn btn-block btn-transition btn-outline-primary"><span
+                class="fa fa-save" #btnSaveFactVen></span>&nbsp;&nbsp;Guardar y nuevo [Ctrl+s]
+        </button>
+    </div>
+    <div class="col-md-3">
+        <button (click)="save(2)" class="btn btn-block btn-transition btn-outline-primary"><span
+                class="fa fa-save"></span>&nbsp;&nbsp;Guardar y volver [Ctrl+d]
+        </button>
+    </div>
+</div>

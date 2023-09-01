@@ -1,0 +1,60 @@
+<form id="formFamilia" [formGroup]="formFamilia"  class="form-group-min">
+    <div class="row form-group">
+        <label class="col-form-label col-md-2"  for="txtNombreFam" >Nombre</label>
+        <div class="col-md-4" >
+            <input id="txtNombreFam" name="txtNombreFam" class="form-control form-control-sm" type="text" formControlName="nombre" enter="txtNombreFamCorto" focus-me="true" />
+            <div *ngIf="dataForm.submitted && formFamilia.invalid">
+                <div *ngIf="f.nombre.errors?.required" class="text-danger">
+                    Campo obligatorio
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row form-group">
+        <label class="col-form-label col-md-2"  for="txtNombreFamCorto" >Nombre Corto</label>
+        <div class="col-md-4" >
+            <label class="block clearfix">
+                <span class="block input-icon input-icon-right">
+                    <input id="txtNombreFamCorto" name="txtNombreFamCorto" #inputNombreCortoForm class="form-control form-control-sm" type="text" formControlName="nombreCorto" ng-change="checkNombreCorto();" enter="cmbNivel" />
+                    <div *ngIf="f.nombreCorto.errors?.exist" class="text-danger">
+                       El nombre corto ingresado ya existe
+                    </div>
+                    <div *ngIf="dataForm.submitted && formFamilia.invalid">
+                        <div *ngIf="f.nombreCorto.errors?.required" class="text-danger">
+                            Campo obligatorio
+                        </div>
+                    </div>
+                    <!-- <i ng-if="familia.$$exist == -1" class="ace-icon fa fa-spinner fa-spin"></i>    
+                    <i ng-if="familia.$$exist == 1" class="ace-icon green fa fa-check"></i>
+                    <i ng-if="familia.$$exist == 2" class="ace-icon red fa fa-remove"></i> -->
+                </span>
+            </label>
+        </div>
+    </div>
+    <div class="row form-group">
+        <label class="col-form-label col-md-2" >Es familia de primer nivel</label>
+        <div class="col-md-4">
+            <select formControlName="nivelSeleccionado" class="form-control form-control-sm" id="cmbNivel" name="cmbNivel" enter="txtFamiliaPadre"
+                    (change)="changeNivel()" >
+                    <option *ngFor="let n of opcionNivel.niveles" [ngValue]="n.value" >{{n.text}}</option>
+            </select>
+            <div *ngIf="dataForm.submitted && formFamilia.invalid">
+                <div *ngIf="f.nivelSeleccionado.errors?.required" class="text-danger">
+                    Campo obligatorio
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row form-group" id="divFamiliasArbol" >
+		<label class="col-form-label col-md-2" for="txtFamiliaPadre" >Elija la familia padre</label>
+		<div class="col-md-4" >
+            <select-family formControlName="familia" [name]="'txtFamiliaPadre'+internalId" [multiple]="false">
+            </select-family>
+            <div *ngIf="dataForm.submitted && formFamilia.invalid">
+                <div *ngIf="f.familia.errors?.required" class="text-danger">
+                    Campo obligatorio
+                </div>
+            </div>
+		</div>
+    </div>
+</form>

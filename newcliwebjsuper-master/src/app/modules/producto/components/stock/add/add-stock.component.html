@@ -1,0 +1,92 @@
+<div class="row">
+    <div class="col-md-12">
+        <form id="formNewMovi"  class="form-group-min" >
+            <div class="row form-group">
+                <label class="col-form-label col-md-2 label-help" for="txtTipoMov">Tipo de Mov./Documento
+                    <i title="El ingreso de stock puede ser a  partir de una factura de compra precargada, o bien sin niguna factura, segun la necesidad."
+                        class="help-ns fa fa-question-circle"></i>
+                </label>
+                <div class="col-md-3">
+                    <select [(ngModel)]="control.tipo" id="txtTipoMov" name="txtTipoMov"
+                        class="form-control form-control-sm"
+                        enter="{{control.tipo==2?'facturaStock':control.tipo==1?'txtProducto':null}}">
+                        <option
+                            *ngFor="let value of  [{id: 1, text: 'Ingreso sin Factura-Otros'}, {id: 2, text: 'Ingreso nueva factura'}]"
+                            [ngValue]="value.id">{{value.text}}</option>
+                    </select>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div [hidden]="control.tipo!=1" class="col-md-12">
+        <fields-input-prod [dataForm]="dataForm" ></fields-input-prod>
+    </div>
+    <div [hidden]="control.tipo!=2" class="col-md-12">
+        <fields-input-fact [dataForm]="dataForm" (activeEvent)="control.tipo=2" ></fields-input-fact>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <hr>
+    </div>
+</div>
+<div [hidden]="control.tipo!=1" class="row">
+    <div class="col-md-8">
+    </div>
+    <div class="col-md-4">
+        <button-footer (clickCancel)="cancel()" (clickSaveAndReturn)="saveOtros(2)" (clickSaveAndNew)="saveOtros(1)" [save]="false" ></button-footer>
+    </div>
+
+    <!-- <div class="col-md-2">
+    </div>
+    <div class="col-md-2">
+        <button (click)="cancel()" class="btn btn-block btn-transition btn-outline-danger"><span
+                class="fa fa-remove"></span>&nbsp;&nbsp;Cancelar
+        </button>
+    </div>
+    <div class="col-md-2">
+        <button (click)="saveOtros()" class="btn btn-block btn-transition btn-outline-success"><span
+                class="fa fa-save"></span>&nbsp;&nbsp;Guardar
+        </button>
+    </div>
+    <div class="col-md-2">
+        <button (click)="saveOtros(1)" class="btn btn-block btn-transition btn-outline-info"><span
+                class="fa fa-save"></span>&nbsp;&nbsp;Guardar y nuevo
+        </button>
+    </div>
+    <div class="col-md-2">
+        <button (click)="saveOtros(2)" class="btn btn-block btn-transition btn-outline-primary"><span
+                class="fa fa-save"></span>&nbsp;&nbsp;Guardar y volver
+        </button>
+    </div> -->
+</div>
+<div [hidden]="control.tipo!=2" class="row">
+    <div class="col-md-8">
+    </div>
+    <div class="col-md-4">
+        <button-footer (clickCancel)="cancel()" (clickSaveAndReturn)="saveNuevaFactura(2)" (clickSaveAndNew)="saveNuevaFactura(1)" [save]="false" ></button-footer>
+    </div>
+
+    <!-- <div class="col-md-2">
+    </div>
+    <div class="col-md-2">
+        <button (click)="cancel()" class="btn btn-block btn-transition btn-outline-danger"><span
+                class="fa fa-remove"></span>&nbsp;&nbsp;Cancelar
+        </button>
+    </div>
+    <div class="col-md-2">
+        <button (click)="saveNuevaFactura()" class="btn btn-block btn-transition btn-outline-success"><span
+                class="fa fa-save"></span>&nbsp;&nbsp;Guardar
+        </button>
+    </div>
+    <div class="col-md-2">
+        <button (click)="saveNuevaFactura(1)" class="btn btn-block btn-transition btn-outline-info"><span
+                class="fa fa-save"></span>&nbsp;&nbsp;Guardar y nuevo
+        </button>
+    </div>
+    <div class="col-md-2">
+        <button (click)="saveNuevaFactura(2)" class="btn btn-block btn-transition btn-outline-primary"><span
+                class="fa fa-save"></span>&nbsp;&nbsp;Guardar y volver
+        </button>
+    </div> -->
+</div>

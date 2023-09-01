@@ -1,0 +1,121 @@
+<div *ngIf="pass$ | async as pass; else loadingView;" class="row text-center mt-4">
+    <ng-container *ngIf="pass; else noItems">
+        <aside class="col-md-8 col-sm-12 mx-auto">
+            <!-- <p>Login form style 3</p> -->
+            <div class="card">
+                <article class="card-body">
+                    <h5 class="text-center mb-2 mt-1">Restaura tu contraseña</h5>
+                    <hr>
+                    <div *ngIf="!pass?.valido" class="alert alert-danger fade show" role="alert">
+                        El código de restauracion caducó o es inválido. Son 15 dias válidos para restaurar la contraseña
+                        una vez que se solicita el pedido.
+                    </div>
+                    <div *ngIf="send" class="alert alert-success fade show" role="alert">
+                        Se restauro la contraseña correctamente, podes ingresar con tus nuevos datos. Te rediccionamos a login para que puedas ingresar.
+                        <div class="row form-group">
+                            <div class="col-1 mx-auto">
+                                <div class="swatch-holder swatch-holder-lg bg-premium-dark text-center" id="Tooltip-1">
+                                    <span style="color: white; font-size: 40px;"  >
+                                        {{counter}}
+                                    </span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <form *ngIf="pass.valido && !send" id="formPass" [formGroup]="formPass">
+                        <!-- <div class="alert alert-info fade show" role="alert">
+                            Ingresa tu email y te enviaremos un enlace a tu bandeja de entrada, para poder recuperar tu
+                            contraseña.
+                        </div> -->
+                        <div class="row form-group">
+                            <div class="col-md-6 mx-auto">
+                                <div class="input-group" title="Ingrese una contraseña segura y valida">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"> <i class="text-primary fa fa-lock"></i>
+                                        </span>
+                                    </div>
+                                    <input formControlName="password" id="password" name="password" autocomplete="off"
+                                        class="form-control" placeholder="Nueva contraseña" type="password" enter="password2">
+                                </div>
+                                <div *ngIf="dataForm.submitted && formPass.invalid">
+                                    <div *ngIf="f.password.errors?.required" class="text-danger">
+                                        La contraseña nueva es obligatoria
+                                    </div>
+                                    <div *ngIf="f.password.errors?.maxlength" class="text-danger">
+                                        La contraseña tiene muchos caracteres
+                                    </div>
+                                    <div *ngIf="f.password.errors?.minlength" class="text-danger">
+                                        La contraseña tiene pocos caracteres
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <div class="col-md-6 mx-auto">
+                                <div class="input-group" title="Repita la nueva contraseña.">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text"> <i class="text-primary fa fa-lock"></i>
+                                        </span>
+                                    </div>
+                                    <input formControlName="$$password" id="password2" name="password2"
+                                        autocomplete="off" class="form-control" placeholder="Repita la contraseña"
+                                        type="password">
+                                </div>
+                                <div *ngIf="dataForm.submitted && formPass.invalid">
+                                    <div *ngIf="f.$$password.errors?.required" class="text-danger">
+                                        La contraseña a confirmar es obligatoria
+                                    </div>
+                                    <div *ngIf="f.$$password.errors?.maxlength" class="text-danger">
+                                        La contraseña a confirmar tiene muchos caracteres
+                                    </div>
+                                    <div *ngIf="f.$$password.errors?.minlength" class="text-danger">
+                                        La contraseña confirmar tiene pocos caracteres
+                                    </div>
+                                    <div *ngIf="formPass.errors?.invalid_password" class="text-danger">
+                                        No coinciden las contraseñas
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="form-group">
+                            <div class="col-md-8 col-sm-12 mx-auto">
+                                <button [disabled]="loading" type="button" id="btnLogin" name="btnLogin"
+                                    (click)="updatePass()" class="btn-transition btn btn-ns btn-block">
+                                    <span *ngIf="!loading">Guardar contraseña</span>
+                                    <span *ngIf="loading">
+                                        <span class="fa fa-circle-o-notch fa-spin">
+                                        </span>&nbsp;Enviando información
+                                    </span>
+                                </button>
+                            </div>
+                        </div>
+                    </form>
+                    <div class="float-left">
+                        <a [routerLink]="['/auth/login']" class="btn">Ir al login</a>
+                    </div>
+                    <div *ngIf="pass?.valido" class="float-right">
+                        <a [routerLink]="['/auth/register']" class="btn">Registrarte</a>
+                    </div>
+                    <div *ngIf="!pass?.valido" class="float-right">
+                        <a [routerLink]="['/auth/recuperar-password']" class="btn">Recuperar mi contraseña</a>
+                    </div>
+                </article>
+            </div>
+        </aside>
+    </ng-container>
+    <ng-template #noItems>
+        <div class="form-group row alert alert-warning">
+            Sin datos
+        </div>
+    </ng-template>
+</div>
+<ng-template #loadingView>
+    <div class="row">
+        <div class="mx-auto">
+            <div class="d-flex align-items-center">
+                <div class="spinner-jsuper spinner-border text-ns ml-auto" role="status" aria-hidden="true"></div>
+                <span>&nbsp;Cargando...</span>
+            </div>
+        </div>
+    </div>
+</ng-template>

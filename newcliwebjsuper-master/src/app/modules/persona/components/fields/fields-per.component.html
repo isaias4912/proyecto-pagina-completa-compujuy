@@ -1,0 +1,77 @@
+<form id="formPersona" [formGroup]="formPersona" class="form-group-min">
+    <app-panel [idCollapse]="'panelDatPer'" [title]="'Datos personales'" [collapse]="false">
+        <div class="row form-group">
+            <label class="col-form-label col-md-1" for="txtDNIPer">DNI</label>
+            <div class="col-md-2">
+                <input #txtDNIPerForm formControlName="dni" id="txtDNIPer"
+                    name="txtDNIPer" type="number" class="form-control form-control-sm" required [cantDigits]="8"
+                    enter="txtCuilPer" focus-me="true" />
+                <div *ngIf="f.dni.errors?.existe_dni" class="text-danger">
+                    El DNI ya existe en el sistema
+                </div>
+                <div *ngIf="dataForm.submitted && formPersona.invalid">
+                    <div *ngIf="f.dni.errors?.required" class="text-danger">
+                        Campo obligatorio
+                    </div>
+                    <div *ngIf="f.dni.errors?.length_dni" class="text-danger">
+                        Campo muy corto
+                    </div>
+                    <div *ngIf="f.dni.errors?.no_validate_dni" class="text-danger">
+                        Debe validar el dni
+                    </div>
+                </div>
+            </div>
+            <label class="col-form-label col-md-1" for="txtCuilPer">CUIL</label>
+            <div class="col-md-2">
+                <input id="txtCuilPer" name="txtCuilPer" class="form-control form-control-sm" type="number"
+                    formControlName="cuil" enter="txtApePer" [cantDigits]="11" digits="true" />
+                <div *ngIf="dataForm.submitted && formPersona.invalid">
+                    <div *ngIf="f.cuil.errors?.required" class="text-danger">
+                        Campo obligatorio
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <label class="col-form-label col-md-1" for="txtApePer">Apellido</label>
+            <div class="col-md-2">
+                <input id="txtApePer" name="txtApePer" class="form-control form-control-sm" type="text"
+                    formControlName="apellido" enter="txtNombrePer" required maxlength="50" />
+                <div *ngIf="dataForm.submitted && formPersona.invalid">
+                    <div *ngIf="f.apellido.errors?.required" class="text-danger">
+                        Campo obligatorio
+                    </div>
+                </div>
+            </div>
+            <label class="col-form-label col-md-1" for="txtNombrePer">Nombre</label>
+            <div class="col-md-4">
+                <input id="txtNombrePer" name="txtNombrePer" class="form-control form-control-sm" type="text"
+                    formControlName="nombre" enter="cmbSexo" required maxlength="50" />
+                <div *ngIf="dataForm.submitted && formPersona.invalid">
+                    <div *ngIf="f.nombre.errors?.required" class="text-danger">
+                        Campo obligatorio
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <label class="col-form-label col-md-1" for="cmbSexo">Sexo</label>
+            <div class="col-md-2">
+                <select id="cmbSexo" name="cmbSexo" class="input form-control form-control-sm" formControlName="sexo"
+                    enter="fechaNacPer">
+                    <option *ngFor="let sexo of dataOptions.sexos" [ngValue]="sexo.value">{{sexo.name}}</option>
+                </select>
+            </div>
+            <label class="col-form-label col-md-1" for="fechaNacPer">Fecha. de Nac</label>
+            <div class="col-md-2">
+                <app-date #fechaNacPer formControlName="fechaNac" [name]="'fechaNacPer'">
+                </app-date>
+            </div>
+        </div>
+    </app-panel>
+    <div>
+        <domicilio formControlName="domicilios" [domicilios]="persona?.domicilios" [dataForm]="dataForm"></domicilio>
+        <telefono formControlName="telefonos" [telefonos]="persona?.telefonos" [dataForm]="dataForm"></telefono>
+        <contacto formControlName="contactos" [contactos]="persona?.contactos" [dataForm]="dataForm"></contacto>
+    </div>
+</form>

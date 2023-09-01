@@ -1,0 +1,4 @@
+<span class="hand custom-control-inline" (click)="sort()" >
+    <u>{{text}}</u>
+    <span [hidden]="paramPagination.order!=order" class="custom-control-inline fa" [ngClass]="{'fa-chevron-up': paramPagination.reverse, 'fa-chevron-down': !paramPagination.reverse}" class="fa fa-chevron-up" ></span>
+</span>

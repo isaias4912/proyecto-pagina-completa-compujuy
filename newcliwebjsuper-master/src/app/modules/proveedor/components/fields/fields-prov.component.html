@@ -1,0 +1,61 @@
+<form id="formProveedor" [formGroup]="formProveedor" class="form-group-min">
+    <div class="row form-group">
+        <label class="col-form-label col-md-2">Persona/Empresa</label>
+        <div class="col-md-4">
+            <select-ent formControlName="entidad" [name]="'selectEntidad'" [nextFocus]="'txtTipo'"
+                [disabled]="proveedor?true:false"></select-ent>
+            <div *ngIf="dataForm.submitted && formProveedor.invalid">
+                <div *ngIf="f.entidad.errors?.required" class="text-danger">
+                    Debe seleccionar una persona o empresa
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row form-group">
+        <label class="col-form-label col-md-2" for="txtTipo">Condicion AFIP</label>
+        <div class="col-md-4">
+            <select id="txtTipo" name="txtTipo" class="form-control form-control-sm" formControlName="tipoProveedor"
+                (change)="changeTipoProveedor()" enter="txtDetail">
+                <option *ngFor="let opcion of dataOptions.tipos" [ngValue]="opcion.value">{{opcion.name}}</option>
+            </select>
+            <div *ngIf="dataForm.submitted && formProveedor.invalid">
+                <div *ngIf="f.tipoProveedor.errors?.required" class="text-danger">
+                    Campo obligatorio
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row form-group">
+        <label class="col-form-label col-md-2" for="cmbTipoDocCli">Tipo doc.</label>
+        <div class="col-1">
+            <select id="cmbTipoDocCli" name="cmbTipoDocCli" formControlName="tipoDocProveedor"
+                (change)="changeTipoDoc()" class="form-control form-control-sm" enter="selConceptoCbte">
+                <option *ngFor="let doc of dataOptions.docs" title="{{doc.descripcion}}" [ngValue]="doc.value">
+                    {{doc.value}}</option>
+            </select>
+            <div *ngIf="dataForm.submitted && formProveedor.invalid">
+                <div *ngIf="f.tipoDocProveedor.errors?.required" class="text-danger">
+                    Debe seleccionar un tipo de documento
+                </div>
+            </div>
+        </div>
+        <label class="col-form-label col-1" for="txtDocCli">Número</label>
+        <div class="col-md-2">
+            <input type="text" id="txtDocCli" name="txtDocCli" formControlName="nroDocProveedor" [readonly]="!enableNroDoc"
+                class="form-control form-control-sm" enter="cmbTipoCli" />
+            <div *ngIf="dataForm.submitted && formProveedor.invalid">
+                <div *ngIf="f.nroDocProveedor.errors?.required" class="text-danger">
+                    Debe seleccionar un número de documento
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row form-group">
+        <label class="col-form-label col-md-2" for="txtDetail">Observación</label>
+        <div class="col-md-9">
+            <input id="txtDetail" name="txtDetail" class="form-control form-control-sm" formControlName="observacion"
+                enter="btnSaveProveedor" maxlength="250" />
+        </div>
+    </div>
+</form>

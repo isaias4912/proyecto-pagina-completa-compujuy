@@ -1,0 +1,252 @@
+<form id="formOferta" [formGroup]="formOferta" class="form-group-min">
+    <div class="row form-group">
+        <label class="col-form-label col-md-2 label-help" for="txtNombre">Nombre de la Oferta
+            <i title="Nombre de la oferta." class="help-ns fa fa-question-circle"></i>
+        </label>
+        <div class="col-md-3">
+            <input id="txtNombre" name="txtNombre" class="form-control form-control-sm" formControlName="nombre"
+                enter="cmbEstado" />
+            <div *ngIf="dataForm.submitted && formOferta.invalid">
+                <div *ngIf="f.nombre.errors?.required" class="text-danger">
+                    Campo obligatorio
+                </div>
+                <div *ngIf="f.nombre.errors?.minlength" class="text-danger">
+                    Campo muy corto
+                </div>
+                <div *ngIf="f.nombre.errors?.maxlength" class="text-danger">
+                    Campo muy largo
+                </div>
+            </div>
+        </div>
+        <label class="col-form-label col-md-2 label-help" for="cmbEstado">Estado inicial
+            <i title="Estado de la oferta, puede ser activa o inactiva." class="help-ns fa fa-question-circle"></i>
+        </label>
+        <div class="col-md-3">
+            <select id="cmbEstado" name="cmbEstado" formControlName="activo" class="form-control form-control-sm"
+                enter="fechaDesdeInp">
+                <option *ngFor="let opt of  [{val: true, label: 'Activa'}, {val: false, label: 'Inactiva'}]"
+                    [ngValue]="opt.val">{{opt.label}}</option>
+                <div *ngIf="dataForm.submitted && formOferta.invalid">
+                    <div *ngIf="f.activo.errors?.required" class="text-danger">
+                        Campo obligatorio
+                    </div>
+                </div>
+            </select>
+        </div>
+    </div>
+    <div class="row form-group">
+        <label class="col-form-label col-md-2 label-help" for="fechaDesdeInp">Desde
+            <i title="Indica desde que fecha y horario estara activa la oferta"
+                class="help-ns fa fa-question-circle"></i>
+        </label>
+        <div class="col-md-3">
+            <input-mask formControlName="fechaDesde" [name]="'fechaDesdeInp'" [mask]="'00-00-0000 00:00'"
+                [placeholder]="'dd-mm-aaaa hh:mm'" [enter]="'fechaHastaOut'"></input-mask>
+            <div *ngIf="dataForm.submitted && formOferta.invalid">
+                <div *ngIf="f.fechaDesde.errors?.required" class="text-danger">
+                    Campo obligatorio
+                </div>
+                <div *ngIf="f.fechaDesde.errors?.invalidDate" class="text-danger">
+                    La fecha y hora debe tener un formato valido (DD-MM-AAAA HH:mm)
+                </div>
+                <div *ngIf="f.fechaDesde.errors?.invalidDateNow" class="text-danger">
+                    La fecha desde deber ser mayor a la fecha actual
+                </div>
+            </div>
+        </div>
+        <label class="col-form-label col-md-2 label-help" for="fechaHastaOut">Hasta
+            <i title="Indica hasta que fecha y horario estara activa la oferta"
+                class="help-ns fa fa-question-circle"></i>
+        </label>
+        <div class="col-md-3">
+            <input-mask formControlName="fechaHasta" [name]="'fechaHastaOut'" [mask]="'00-00-0000 00:00'"
+                [placeholder]="'dd-mm-aaaa hh:mm'" [enter]="'categoriaOferta'"></input-mask>
+            <div *ngIf="dataForm.submitted && formOferta.invalid">
+                <div *ngIf="f.fechaHasta.errors?.required" class="text-danger">
+                    Campo obligatorio
+                </div>
+                <div *ngIf="f.fechaHasta.errors?.invalidDate" class="text-danger">
+                    La fecha y hora debe tener un formato valido (DD-MM-AAAA HH:mm)
+                </div>
+                <div *ngIf="formOferta.errors?.invalidDateDesde" class="text-danger">
+                    La fecha y hora hasta debe ser mayor a la fecha y hora desde
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row form-group">
+        <label class="col-form-label col-md-2 label-help" for="categoriaOferta">Categoría de la Oferta
+            <i title="Seleccione la categoría de la oferta." class="help-ns fa fa-question-circle"></i>
+        </label>
+        <div class="col-md-3">
+            <select id="categoriaOferta" name="categoriaOferta" formControlName="categoriaOferta"
+                (change)="changeTipo();" class="form-control form-control-sm" enter="tipoOferta">
+                <option [ngValue]="null" selected disabled>Seleccione la categoría</option>
+                <option [ngValue]="'POR_PRODUCTO'">Por producto</option>
+            </select>
+            <div *ngIf="dataForm.submitted && formOferta.invalid">
+                <div *ngIf="f.categoriaOferta.errors?.required" class="text-danger">
+                    Campo obligatorio
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="formOferta.get('categoriaOferta').value != null && formOferta.get('categoriaOferta').value != ''"
+        class="row form-group">
+        <label class="col-form-label col-md-2 label-help" for="tipoOferta">Tipo de la Oferta
+            <i title="Tipo de la oferta, puede ser <p><b>Por cada producto:</b> la oferta se aplicara por cada producto, independiebtemente de la cantidad ingresada.</p><p><b>Cada compra de N productos:</b> la oferta se aplicará cada compra de N productos, osea si se configura para N=3 productos, la oferta se aplicara cada 3 productos.</p><p><b>Compra de mas de N productos:</b> la ofera se aplicará si compra  más de N productos, osea si se configura para N=5, si se compra 5 o mas productos la oferta se aplica.</p>"
+                class="help-ns fa fa-question-circle"></i>
+        </label>
+        <div class="col-md-3">
+            <select id="tipoOferta" name="tipoOferta" formControlName="tipoOferta" (change)="changeTipo();"
+                class="form-control form-control-sm"
+                enter="{{formOferta.get('tipoOferta').value == 'CADA_N_PRODUCTO'||formOferta.get('tipoOferta').value == 'MAS_DE_N_PRODUCTO'?'cantidadCadaNProd':'tipoDescuento'}}">
+                <option [ngValue]="null" selected disabled>Seleccione el tipo</option>
+                <option [ngValue]="'POR_CADA_PRODUCTO'">Por cada producto</option>
+                <option [ngValue]="'CADA_N_PRODUCTO'">Cada compra de N productos</option>
+                <option [ngValue]="'MAS_DE_N_PRODUCTO'">Compra de mas de N productos</option>
+            </select>
+            <div *ngIf="dataForm.submitted && formOferta.invalid">
+                <div *ngIf="f.tipoOferta.errors?.required" class="text-danger">
+                    Campo obligatorio
+                </div>
+            </div>
+        </div>
+        <ng-container
+            *ngIf="formOferta.get('tipoOferta').value == 'CADA_N_PRODUCTO' || formOferta.get('tipoOferta').value == 'MAS_DE_N_PRODUCTO'">
+            <label class="col-form-label col-md-2 label-help" for="cantidadCadaNProd">Cantidad (N)
+                <i title="N es la cantidad relacionada con el tipo de oferta seleccionado (Cada compra de N productos | Compra de mas de N productos)."
+                    class="help-ns fa fa-question-circle"></i>
+            </label>
+            <div class="col-md-3">
+                <input id="cantidadCadaNProd" name="cantidadCadaNProd" formControlName="cantidad" type="number"
+                    class="form-control form-control-sm" enter="tipoOfertaTipo" />
+                <div *ngIf="dataForm.submitted && formOferta.invalid">
+                    <div *ngIf="f.cantidad.errors?.required" class="text-danger">
+                        Campo obligatorio
+                    </div>
+                    <div *ngIf="f.cantidad.errors?.min" class="text-danger">
+                        Debe ingresar un valor mayor o igual a 0.01
+                    </div>
+                    <div *ngIf="f.cantidad.errors?.max" class="text-danger">
+                        Debe ingresar un valor menor
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+    <div class="row form-group"
+        *ngIf="formOferta.get('tipoOferta').value != null && formOferta.get('tipoOferta').value != ''">
+        <ng-container *ngIf="formOferta.get('tipoOferta').value == 'CADA_N_PRODUCTO'">
+            <label class="col-form-label col-md-2 label-help" for="tipoOfertaTipo">Metodo
+                <i title="Indica como se realizara el descuento <p><b>Por cada producto:</b>a cada producto se realizara el descuento asociado y no al total por ejemplo.</p>"
+                    class="help-ns fa fa-question-circle"></i>
+            </label>
+            <div class="col-md-3">
+                <select id="tipoOfertaTipo" name="tipoOfertaTipo" formControlName="tipoOfertaTipo"
+                    (change)="changeTipo();" enter="tipoDescuento" class="form-control form-control-sm" required>
+                    <option [ngValue]="null" selected disabled>Seleccione el metodo</option>
+                    <option [ngValue]="'POR_CADA_PRODUCTO'">Por cada producto</option>
+                </select>
+                <div *ngIf="dataForm.submitted && formOferta.invalid">
+                    <div *ngIf="f.tipoOfertaTipo.errors?.required" class="text-danger">
+                        Campo obligatorio
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+        <ng-container *ngIf="formOferta.get('tipoOferta').value == 'MAS_DE_N_PRODUCTO'">
+            <label class="col-form-label col-md-2 label-help" for="tipoOfertaTipo">Metodo
+                <i title="Indica como se realizara el descuento <p><b>Por cada producto:</b>a cada producto se realizara el descuento asociado y no al total por ejemplo.</p>"
+                    class="help-ns fa fa-question-circle"></i>
+            </label>
+            <div class="col-md-3">
+                <select id="tipoOfertaTipo" name="tipoOfertaTipo" formControlName="tipoOfertaTipo"
+                    (change)="changeTipo();" enter="tipoDescuento" class="form-control form-control-sm" required>
+                    <option [ngValue]="null" selected disabled>Seleccione el metodo</option>
+                    <option [ngValue]="'POR_CADA_PRODUCTO'">Por cada producto</option>
+                </select>
+                <div *ngIf="dataForm.submitted && formOferta.invalid">
+                    <div *ngIf="f.tipoOfertaTipo.errors?.required" class="text-danger">
+                        Campo obligatorio
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+    </div>
+    <div class="row form-group"
+        *ngIf="formOferta.get('tipoOferta').value != null && formOferta.get('tipoOferta').value != ''">
+        <label class="col-form-label col-md-2 label-help" for="tipoDescuento">Tipo de descuento
+            <i title="Seleccione el tipo de descuento <p><b>Por porcentaje:</b> se realiza el descuento por el porcentaje ingresado.</p><p><b>Por cantidad:</b> se realiza el descuento por la cantidad ingresda, esa cantidad es en dinero, si ingreso por ej. 5, se descontara al producto 5 pesos.</p><p><b>Por valor:</b> al asinar el producto a una oferta, se le pedira que ingrese el valor fijo a descontar, parecido a cantidad, pero se le puede descontar distinto valor a cada producto de la oferta.</p>"
+                class="help-ns fa fa-question-circle"></i>
+        </label>
+        <div class="col-md-3">
+            <select id="tipoDescuento" name="tipoDescuento" formControlName="tipoDescuento" (change)="changeTipo();"
+                class="form-control form-control-sm" enter="valor">
+                <option [ngValue]="null" selected disabled>Seleccione el tipo de descuento</option>
+                <option [ngValue]="'PORCENTAJE'">Por porcentaje</option>
+                <option [ngValue]="'CANTIDAD'">Por cantidad</option>
+                <option [ngValue]="'VALOR'">Por valor</option>
+            </select>
+            <div *ngIf="dataForm.submitted && formOferta.invalid">
+                <div *ngIf="f.tipoDescuento.errors?.required" class="text-danger">
+                    Campo obligatorio
+                </div>
+            </div>
+        </div>
+    </div>
+    <div *ngIf="(formOferta.get('tipoDescuento').value != '' && formOferta.get('tipoDescuento').value != null) && (formOferta.get('tipoDescuento').value != 'VALOR')"
+        class="row form-group">
+        <label class="col-form-label col-md-2 label-help" for="valor">Valor
+            ({{formOferta.get('tipoDescuento').value=='PORCENTAJE'?'Porcentaje':formOferta.get('tipoDescuento').value=='CANTIDAD'?'Cantidad':'Valor fijo'}})
+            <i title="Ingrese el valor del tipo de descuento seleccionado (Por porcentaje | Por cantidad)"
+                class="help-ns fa fa-question-circle"></i>
+        </label>
+        <div class="col-md-3">
+            <input id="valor" name="valor" formControlName="valor" type='number' class="form-control form-control-sm"
+                enter="txtPrioridad" />
+            <div *ngIf="dataForm.submitted && formOferta.invalid">
+                <div *ngIf="f.valor.errors?.required" class="text-danger">
+                    Campo obligatorio
+                </div>
+                <div *ngIf="f.valor.errors?.min" class="text-danger">
+                    Debe ingresar un valor mayor o igual a 0.01
+                </div>
+                <div *ngIf="f.valor.errors?.max" class="text-danger">
+                    Debe ingresar un valor menor
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row form-group">
+        <label class="col-form-label col-md-2 label-help" for="valor">Prioridad
+            <i title="La prioridad actual cuando un producto tiene mas de una oferta, cual de las ofertas tiene prioridad y sera aplicada."
+                class="help-ns fa fa-question-circle"></i>
+        </label>
+        <div class="col-md-3">
+            <input id="txtPrioridad" name="txtPrioridad" formControlName="prioridad" type='number'
+                class="form-control form-control-sm" enter="txtOfertaDetalle" max="99999" min="1" />
+            <div *ngIf="dataForm.submitted && formOferta.invalid">
+                <div *ngIf="f.prioridad.errors?.required" class="text-danger">
+                    Campo obligatorio
+                </div>
+                <div *ngIf="f.prioridad.errors?.min" class="text-danger">
+                    Debe ingresar un valor mayor o igual a 1
+                </div>
+                <div *ngIf="f.prioridad.errors?.max" class="text-danger">
+                    Debe ingresar un valor menor
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row form-group">
+        <label class="col-form-label col-md-2 label-help" for="txtOfertaDetalle">Detalle
+            <i title="Detalle, descripción adicional para la oferta."
+            class="help-ns fa fa-question-circle"></i>
+        </label>
+        <div class="col-md-8">
+            <textarea id="txtOfertaDetalle" name="txtOfertaDetalle" class="form-control form-control-sm"
+                formControlName="detalle" maxlength="5000"></textarea>
+        </div>
+    </div>
+</form>

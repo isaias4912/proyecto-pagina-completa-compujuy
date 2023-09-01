@@ -1,0 +1,166 @@
+<div *ngIf="dataVenta$ | async as dataVenta; else loading;">
+    <ng-container *ngIf="dataVenta; else noItems">
+        <form id="formFactVen" [formGroup]="formFactVen" class="form-group-min">
+            <div class="card mb-2">
+                <div class="card-header container-fluid" style="min-height: 1.5rem !important;" id="headingOne">
+                    <div class="container-fluid">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <span class="float-sm-left">
+                                    Datos del cbte.
+                                </span>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row">
+                                    <div class="col-md-2">
+                                    </div>
+                                    <div class="col-md-2 p-1 buttons-small label-help padding-2">
+                                        <button type="button" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false"
+                                            title="<p>Seleccione si quiere que su comprobante sea electronico y valido ante la AFIP, o no.</p><p>Seleccion actual:<b>{{f.tipoFactura.value}}</b></p>"
+                                            class="btn-transition btn-block dropdown-toggle btn btn-sm btn-outline-success btn-font-size-7 button-help">
+                                            {{getDescFromTipoFact(f.tipoFactura.value)}}
+                                        </button>
+                                        <div tabindex="-1" role="menu" aria-hidden="true"
+                                            class="dropdown-menu dropdown-menu-right">
+                                            <ul class="nav flex-column">
+                                                <li *ngFor="let fact of dataVenta.facturas" class="nav-item">
+                                                    <a (click)="changeFactura(fact)" class="nav-link">
+                                                        <span>
+                                                            {{fact.descripcion}}
+                                                        </span>
+                                                        <div *ngIf="fact.active"
+                                                            class="ml-auto badge badge-pill badge-success">
+                                                            <span class="fa fa-check"></span>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+
+                                    <div class="col-md-3 p-1 buttons-small padding-2">
+                                        <button type="button" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false"
+                                            title="<p>Seleccione la lista de precios con la cual quiere trabajar en el comprobante</p><p>Seleccion actual:<b>{{f.$$listaPrecio.value?.nombre +' -' +f.$$listaPrecio.value?.id}}</b></p>"
+                                            class="btn-transition btn-block dropdown-toggle btn btn-sm btn-outline-primary btn-font-size-7 button-help">
+                                            Lis. Precio - {{f.$$listaPrecio.value?.nombre}}
+                                        </button>
+                                        <div tabindex="-1" role="menu" aria-hidden="true"
+                                            class="dropdown-menu dropdown-menu-right">
+                                            <ul class="nav flex-column">
+                                                <li *ngFor="let lista of listasPrecio" class="nav-item">
+                                                    <a (click)="changeListaPrecio(lista)" class="nav-link">
+                                                        <span>
+                                                            {{lista.nombre}}
+                                                        </span>
+                                                        <div *ngIf="lista.active"
+                                                            class="ml-auto badge badge-pill badge-success">
+                                                            <span class="fa fa-check"></span>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-2 p-1 buttons-small padding-2">
+                                        <button type="button" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false"
+                                            title="<p>Seleccione el punto de venta con el que quiere trabajar, válido a la hora de emitir Factura electronica válida.</p><p>Seleccion actual:<b>{{getDescForPtoVenta(f.ptoVenta.value)}}</b></p>"
+                                            class="btn-transition btn-block dropdown-toggle btn btn-sm btn-outline-primary btn-font-size-7 button-help">
+                                            Pto. de v. {{f.ptoVenta.value}}
+                                        </button>
+                                        <div tabindex="-1" role="menu" aria-hidden="true"
+                                            class="dropdown-menu dropdown-menu-right">
+                                            <ul class="nav flex-column">
+                                                <li *ngFor="let pto of dataVenta.puntosventa" class="nav-item">
+                                                    <a (click)="changePtoVenta(pto)" class="nav-link">
+                                                        <span>
+                                                            Pto. de v. {{pto.nro}}
+                                                        </span>
+                                                        <div *ngIf="pto.active"
+                                                            class="ml-auto badge badge-pill badge-success">
+                                                            <span class="fa fa-check"></span>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-3 p-1 buttons-small padding-2">
+                                        <button type="button" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false"
+                                            title="<p>Seleccione la sucursal en la que aparecera el comprobante, y en donde se buscara y se descontara el stock.</p><p>Seleccion actual:<b>{{f.sucursal.value?.nombre +' - '+f.sucursal.value?.id}}</b></p>"
+                                            class="btn-transition btn-block dropdown-toggle btn btn-sm btn-outline-primary btn-font-size-7 button-help">
+                                            {{f.sucursal.value?.nombre}}
+                                        </button>
+                                        <div tabindex="-1" role="menu" aria-hidden="true"
+                                            class="dropdown-menu dropdown-menu-right">
+                                            <ul class="nav flex-column">
+                                                <li *ngFor="let suc of sucursales" class="nav-item">
+                                                    <a (click)="changeSucursal(suc)" class="nav-link">
+                                                        <span>
+                                                            {{suc.nombre}}
+                                                        </span>
+                                                        <div *ngIf="suc.active"
+                                                            class="ml-auto badge badge-pill badge-success">
+                                                            <span class="fa fa-check"></span>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne">
+                    <div class="card-body padding-2">
+                        <header-cbte  [tipoCbte]="TipoCbte.CBTE_VENTA" [data]="dataVenta" 
+                        (eventChangeCbte)="changeTipoCbte($event)" (finishViewEvent)="finishLoadComponent($event)" ></header-cbte>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-12">
+                    <items-cbte [data]="dataVenta" [enableIva]="true" 
+                    (finishViewEvent)="finishLoadComponent($event)"
+                        [typeCbte]="'VENTA'" [dataForm]="dataForm">
+                    </items-cbte>
+                </div>
+            </div>
+            <div *ngIf="dataView.showObservacion" class="row form-group">
+                <label for="txtObservacion" class="col-md-1 col-form-label padding-right-left-4 label-help-observacion">Observación
+                    <i title="Detalle, observacion adicional." class="help-ns fa fa-question-circle"></i>
+                </label>
+                <div class="col-md-11">
+                    <input id="txtObservacion" name="txtObservacion" formControlName="observacion" type="text"
+                        class="form-control form-control-sm" />
+                    <div *ngIf="dataForm.submitted && formFactVen.invalid">
+                        <div *ngIf="f.observacion.errors?.maxlength" class="text-danger">
+                            Campo muy largo
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-12">
+                    <items-pago [formasPago]="dataVenta.formasPago" [dataForm]="dataForm" [asociada]="false"
+                    (finishViewEvent)="finishLoadComponent($event)" [order]="3">
+                    </items-pago>
+                </div>
+            </div>
+        </form>
+    </ng-container>
+    <ng-template #noItems>
+        <div class="form-group row alert alert-warning">
+            Sin datos para cargar una nueva caja
+        </div>
+    </ng-template>
+</div>
+<app-size-detector></app-size-detector>
+<ng-template #loading>
+    <app-loading></app-loading>
+</ng-template>

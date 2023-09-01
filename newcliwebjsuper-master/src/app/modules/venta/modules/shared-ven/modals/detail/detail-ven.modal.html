@@ -1,0 +1,41 @@
+<app-modal [title]="'Detalle de venta'" [footer]="true" (eventCancel)="cancel()">
+    <detail-ven #dv [idEntity]="idEntity" [data]="data"></detail-ven>
+    <app-footer>
+        <div class="row">
+            <!-- <div class="col-lg-3">
+            </div> -->
+            <div class="col-lg-3 col-md-4 col-sm-12">
+                <button (click)="sendEmailCbte(dv.getCbte())" class="btn btn-block btn-transition btn-outline-info"><span
+                        class="fa fa-envelope"></span>&nbsp;&nbsp;Enviar por email
+                </button>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-12">
+                <div class="mb-2 mr-2 btn-group dropup d-flex">
+                    <button (click)="printCbte('A4')" class="btn btn-block btn-outline-alternate">Imprimir A4</button>
+                    <button type="button" aria-haspopup="true" aria-expanded="false" data-toggle="dropdown" class="dropdown-toggle-split dropdown-toggle btn btn-outline-alternate"><span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(40px, 33px, 0px);">
+                        <button (click)="printCbte('58mm')" type="button" tabindex="0" class="dropdown-item">Imprimir 58mm</button>
+                        <button (click)="printCbte('80mm')" type="button" tabindex="0" class="dropdown-item">Imprimir 80mm</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-12">
+                <div class="mb-2 mr-2 btn-group dropup d-flex">
+                    <button (click)="donwloadCbte()" class="btn btn-block btn-outline-alternate">Descargar PDF A4</button>
+                    <button type="button" aria-haspopup="true" aria-expanded="false" data-toggle="dropdown" class="dropdown-toggle-split dropdown-toggle btn btn-outline-alternate"><span class="sr-only">Toggle Dropdown</span>
+                    </button>
+                    <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu" x-placement="bottom-start" style="position: absolute; will-change: transform; top: 0px; left: 0px; transform: translate3d(40px, 33px, 0px);">
+                        <button (click)="donwloadCbte('58mm')" type="button" tabindex="0" class="dropdown-item">Descargar PDF 58mm</button>
+                        <button (click)="donwloadCbte('80mm')" type="button" tabindex="0" class="dropdown-item">Descargar PDF 80mm</button>
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-12">
+                <button (click)="cancel()" id="btnCerrarDetailVen" name="btnCerrarDetailVen" class="btn btn-block btn-transition btn-outline-danger"><span
+                        class="fa fa-remove"></span>&nbsp;&nbsp;Cerrar
+                </button>
+            </div>
+        </div>
+    </app-footer>
+</app-modal>

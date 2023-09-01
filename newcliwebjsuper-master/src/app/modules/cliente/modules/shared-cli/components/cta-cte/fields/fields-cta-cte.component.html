@@ -1,0 +1,54 @@
+<form id="formCtaCte" [formGroup]="formCtaCte" class="form-group-min">
+    <div class="row form-group">
+        <label class="col-form-label col-md-2">Nombre del Cliente</label>
+        <div class="col-md-3">
+            <input readonly value="{{getEntidadString(cliente.entidad)}}"
+                class="form-control form-control-sm" />
+        </div>
+        <label class="col-form-label col-md-1">DNI/CUIT</label>
+        <div class="col-md-2">
+            <input *ngIf="cliente.entidad.tipo=='PERSONA'" readonly value="{{cliente.entidad.persona.dni}}" class="form-control form-control-sm" />
+            <input *ngIf="cliente.entidad.tipo=='EMPRESA'" readonly value="{{cliente.entidad.empresa.cuit}}" class="form-control form-control-sm" />
+        </div>
+    </div>
+    <div class="row form-group">
+        <label class="col-form-label col-md-2" for="cmbEstadoCtaCte">Estado inicial</label>
+        <div class="col-md-2">
+            <select id="cmbEstadoCtaCte" name="cmbEstadoCtaCte" formControlName="activo"
+                class="form-control form-control-sm" enter="txtLimiteCtaCte" required focus-me="true">
+                <option *ngFor="let opt of  [{val: true, label: 'Activa'}, {val: false, label: 'Inactiva'}]"
+                    [ngValue]="opt.val">{{opt.label}}</option>
+            </select>
+            <div *ngIf="dataForm.submitted && formCtaCte.invalid">
+                <div *ngIf="f.activo.errors?.required" class="text-danger">
+                    Campo obligatorio
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row form-group">
+        <label class="col-form-label col-md-2" for="txtLimiteCtaCte">Límite de deuda</label>
+        <div class="col-md-2">
+            <input id="txtLimiteCtaCte" name="txtLimiteCtaCte" type="number" class="form-control form-control-sm"
+                formControlName="limite" required enter="txtDetalleCtaCte" />
+            <div *ngIf="dataForm.submitted && formCtaCte.invalid">
+                <div *ngIf="f.limite.errors?.required" class="text-danger">
+                    Campo obligatorio
+                </div>
+                <div *ngIf="f.limite.errors?.max" class="text-danger">
+                    Ingrese un menor valor
+                </div>
+                <div *ngIf="f.limite.errors?.min" class="text-danger">
+                    Ingrese un mayor valor
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row form-group">
+        <label class="col-form-label col-md-2" for="txtDetalleCtaCte">Detalle</label>
+        <div class="col-md-6">
+            <input id="txtDetalleCtaCte" name="txtDetalleCtaCte" class="form-control form-control-sm"
+                formControlName="descripcion" enter="chkCajaModPrecio" maxlength="5000" />
+        </div>
+    </div>
+</form>

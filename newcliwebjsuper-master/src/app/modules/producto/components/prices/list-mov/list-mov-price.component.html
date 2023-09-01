@@ -1,0 +1,85 @@
+<app-modal [title]="title">
+    <form id="formFilter" class="form-group-min">
+        <div class="row">
+            <div class="col-md-6">
+            </div>
+            <div class="col-md-6 float-right">
+                <div class="float-right">
+                    <app-resgister [paramPagination]="paramPagination" (registerChanged)="pageChanged()">
+                    </app-resgister>
+                </div>
+            </div>
+        </div>
+    </form>
+    <div *ngIf="movimientos$ | async as movimientosArray; else loading;">
+        <ng-container *ngIf="movimientosArray.length; else noItems">
+            <div class="container">
+                <div class="row form-group">
+                    <table class="table  table-striped">
+                        <thead>
+                            <tr>
+                                <th>Tipo</th>
+                                <th>
+                                    <app-sort [text]="'Fecha'" [order]="'fecha'"
+                                        [paramPagination]="paramPagination" (sortChanged)="pageChanged()"></app-sort>
+                                </th>
+                                <th>Precio Inicial</th>
+                                <th>Precio Final</th>
+                                <th>Diferencia aumentada</th>
+                                <th>Porcentaje de aumento</th>
+                                <th>Usuario</th>
+                                <th>Detalle</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let mov of movimientosArray">
+                                <td>
+                                    {{mov.tipoPrecio.nombre}}
+                                </td>
+                                <td>
+                                    {{mov.fecha}}
+                                </td>
+                                <!--                            <td>
+                                                                <span class="fa {{mov.tipo==1?'fa-arrow-up green-strong':'fa-arrow-down red'}} " ></span> {{mov.tipo==1?'Ingreso':'Salida'}}
+                                                            </td>-->
+                                <td>
+                                    <b class="green-strong">$ {{mov.valorInicial}}</b>
+                                </td>
+                                <td>
+                                    <b class="red">$ {{mov.valorFinal}}</b>
+                                </td>
+                                <td>
+                                    $ {{mov.diferencia}}
+                                </td>
+                                <td>
+                                    {{mov.porcentaje}} %
+                                </td>
+                                <td>
+                                    {{mov.userName}}
+                                </td>
+                                <td>
+                                    {{mov.detalle}}
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="row form-group">
+                    <div class="mx-auto">
+                        <ngb-pagination [(page)]="paramPagination.page" [pageSize]="paramPagination.pageSize"
+                            [collectionSize]="paramPagination.totalItems" (pageChange)="pageChanged()">
+                        </ngb-pagination>
+                    </div>
+                </div>
+            </div>
+        </ng-container>
+        <ng-template #noItems>
+            <div class="form-group row alert alert-warning">
+                Sin datos
+            </div>
+        </ng-template>
+    </div>
+    <ng-template #loading>
+        <div class="spinner-border text-primary" role="status"></div>Cargando informacion...
+    </ng-template>
+</app-modal>

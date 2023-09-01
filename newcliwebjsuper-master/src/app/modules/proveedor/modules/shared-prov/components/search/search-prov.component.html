@@ -1,0 +1,125 @@
+<div class="modal-header">
+    <h6 class="modal-title" id="exampleModalLongTitle">{{title}}</h6>
+    <button type="button" (click)="cancel()" class="close red" data-dismiss="modal" aria-label="Close">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div id="divFilter" class="row">
+        <div class="col-md-12">
+            <app-panel [idCollapse]="'panelFiltro'">
+                <form id="formFilter" [formGroup]="formFilter">
+                    <div class="row">
+                        <div class="col-md-11">
+                            <div class="row form-group  margin-bottom-5">
+                                <label for="txtFiltro"
+                                    class="col-md-1 col-form-label padding-right-left-4">Filtro</label>
+                                <div class="col-md-11">
+                                    <input type="text" id="txtFiltro" name="txtFiltro"
+                                        class="form-control form-control-sm" formControlName="q"
+                                        placeholder="Razon social o CUIT del proveedor" />
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-1">
+                            <button type="submit" (click)="pageChanged();" #btnQuery id="btnQuery" name="btnQuery"
+                                title="Realice la busqueda segun los filtros aplicados"
+                                class="btn-sm btn-block btn-transition btn btn-outline-info">
+                                <i class="fa fa-search"></i>
+                            </button>
+                            <button type="button" ng-click="reset();" title="Limpiar los campos de busqueda"
+                                class="btn-sm btn-block btn-transition btn btn-outline-warning">
+                                <i class="fa fa-eraser"></i>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </app-panel>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-12">
+            <div *ngIf="(proveedores$ | async) as prov" class="table-responsive">
+                <table class="table  table-striped">
+                    <thead>
+                        <tr>
+                            <th>
+                                <!-- <span class="glyphicon sort-icon" ng-show="paramPagination.sortkey == 'cuit'"
+                                ng-class="{'glyphicon-chevron-up':paramPagination.reverse,'glyphicon-chevron-down':!paramPagination.reverse}"></span> -->
+                                <app-sort [text]="'CUIT'" [order]="'cuit'" [paramPagination]="paramPagination"
+                                    (sortChanged)="pageChanged()"></app-sort>
+                            </th>
+                            <th>
+                                <!-- <span class="glyphicon sort-icon" ng-show="paramPagination.sortkey == 'razonSocial'"
+                                ng-class="{'glyphicon-chevron-up':paramPagination.reverse,'glyphicon-chevron-down':!paramPagination.reverse}"></span> -->
+                                <app-sort [text]="'Razón Social'" [order]="'razonSocial'"
+                                    [paramPagination]="paramPagination" (sortChanged)="pageChanged()"></app-sort>
+                            </th>
+                            <th>
+                                <span>Tipo</span>
+                            </th>
+                            <th>
+                                <span>Persona Asociada</span>
+                            </th>
+                            <th style="width: 120px;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <!-- <tr ng-repeat="proveedor in proveedores.items"> -->
+                        <tr *ngFor="let proveedor of prov.data">
+                            <!-- <tr *ngFor="let proveedor of  prov.data"> -->
+                            <td>
+                                {{proveedor.cuit}}
+                            </td>
+                            <td>
+                                {{proveedor.razonSocial}}
+                            </td>
+                            <td *ngIf="proveedor.tipo == 0">
+                                Sin especificar
+                            </td>
+                            <td *ngIf="proveedor.tipo == 1">
+                                Consumidor Final
+                            </td>
+                            <td *ngIf="proveedor.tipo == 2">
+                                Monotributo
+                            </td>
+                            <td *ngIf="proveedor.tipo == 3">
+                                Responsable Inscripto
+                            </td>
+                            <td *ngIf="proveedor.tipo == 4">
+                                Otro
+                            </td>
+                            <td class="text-primary" *ngIf="proveedor.persona != null">
+                                {{proveedor.persona.apellido + ' ' + proveedor.persona.nombre}} <a href
+                                    ng-click="detailPersona({type: 'persona', id: proveedor.persona.id})"><span
+                                        class="fa fa-eye"></span></a>
+                            </td>
+                            <td class="text-warning" *ngIf="proveedor.persona == null">
+                                Sin asociado
+                            </td>
+                            <td class="buttons-small">
+                                <button (click)="selectProveedor(proveedor);"
+                                    class="btn-sm btn-transition btn btn-outline-primary" title="Seleccionar">
+                                    <i class="ace-icon fa fa-check bigger-120"></i>
+                                </button>
+                                <button (click)="detailProveedor(proveedor);"
+                                    class="btn-sm btn-transition btn btn-outline-info" title="Seleccionar">
+                                    <i class="ace-icon fa fa-eye bigger-120"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="mx-auto">
+            <ngb-pagination [(page)]="paramPagination.page" [pageSize]="paramPagination.pageSize"
+                [collectionSize]="paramPagination.totalItems" (pageChange)="pageChanged()">
+            </ngb-pagination>
+            <!-- <pagination-controls (pageChange)="paramPagination.page = $event;pageChanged();"
+                [previousLabel]="'Anterior'" [nextLabel]="'Siguiente'"></pagination-controls> -->
+        </div>
+    </div>
+</div>

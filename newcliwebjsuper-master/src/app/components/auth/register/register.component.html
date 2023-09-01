@@ -1,0 +1,204 @@
+<div class="row text-center mt-4">
+    <aside class="col-md-8 col-sm-12 mx-auto">
+        <!-- <p>Login form style 3</p> -->
+        <div class="card">
+            <article class="card-body">
+                <h5 class="text-center mb-2 mt-1">Registrate</h5>
+                <hr>
+                <!-- <p class="text-success text-center">Some message goes here</p> -->
+                <form id="formRegister" [formGroup]="formRegister">
+                    <div formGroupName="persona" class="row form-group">
+                        <div class="col-md-6">
+                            <div class="input-group" title="Ingrese su nombre">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"> <i
+                                            class="text-primary fa fa-user-circle"></i>
+                                    </span>
+                                </div>
+                                <input formControlName="nombre" id="nombre" name="nombre"
+                                    class="form-control" placeholder="Nombre" type="text"
+                                    enter="apellido">
+                            </div>
+                            <div *ngIf="dataForm.submitted && formRegister.invalid">
+                                <div *ngIf="fp.nombre.errors?.required" class="text-danger">
+                                    El nombre es obligatorio
+                                </div>
+                                <div *ngIf="fp.nombre.errors?.maxlength" class="text-danger">
+                                    El nombre tiene muchos caracteres
+                                </div>
+                                <div *ngIf="fp.nombre.errors?.minlength" class="text-danger">
+                                    El nombre tiene pocos caracteres
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input-group" title="Ingrese su apellido">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"> <i
+                                            class="text-primary fa fa-user-circle-o"></i>
+                                    </span>
+                                </div>
+                                <input formControlName="apellido" id="apellido" name="apellido"
+                                    class="form-control" placeholder="Apellido" type="text"
+                                    enter="mail">
+                            </div>
+                            <div *ngIf="dataForm.submitted && formRegister.invalid">
+                                <div *ngIf="fp.apellido.errors?.required" class="text-danger">
+                                    El apellido es obligatorio
+                                </div>
+                                <div *ngIf="fp.apellido.errors?.maxlength" class="text-danger">
+                                    El apellido tiene muchos caracteres
+                                </div>
+                                <div *ngIf="fp.apellido.errors?.minlength" class="text-danger">
+                                    El apellido tiene pocos caracteres
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-6">
+                            <div class="input-group" title="Ingrese su email">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"> <i
+                                            class="text-primary fa fa-at"></i>
+                                    </span>
+                                </div>
+                                <input formControlName="mail" id="mail" name="mail" #txtMailForm
+                                    class="form-control" placeholder="Email" type="email"
+                                    enter="username">
+                            </div>
+                            <div *ngIf="f.mail.errors?.existe_mail" class="text-danger">
+                                El email {{f.mail.value}} ya existe en el sistema
+                            </div>
+                            <div *ngIf="dataForm.submitted && formRegister.invalid">
+                                <div *ngIf="f.mail.errors?.email" class="text-danger">
+                                    El mail debe tener un formato valido
+                                </div>
+                                <div *ngIf="f.mail.errors?.required" class="text-danger">
+                                    El mail es obligatorio
+                                </div>
+                                <div *ngIf="f.mail.errors?.maxlength" class="text-danger">
+                                    El mail tiene muchos caracteres
+                                </div>
+                                <div *ngIf="f.mail.errors?.minlength" class="text-danger">
+                                    El mail tiene pocos caracteres
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input-group" title="Ingrese un usuario valido">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"> <i
+                                            class="text-primary fa fa-user"></i>
+                                    </span>
+                                </div>
+                                <input formControlName="usuario" #txtUserForm id="username"
+                                    name="username" autocomplete="off" class="form-control"
+                                    placeholder="Usuario" type="text" enter="password">
+                            </div>
+                            <div *ngIf="f.usuario.errors?.existe_user" class="text-danger">
+                                El usuario {{f.usuario.value}} ya existe en el sistema
+                            </div>
+                            <div *ngIf="dataForm.submitted && formRegister.invalid">
+                                <div *ngIf="f.usuario.errors?.required" class="text-danger">
+                                    El usuario es obligatorio
+                                </div>
+                                <div *ngIf="f.usuario.errors?.maxlength" class="text-danger">
+                                    El usuario tiene muchos caracteres
+                                </div>
+                                <div *ngIf="f.usuario.errors?.minlength" class="text-danger">
+                                    El usuario tiene pocos caracteres
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-6">
+                            <div class="input-group" title="Ingrese una contraseña segura y valida">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"> <i
+                                            class="text-primary fa fa-lock"></i>
+                                    </span>
+                                </div>
+                                <input formControlName="password" id="password" name="password"
+                                    autocomplete="off" class="form-control" placeholder="Contraseña"
+                                    type="password" enter="password2">
+                            </div>
+                            <div *ngIf="dataForm.submitted && formRegister.invalid">
+                                <div *ngIf="f.password.errors?.required" class="text-danger">
+                                    La contraseña es obligatoria
+                                </div>
+                                <div *ngIf="f.password.errors?.maxlength" class="text-danger">
+                                    La contraseña tiene muchos caracteres
+                                </div>
+                                <div *ngIf="f.password.errors?.minlength" class="text-danger">
+                                    La contraseña tiene pocos caracteres
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="input-group" title="Repita la contraseña ingresada.">
+                                <div class="input-group-prepend">
+                                    <span class="input-group-text"> <i
+                                            class="text-primary fa fa-lock"></i>
+                                    </span>
+                                </div>
+                                <input formControlName="$$password" id="password2" name="password2"
+                                    autocomplete="off" class="form-control"
+                                    placeholder="Repita la contraseña" type="password">
+                            </div>
+                            <div *ngIf="dataForm.submitted && formRegister.invalid">
+                                <div *ngIf="f.$$password.errors?.required" class="text-danger">
+                                    La contraseña a confirmar es obligatoria
+                                </div>
+                                <div *ngIf="f.$$password.errors?.maxlength" class="text-danger">
+                                    La contraseña a confirmar tiene muchos caracteres
+                                </div>
+                                <div *ngIf="f.$$password.errors?.minlength" class="text-danger">
+                                    La contraseña confirmar tiene pocos caracteres
+                                </div>
+                                <div *ngIf="formRegister.errors?.invalid_password" class="text-danger">
+                                    No coinciden las contraseñas
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <!-- <recaptcha-demo-wrapper> -->
+                        <div class="col-md-6 col-sm-12 mx-auto">
+                            <div style="transform:scale(0.7);transform-origin:0;">
+                                <re-captcha formControlName="captcha" (resolved)="resolved($event)"
+                                    siteKey="{{captchaKey}}"></re-captcha>
+                            </div>
+                            <div *ngIf="dataForm.submitted && formRegister.invalid">
+                                <div *ngIf="f.captcha.errors?.required" class="text-danger">
+                                    El captcha se debe validar
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="col-md-8 col-sm-12 mx-auto">
+                            <button [disabled]="loading" type="button" id="btnLogin" name="btnLogin"
+                                (click)="register()" class="btn-transition btn btn-ns btn-block">
+                                <span *ngIf="!loading">Registrarme</span>
+                                <span *ngIf="loading">
+                                    <span class="fa fa-circle-o-notch fa-spin">
+                                    </span>&nbsp;Registrandome
+                                </span>
+                            </button>
+                        </div>
+                    </div>
+                </form>
+                <div class="float-left">
+                    <a [routerLink]="['/auth/login']" class="btn">Ir al login</a>
+                </div>
+                <div class="float-right">
+                    <a [routerLink]="['/auth/recuperar-password']" class="btn">Olvide mi contraseña</a>
+                </div>
+                <!-- <p class="f"><a [routerLink]="['/auth/login']" class="btn">Ir al login</a>
+                </p> -->
+            </article>
+        </div>
+    </aside>
+</div>

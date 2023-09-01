@@ -1,0 +1,339 @@
+<div id="divLibVen" class="row">
+    <div class="col-md-12">
+        <app-panel [idCollapse]="'panelFiltro'">
+            <form id="formFilter" class="form-group-min">
+                <div class="row">
+                    <div class="col-lg-11 col-md-11 col-sm-12">
+                        <div class="row form-group  margin-bottom-5">
+                            <label class="col-form-label col-md-1" for="fechaDesdeFilter">Desde</label>
+                            <div class="col-md-3">
+                                <app-date #fechaInicialForm [(ngModel)]="filterVentas.fechaInicial"
+                                    [name]="'fechaDesdeFilter'">
+                                </app-date>
+                            </div>
+                            <label class="col-form-label col-md-1" for="fechaHastaFilter">Hasta</label>
+                            <div class="col-md-3">
+                                <app-date #fechaFinalForm [(ngModel)]="filterVentas.fechaFinal"
+                                    [name]="'fechaHastaFilter'">
+                                </app-date>
+                            </div>
+                            <label class="col-form-label col-md-1" for="cmbFiltroEstado">Estado</label>
+                            <div class="col-md-3">
+                                <select id="cmbFiltroEstado" name="cmbFiltroEstado" class="form-control form-control-sm"
+                                    [(ngModel)]="filterVentas.afipValida">
+                                    <option
+                                        *ngFor="let opcion of [{id: 2, nombre: 'Todas'},{id: 1, nombre: 'Afip validadas'}, {id: 0, nombre: 'Afip no validadas'}]"
+                                        [ngValue]="opcion.id">
+                                        {{opcion.nombre}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row form-group margin-bottom-5">
+                            <!-- <label for="txtUsuario" class="col-md-1 col-form-label padding-right-left-4">Usuario</label>
+                            <div class="col-md-3">
+                                <select2-usu [(ngModel)]="filterVentas.usuario" [name]="'txtUsuario'" [multiple]="false"
+                                    [typeResult]="2" [allowClear]="true">
+                                </select2-usu>
+                            </div> -->
+                            <label for="cmbTipo" class="col-md-1 col-form-label padding-right-left-4">Sucursal</label>
+                            <div class="col-sm-3">
+                                <select-sucursal-simple [name]="'cmbSucursal'" [(ngModel)]="filterVentas.sucursales"
+                                    [textFirstOpt]="'Todas'" [enter]="'cmbSucursalDes'" [typeResult]="3"
+                                    #sucursalOrigen>
+                                </select-sucursal-simple>
+                            </div>
+                            <label class="col-form-label col-md-1" for="cmbCbte">Cbtes.</label>
+                            <div class="col-md-3">
+                                <select id="cmbCbte" class="form-control form-control-sm" name="cmbCbte"
+                                    multiple="multiple" required>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-1 col-md-1 col-sm-12">
+                        <div class="row form-group">
+                            <div class="btn-group btn-group-sm btn-block" role="group">
+                                <button type="submit" (click)="query()"
+                                    class="btn btn-transition btn btn-outline-light">
+                                    <i class="fa fa-search green-strong"></i>
+                                </button>
+                                <button type="button" (click)="reset()" class="btn-transition btn btn-outline-light">
+                                    <i class="fa fa-trash-o blue"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </app-panel>
+    </div>
+</div>
+
+<div class="row">
+    <div class="col-md-6 buttons-small">
+        <!-- <button (click)="printList('pdf')" class="btn-sm btn-transition btn btn-outline-secondary">
+            <i class="fa fa-file-pdf-o red"></i>&nbsp;PDF
+        </button>
+        <button (click)="printList('xls')" class="btn-sm btn-transition btn btn-outline-secondary">
+            <i class="fa fa-file-excel-o green"></i>&nbsp;XLS
+        </button>
+        <button (click)="printList('doc')" class="btn-sm btn-transition btn btn-outline-secondary">
+            <i class="fa fa-file-word-o blue"></i>&nbsp;DOC
+        </button>
+        <button (click)="printList('csv')" class="btn-sm btn-transition btn btn-outline-secondary">
+            <i class="fa fa-file-archive-o green-strong"></i>&nbsp;CVS
+        </button>
+        <button (click)="printList('html')" class="btn-sm btn-transition btn btn-outline-secondary">
+            <i class="fa fa-file-text yellow"></i>&nbsp;HTML
+        </button> -->
+    </div>
+    <div class="col-md-6 float-right">
+        <div class="float-right">
+            <app-resgister [paramPagination]="paramPagination" (registerChanged)="pageChanged()">
+            </app-resgister>
+        </div>
+    </div>
+</div>
+<div *ngIf="ventas$ | async as ventas; else loading;">
+    <ng-container *ngIf="ventas.length; else noItems">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table id="tableVentasList" class="table table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width: 8%;">
+                                    <app-sort [text]="'Id/Cód.'" [order]="'id'" [paramPagination]="paramPagination"
+                                        (sortChanged)="pageChanged()"></app-sort>
+                                </th>
+                                <th style="width: 15%;">
+                                    <app-sort [text]="'Fecha carga'" [order]="'fecha_carga'"
+                                        [paramPagination]="paramPagination" (sortChanged)="pageChanged()"></app-sort>
+                                </th>
+                                <th style="width: 10%;">
+                                    <app-sort [text]="'Fecha cbte.'" [order]="'fecha_cbte'"
+                                        [paramPagination]="paramPagination" (sortChanged)="pageChanged()"></app-sort>
+                                </th>
+                                <th style="width: 8%;">
+                                    <span>Tipo Factura</span>
+                                </th>
+                                <th style="width: 10%;">
+                                    <span>Nro Cbte.</span>
+                                </th>
+                                <th class="text-center" style="width: 15%;">
+                                    <span>Cliente</span>
+                                </th>
+                                <th class="text-center" style="width: 8%;">
+                                    <span>Total neto</span>
+                                </th>
+                                <th class="text-center" style="width: 8%;">
+                                    <span>Total Tributos</span>
+                                </th>
+                                <th class="text-center" style="width: 8%;">
+                                    <span>Total IVA</span>
+                                </th>
+                                <th style="width: 8%;" class="text-right" title="Monto total del comprobante">
+                                    <app-sort [text]="'Total'" [order]="'total'" [paramPagination]="paramPagination"
+                                        (sortChanged)="pageChanged()"></app-sort>
+                                </th>
+                                <th style="width: 120px !important;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let venta of ventas">
+                                <td>
+                                    {{venta.id}}
+                                </td>
+                                <td>
+                                    {{venta.fechaCarga}}
+                                </td>
+                                <td>
+                                    {{venta.fechaCbte}}
+                                </td>
+                                <td>
+                                    Cbte. {{venta.tipoCbte}}
+                                    <span *ngIf="venta.tipoFactura!='FACTURA_ELECTRONICA'" title="{{venta.tipoFactura}}"
+                                        class="fa fa-ticket pull-right green-strong"></span>
+                                    <span *ngIf="venta.tipoFactura=='FACTURA_ELECTRONICA'" title="{{venta.tipoFactura}}"
+                                        style="color: #0099ff" class="fa fa-flash pull-right"></span>
+                                </td>
+                                <td>
+                                    {{venta.ptoVenta &&  venta.cbteNro?formatNumberFact(venta.ptoVenta, venta.cbteNro):''}}
+                                </td>
+                                <td class="text-center">
+                                    {{venta.nombreCliente}}
+                                </td>
+                                <td class="text-right">
+                                    <b>$&nbsp;{{formatDecimal(venta.totalBaseImp)}}</b>&nbsp;&nbsp;
+                                </td>
+                                <td class="text-right">
+                                    <b>$&nbsp;{{formatDecimal(venta.totalTrib)}}</b>&nbsp;&nbsp;
+                                </td>
+                                <td class="text-right">
+                                    <b>$&nbsp;{{formatDecimal(venta.totalIva)}}</b>&nbsp;&nbsp;
+                                </td>
+                                <td class="text-right">
+                                    <b>$&nbsp;{{formatDecimal(venta.total)}}</b>&nbsp;&nbsp;
+                                </td>
+                                <td class="buttons-small">
+                                    <div class="float-right">
+                                        <button (click)="detailVenta(venta)"
+                                            title="Ver detalle de la factura electronica de venta - {{venta.id}}"
+                                            class="btn-sm btn-transition btn btn-outline-primary">
+                                            <i class="fa fa-eye"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="container-fluid">
+                <ngb-pagination [(page)]="paramPagination.page" [pageSize]="paramPagination.pageSize"
+                    [collectionSize]="paramPagination.totalItems" (pageChange)="pageChanged()"
+                    [maxSize]="5" [boundaryLinks]="true" class="d-flex justify-content-center">
+                </ngb-pagination>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6">
+                <div class="table-responsive">
+                    <table id="tableTotales" class="table table-hover table-striped">
+                        <caption>Totales discriminado</caption>
+                        <thead>
+                            <tr>
+                                <th>Totales
+                                </th>
+                                <th>
+                                    Valor
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    Total Neto / B. I.
+                                </td>
+                                <td class="text-right">
+                                    {{formatDecimal(extraData.totalBaseImp)}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Total tributos
+                                </td>
+                                <td class="text-right">
+                                    {{formatDecimal(extraData.totalTrib)}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Total IVA
+                                </td>
+                                <td class="text-right">
+                                    {{formatDecimal(extraData.totalIva)}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Total
+                                </td>
+                                <td class="text-right">
+                                    <b>{{formatDecimal(extraData.total)}}</b>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+
+            <div class="col-md-6">
+                <div class="table-responsive">
+                    <table id="tableIVATotales" class="table table-hover table-striped">
+                        <caption>Totales IVA discriminado</caption>
+                        <thead>
+                            <tr>
+                                <th>
+                                    Alicuotas
+                                </th>
+                                <th>
+                                    Valor
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <td>
+                                    IVA -Alic. 0
+                                </td>
+                                <td class="text-right">
+                                    {{formatDecimal(getIvaById(3).total)}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    IVA -Alic. 2.5
+                                </td>
+                                <td class="text-right">
+                                    {{formatDecimal(getIvaById(4).total)}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    IVA -Alic. 5
+                                </td>
+                                <td class="text-right">
+                                    {{formatDecimal(getIvaById(5).total)}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    IVA -Alic. 10.5
+                                </td>
+                                <td class="text-right">
+                                    {{formatDecimal(getIvaById(6).total)}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    IVA -Alic. 21
+                                </td>
+                                <td class="text-right">
+                                    {{formatDecimal(getIvaById(8).total)}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    IVA -Alic. 27
+                                </td>
+                                <td class="text-right">
+                                    {{formatDecimal(getIvaById(9).total)}}
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    Total
+                                </td>
+                                <td class="text-right">
+                                    <b>{{formatDecimal(extraData.totalIva)}}</b>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+    <ng-template #noItems>
+        <div class="form-group row alert alert-warning">
+            Sin datos
+        </div>
+    </ng-template>
+</div>
+<ng-template #loading>
+    <app-loading></app-loading>
+</ng-template>

@@ -1,0 +1,19 @@
+<app-modal [title]="title" [footer]="true" (eventCancel)="cancel()" >
+    <pay [dataFilter]="dataFilter" [dataPago]="dataPago" [dataForm]="dataForm" [type]="type" [buttonAction]="false" (eventSave)="saveSucces($event)" ></pay>
+    <app-footer>
+        <div class="row" >
+            <div class="col-lg-6 col-md-4">
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <button (click)="savePay()" class="btn btn-block btn-transition btn-outline-success"><span
+                        class="fa fa-check"></span>&nbsp;&nbsp;Confirmar Pago
+                </button>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <button (click)="cancel()" class="btn btn-block btn-transition btn-outline-danger"><span
+                        class="fa fa-remove"></span>&nbsp;&nbsp;Cancelar
+                </button>
+            </div>
+        </div>
+    </app-footer>
+</app-modal>

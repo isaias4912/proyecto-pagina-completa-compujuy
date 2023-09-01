@@ -1,0 +1,120 @@
+<div *ngIf="empresa$ | async as empresa; else loading;">
+    <ng-container *ngIf="empresa; else noItems">
+        <div class="row form-group">
+            <div class="col-md-12">
+                <div class="form-group margin-bottom-5">
+                    <label class="label-detail col-md-7">Razon social/s:<span
+                            class="label-value-detail">{{empresa.razonSocial}}&nbsp;{{empresa.razonSocial}}</span></label>
+                </div>
+                <div class="form-group margin-bottom-5">
+                    <label class="label-detail col-md-5">Tipo:<span
+                            class="label-value-detail">{{empresa.tipoEmpresa}}</span></label>
+                </div>
+                <div *ngIf="empresa.persona" class="form-group margin-bottom-5">
+                    <label class="label-detail col-md-12">Nombre persona asociada:<span
+                            class="label-value-detail">{{empresa.persona.apellido + ' ' + empresa.persona.nombre}}</span></label>
+                </div>
+                <div *ngIf="empresa.persona" class="form-group margin-bottom-5">
+                    <label class="label-detail col-md-5">DNI:<span
+                            class="label-value-detail">{{empresa.persona.dni}}</span></label>
+                    <label class="label-detail col-md-5">CUIL:<span
+                            class="label-value-detail">{{empresa.persona.cuil}}</span></label>
+                </div>
+                <div class="form-group margin-bottom-5">
+                    <label class="label-detail col-md-5">Observación:<span
+                            class="label-value-detail">{{empresa.observacion}}</span></label>
+                </div>
+
+            </div>
+        </div>
+        <div *ngIf="empresa.domicilios?.length > 0" class="form-group margin-bottom-5">
+            <label class="label-detail col-md-2">Domicilio/s:</label>
+            <div class="col-md-12">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Calle</th>
+                            <th>Número</th>
+                            <th>Piso</th>
+                            <th>Depto.</th>
+                            <th>Provincia</th>
+                            <th>Ciudad</th>
+                            <th>Observación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let domicilio of empresa.domicilios">
+                            <td>{{domicilio.calle}}</td>
+                            <td>{{domicilio.numero}}</td>
+                            <td>{{domicilio.piso}}</td>
+                            <td>{{domicilio.dpto}}</td>
+                            <td>{{domicilio.provincia}}</td>
+                            <td>{{domicilio.ciudad}}</td>
+                            <td>{{domicilio.detale}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div *ngIf="empresa.telefonos?.length > 0" class="form-group margin-bottom-5">
+            <label class="label-detail col-md-2">Telefonos/s:</label>
+            <div class="col-md-12">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Prefijo - Numero</th>
+                            <th>Empresa</th>
+                            <th>Observación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let telefono of empresa.telefonos">
+                            <td>{{telefono.tipo==1?'Celular':'Fijo'}}</td>
+                            <td>{{telefono.prefijo}}-{{telefono.numero}}</td>
+                            <td>{{telefono.empresa}}</td>
+                            <td>{{telefono.detalle}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <div *ngIf="empresa.contactos?.length > 0" class="form-group margin-bottom-5">
+            <label class="label-detail col-md-2">Contacto/s:</label>
+            <div class="col-md-12">
+                <table class="table table-striped">
+                    <thead>
+                        <tr>
+                            <th>Tipo</th>
+                            <th>Cuenta</th>
+                            <th>Observación</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let contacto of empresa.contactos">
+                            <td class="center" *ngIf="contacto.tipo==1">Email</td>
+                            <td class="center" *ngIf="contacto.tipo==2">Facebook</td>
+                            <td class="center" *ngIf="contacto.tipo==3">Twiter</td>
+                            <td class="center" *ngIf="contacto.tipo==4">Otro</td>
+                            <td class="center" *ngIf="contacto.tipo==1">
+                                <address>{{contacto.descripcion}}&nbsp;&nbsp;<a
+                                        href="mailto:{{contacto.descripcion}}"><span class="fa fa-envelope"></span></a>
+                                </address>
+                            </td>
+                            <td class="center" *ngIf="contacto.tipo!=1">{{contacto.descripcion}}</td>
+                            <td>{{contacto.detalle}}</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </ng-container>
+    <ng-template #noItems>
+        <div class="form-group row alert alert-warning">
+            Sin datos
+        </div>
+    </ng-template>
+</div>
+<ng-template #loading>
+    <app-loading></app-loading>
+</ng-template>

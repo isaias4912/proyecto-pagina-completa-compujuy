@@ -1,0 +1,187 @@
+<div *ngIf="dataCaja$ | async as dataCaja; else loading;">
+    <ng-container *ngIf="dataCaja; else noItems">
+        <form id="formCaja" [formGroup]="formCaja" class="form-group-min">
+            <div class="row form-group">
+                <label class="col-form-label col-md-2 label-help" for="txtCajaNombre">Nombre de la Caja
+                    <i title="Nombre de la caja." class="help-ns fa fa-question-circle"></i>
+                </label>
+                <div class="col-md-2">
+                    <input id="txtCajaNombre" name="txtCajaNombre" class="form-control form-control-sm" type="text"
+                        formControlName="nombre" enter="txtCajaNombreMaq" required />
+                    <div *ngIf="dataForm.submitted && formCaja.invalid">
+                        <div *ngIf="f.nombre.errors?.required" class="text-danger">
+                            Campo obligatorio
+                        </div>
+                        <div *ngIf="f.nombre.errors?.minlength" class="text-danger">
+                            Campo muy corto
+                        </div>
+                        <div *ngIf="f.nombre.errors?.maxlength" class="text-danger">
+                            Campo muy largo
+                        </div>
+                    </div>
+                </div>
+                <label class="col-form-label col-md-2 label-help" for="txtCajaNombreMaq">Nombre de la PC
+                    <i title="Nombre de la PC/Computadora donde funcionara esta caja, la caja se corresponde con una PC/computadora, osea la caja permitira que se abra solamente en la computadora que tenga el nombre ingresado aqui.."
+                        class="help-ns fa fa-question-circle"></i>
+                </label>
+                <div class="col-md-2">
+                    <!-- <span class="input-icon input-icon-right"> -->
+                    <input id="txtCajaNombreMaq" name="txtCajaNombreMaq" class="form-control form-control-sm"
+                        type="text" formControlName="nombreMaquina" enter="txtCajaLimite" />
+                    <div *ngIf="dataForm.submitted && formCaja.invalid">
+                        <div *ngIf="f.nombreMaquina.errors?.required" class="text-danger">
+                            Campo obligatorio
+                        </div>
+                        <div *ngIf="f.nombreMaquina.errors?.minlength" class="text-danger">
+                            Campo muy corto
+                        </div>
+                        <div *ngIf="f.nombreMaquina.errors?.maxlength" class="text-danger">
+                            Campo muy largo
+                        </div>
+                    </div>
+                    <!-- <i class="ace-icon fa fa-question blue" title="Nombre de la PC en donde funcionara la Caja"></i> -->
+                    <!-- </span> -->
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="col-form-label col-md-2 label-help" for="txtCajaLimite">Límite Cons/Final
+                    <i title="Limite en dinero que podra facturar la caja a consumidores finales sin pedir datos al cliente."
+                        class="help-ns fa fa-question-circle"></i>
+                </label>
+                <div class="col-md-2">
+                    <input id="txtCajaLimite" name="txtCajaLimite" type="number" class="form-control form-control-sm"
+                        formControlName="limiteConsumidorFinal" enter="cmbPtoVenta" />
+                    <div *ngIf="dataForm.submitted && formCaja.invalid">
+                        <div *ngIf="f.limiteConsumidorFinal.errors?.required" class="text-danger">
+                            Campo obligatorio
+                        </div>
+                        <div *ngIf="f.limiteConsumidorFinal.errors?.min" class="text-danger">
+                            Debe ingrear un valor mayor
+                        </div>
+                        <div *ngIf="f.limiteConsumidorFinal.errors?.max" class="text-danger">
+                            Debe ingrear un valor menor
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="col-form-label col-md-2 label-help" for="cmbPtoVenta">Punto venta
+                    <i title="Punto de venata con el que trabajara la caja." class="help-ns fa fa-question-circle"></i>
+                </label>
+                <div class="col-md-2">
+                    <select id="cmbPtoVenta" name="cmbPtoVenta" class="form-control form-control-sm"
+                        formControlName="idPuntoVenta" [enter]="{type:'select2', field:'cmbCbteHab'}">
+                        <option *ngFor="let pv of dataCaja.puntosventa" [ngValue]="pv.nro">{{pv.nro}}</option>
+                    </select>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="col-form-label col-md-2 label-help" for="cmbCbteHab">Comprobantes habilitados
+                    <i title="Comprobantes habilitados para emitir en la caja"
+                        class="help-ns fa fa-question-circle"></i>
+                </label>
+                <div class="col-md-6">
+                    <select id="cmbCbteHab" class="form-control form-control-sm" name="cmbCbteHab" multiple="multiple"
+                        required>
+                    </select>
+                    <div *ngIf="dataForm.submitted && formCaja.invalid">
+                        <div *ngIf="f.comprobantesHab.errors?.required" class="text-danger">
+                            Campo obligatorio
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="col-form-label col-md-2" for="txtCajaDetalle">Detalle
+                    <i title="Detalle adicional para la caja." class="help-ns fa fa-question-circle"></i>
+                </label>
+                <div class="col-md-6">
+                    <textarea id="txtCajaDetalle" name="txtCajaDetalle" class="form-control form-control-sm"
+                        formControlName="observacion" enter="chkCajaModPrecio"></textarea>
+                    <div *ngIf="f.observacion.errors?.maxlength" class="text-danger">
+                        Campo muy largo
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="col-form-label col-md-2 label-help" for="chkCajaModPrecio">Modificar Precio
+                    <i title="Si se habilita esta opcion se permitira momdificar el precio a esta caja sin autorizacion por parte del vendedor."
+                        class="help-ns fa fa-question-circle"></i>
+                </label>
+                <div class="col-md-1">
+                    <div class="pretty p-switch">
+                        <input formControlName="modificaPrecio" id="chkCajaModPrecio" name="chkCajaModPrecio"
+                            type="checkbox" />
+                        <div class="state p-primary">
+                            <label></label>
+                        </div>
+                    </div>
+                </div>
+                <label class="col-form-label col-md-2 label-help" for="chkCajaModDesc">Modificar Descuento
+                    <i title="Si se habilita esta opcion se permitira momdificar el descuento a esta caja sin autorizacion por parte del vendedor."
+                        class="help-ns fa fa-question-circle"></i>
+                </label>
+                <div class="col-md-1">
+                    <div class="pretty p-switch">
+                        <input formControlName="modificaDescuento" id="chkCajaModDesc" name="chkCajaModDesc"
+                            type="checkbox" />
+                        <div class="state p-primary">
+                            <label></label>
+                        </div>
+                    </div>
+                </div>
+                <label class="col-form-label col-md-2 label-help" for="chkCajaModAdic">Modificar Adicional
+                    <i title="Si se habilita esta opcion se permitira modificar el adicional a esta caja sin autorizacion por parte del vendedor."
+                        class="help-ns fa fa-question-circle"></i>
+                </label>
+                <div class="col-md-1">
+                    <div class="pretty p-switch">
+                        <input formControlName="modificaAdicional" id="chkCajaModAdic" name="chkCajaModAdic"
+                            type="checkbox" />
+                        <div class="state p-primary">
+                            <label></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="col-form-label col-md-2 label-help" for="chkControlStricto">Control Estricto
+                    <i title="Si se habilita esta opcion no se permitira vender productos que no tengan stock en esta caja."
+                        class="help-ns fa fa-question-circle"></i>
+                </label>
+                <div class="col-md-1">
+                    <div class="pretty p-switch">
+                        <input formControlName="conControlEstricto" id="chkControlStricto" name="chkControlStricto"
+                            type="checkbox" />
+                        <div class="state p-primary">
+                            <label></label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="col-md-2 col-form-label label-help" for="duallist">Sucursales habilitadas
+                    <i title="Sucursales que tendra habilitada esta caja para trabajar, de estas sucursales se realizaran los cbtes, se consultaran los productos o se descontara el stock por ej."
+                    class="help-ns fa fa-question-circle"></i>
+                </label>
+                <div class="col-md-8">
+                    <select-suc-dual-list formControlName="sucursales">
+                    </select-suc-dual-list>
+                    <div *ngIf="dataForm.submitted && formCaja.invalid">
+                        <div *ngIf="f.sucursales.errors?.required" class="text-danger">
+                            Debe seleccionar al menos una sucursal
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </ng-container>
+    <ng-template #noItems>
+        <div class="form-group row alert alert-warning">
+            Sin datos para cargar una nueva caja
+        </div>
+    </ng-template>
+</div>
+<ng-template #loading>
+    <app-loading></app-loading>
+</ng-template>

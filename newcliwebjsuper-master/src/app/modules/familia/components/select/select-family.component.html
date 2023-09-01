@@ -1,0 +1,15 @@
+<div class="input-group input-group-sm">
+    <select id="{{name}}" class="form-control form-control-sm" name="{{name}}" multiple="multiple">
+    </select>
+    <div *ngIf="!disabled" (click)="new()" class="input-group-append">
+        <span class="text-info input-group-text fa fa-plus hand" title="Agregar una familia de productos"></span>
+    </div>
+    <a (click)="showChartFam()" class="hand input-group-append" title="Ver el árbol de familias">
+        <span class="red input-group-text fa fa-code-fork"></span>
+    </a>
+    <a *ngIf="!disabled && !multiple" (click)="showSearchFam()" class="input-group-append hand" title="Ver listado de familias y seleccionar">
+        <span class="input-group-text fa fa-list green-strong">
+        </span>
+    </a>
+</div>
+<a [hidden]="true" #buttonClickSelect2 (click)="selectValueSelect()"></a>

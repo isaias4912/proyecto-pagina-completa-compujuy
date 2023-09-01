@@ -1,0 +1,29 @@
+<div class="row">
+    <div class="col-md-12">
+        <fields-per [dataForm]="dataForm" ></fields-per>
+    </div>
+</div>
+<div *ngIf="buttonAction" class="row">
+    <div class="col-md-12">
+        <hr>
+    </div>
+</div>
+<div *ngIf="buttonAction" class="row">
+    <div class="col-md-2">
+    </div>
+    <div class="col-md-3">
+        <button (click)="cancel()" class="btn btn-block btn-transition btn-outline-danger"><span
+                class="fa fa-remove"></span>&nbsp;&nbsp;Cancelar
+        </button>
+    </div>
+    <div class="col-md-3">
+        <button (click)="save(1)" class="btn btn-block btn-transition btn-outline-info"><span
+                class="fa fa-save"></span>&nbsp;&nbsp;Guardar y nuevo
+        </button>
+    </div>
+    <div class="col-md-3">
+        <button (click)="save(2)" class="btn btn-block btn-transition btn-outline-primary"><span
+                class="fa fa-save"></span>&nbsp;&nbsp;Guardar y volver
+        </button>
+    </div>
+</div>

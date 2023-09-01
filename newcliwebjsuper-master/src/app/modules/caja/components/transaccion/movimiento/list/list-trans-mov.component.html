@@ -1,0 +1,216 @@
+<div *ngIf="dataFilter$ | async as dataFilter" id="div" class="row">
+    <div class="col-md-12">
+        <app-panel [idCollapse]="'panelFiltro'">
+            <form *ngIf="showFilter" id="formFilter" class="form-group-min">
+                <div class="row">
+                    <div class="col-lg-11 col-md-11 col-sm-12">
+                        <div class="row form-group">
+                            <label class="col-form-label col-md-1" for="fechaDesdeFilter">Desde</label>
+                            <div class="col-md-3">
+                                <app-date [(ngModel)]="filterDetTransacciones.fechaInicial"
+                                    [name]="'fechaDesdeFilter'" >
+                                </app-date>
+                            </div>
+                            <label class="col-form-label col-md-1" for="fechaHastaFilter">Hasta</label>
+                            <div class="col-md-3">
+                                <app-date [(ngModel)]="filterDetTransacciones.fechaFinal"
+                                    [name]="'fechaHastaFilter'" >
+                                </app-date>
+                            </div>
+                            <label class="col-form-label col-md-1" for="cmbCaja">Caja</label>
+                            <div class="col-md-3">
+                                <select id="cmbCaja" name="cmbCaja" class="form-control form-control-sm"
+                                    [(ngModel)]="filterDetTransacciones.caja">
+                                    <option selected [ngValue]="null">Todas</option>
+                                    <option *ngFor="let caja of dataFilter.cajas" [ngValue]="caja.id">
+                                        {{caja.nombre}}</option>
+                                </select>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label for="txtUsuario" class="col-md-1 col-form-label padding-right-left-4">Usuario</label>
+                            <div class="col-md-3">
+                                <select2-usu [(ngModel)]="filterDetTransacciones.usuario" [name]="'txtUsuario'"
+                                    [multiple]="false" [typeResult]="2" [allowClear]="true">
+                                </select2-usu>
+                            </div>
+                            <label class="col-form-label col-md-1" for="fechaDesdeFilter">Monto Desde</label>
+                            <div class="col-md-1">
+                                <input [(ngModel)]="filterDetTransacciones.totalMinimo" type="number" step=".01"
+                                    class="form-control form-control-sm" id="montoDesdeFilter" name="montoDesdeFilter"
+                                    min="0" />
+                            </div>
+                            <label class="col-form-label col-md-1" for="fechaHastaFilter">Monto Hasta</label>
+                            <div class="col-md-1">
+                                <input [(ngModel)]="filterDetTransacciones.totalMaximo" type="number" step=".01"
+                                    class="form-control form-control-sm" id="montoHastaFilter" name="montoHastaFilter"
+                                    min="0" />
+                            </div>
+                            <label class="col-form-label col-md-1" for="txtIdTransaccion">Transacción</label>
+                            <div class="col-md-3">
+                                <input [(ngModel)]="filterDetTransacciones.transaccion" type="number" step="1"
+                                    class="form-control form-control-sm" id="txtIdTransaccion"
+                                    name="txtIdTransaccion" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-1 col-md-1 col-sm-12">
+                        <div class="row form-group">
+                            <div class="btn-group btn-group-sm btn-block" role="group">
+                                <button type="submit" (click)="query()"
+                                    class="btn btn-transition btn btn-outline-light">
+                                    <i class="fa fa-search green-strong"></i>
+                                </button>
+                                <button type="button" (click)="reset()" class="btn-transition btn btn-outline-light">
+                                    <i class="fa fa-trash-o blue"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </app-panel>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6 buttons-small">
+    </div>
+    <div class="col-md-6 float-right">
+        <div class="float-right">
+            <app-resgister [paramPagination]="paramPagination" (registerChanged)="pageChanged()">
+            </app-resgister>
+        </div>
+    </div>
+</div>
+<div *ngIf="detTransacciones$ | async as detTransacciones; else loading;">
+    <ng-container *ngIf="detTransacciones.length; else noItems">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table *ngIf="detTransacciones.length > 0" class="table  table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width: 4%;">
+                                    <app-sort [text]="'Id/Cód.'" [order]="'id'" [paramPagination]="paramPagination"
+                                        (sortChanged)="pageChanged()"></app-sort>
+                                </th>
+                                <!-- <th ng-click="sort('id', 'query');" class="mano"> <u>Id/Cod.</u>
+                                    <span class ="glyphicon sort-icon" *ngIf="paramPagination.sortkey == 'id'" ng-class="{
+                                            'glyphicon-chevron-up':paramPagination.reverse, 'glyphicon-chevron-down':!paramPagination.reverse}"></span>
+                                </th> -->
+                                <th style="width: 8%;">
+                                    <app-sort [text]="'Tipo'" [order]="'tipo'" [paramPagination]="paramPagination"
+                                        (sortChanged)="pageChanged()"></app-sort>
+                                    <!-- <th ng-click="sort('tipo', 'query');" class="mano"> <u>Tipo</u>
+                                    <span class ="glyphicon sort-icon" *ngIf="paramPagination.sortkey == 'tipo'" ng-class="{
+                                            'glyphicon-chevron-up':paramPagination.reverse, 'glyphicon-chevron-down':!paramPagination.reverse}"></span>
+                                </th> -->
+                                <th>
+                                    <span>Transacción</span>
+                                </th>
+                                <th>
+                                    <span>Fecha</span>
+                                </th>
+                                <th>
+                                    <span>Caja</span>
+                                </th>
+                                <th>
+                                    <span>Asociada</span>
+                                </th>
+                                <th>
+                                    <span>Transacción</span>
+                                </th>
+                                <th>
+                                    <app-sort [text]="'Monto'" [order]="'monto'" [paramPagination]="paramPagination"
+                                        (sortChanged)="pageChanged()"></app-sort>
+                                </th>
+                                <th>
+                                </th>
+
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let detTransaccion of detTransacciones">
+                                <td>
+                                    {{detTransaccion.id}}
+                                </td>
+                                <td>
+                                    <span *ngIf="detTransaccion.tipo == 1">Apertura</span>
+                                    <span *ngIf="detTransaccion.tipo == 2">Ingreso</span>
+                                    <span *ngIf="detTransaccion.tipo == 3">Egreso</span>
+                                    <span *ngIf="detTransaccion.tipo == 4">Anulación de fact. de Venta</span>
+                                    <span *ngIf="detTransaccion.tipo == 20">Cierre</span>
+                                </td>
+                                <td>
+                                    <a *ngIf="isPage(typeComponent)" [routerLink]="['/cajas/transacciones/lista']"
+                                        [queryParams]="{id: detTransaccion.transaccionCaja.id}">
+                                        {{detTransaccion.transaccionCaja.id}}
+                                    </a>
+                                    <a *ngIf="isModal(typeComponent)" [routerLink]="['/cajas/transacciones/lista']"
+                                        [queryParams]="{id: detTransaccion.transaccionCaja.id}" target="_blank" >
+                                        {{detTransaccion.transaccionCaja.id}}
+                                    </a>
+                                </td>
+                                <td>
+                                    {{detTransaccion.fecha}}
+                                </td>
+                                <td>
+                                    {{detTransaccion.transaccionCaja.caja.nombre}} -
+                                    {{detTransaccion.transaccionCaja.caja.id}}
+                                </td>
+                                <td *ngIf="detTransaccion.asociada != null" class="center">
+                                    <a (click)="showDetailInvoice(detTransaccion.asociadaId);" class="hand">
+                                        {{detTransaccion.asociadaTipo==1?'Factura de compra - '+detTransaccion.asociadaId :'-'}}</a>
+                                </td>
+                                <td *ngIf="detTransaccion.asociada == null" class="center">-</td>
+                                <td>
+                                    {{detTransaccion.transaccionCaja.id}} -
+                                    <span *ngIf="detTransaccion.transaccionCaja?.estado == 1">
+                                        <span class="green-strong">Abierta</span>
+                                    </span>
+                                    <span *ngIf="detTransaccion.transaccionCaja?.estado == 2">
+                                        <span class="red">Cerrada</span>
+                                    </span>
+                                    <span
+                                        *ngIf="detTransaccion.transaccionCaja?.estado != 2 && detTransaccion.transaccionCaja?.estado != 1">
+                                    </span>
+                                </td>
+                                <td class="text-right">
+                                    <span class="text-primary text-bold">
+                                        <span *ngIf="detTransaccion.tipo != 20"> $ &nbsp; </span>
+                                        {{formatDecimal(detTransaccion.monto)}}
+                                    </span>
+                                </td>
+                                <td class="buttons-small">
+                                    <div class="float-right">
+                                        <button *ngIf="typeView=='SELECT'" (click)="select(detTransaccion)"
+                                            title="Seleccionar la transacción {{detTransaccion.id}}"
+                                            class="btn-sm btn-transition btn btn-outline-primary">
+                                            <i class="fa fa-hand-o-up"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="container-fluid">
+                <ngb-pagination [(page)]="paramPagination.page" [pageSize]="paramPagination.pageSize"
+                    [collectionSize]="paramPagination.totalItems" (pageChange)="pageChanged()"
+                    [maxSize]="5" [boundaryLinks]="true" class="d-flex justify-content-center">
+                </ngb-pagination>
+            </div>
+        </div>
+    </ng-container>
+    <ng-template #noItems>
+        <div class="form-group row alert alert-warning">
+            Sin datos
+        </div>
+    </ng-template>
+</div>
+<ng-template #loading>
+    <app-loading></app-loading>
+</ng-template>

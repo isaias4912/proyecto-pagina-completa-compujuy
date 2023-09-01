@@ -1,0 +1,19 @@
+<app-modal [title]="'Nueva persona'" [footer]="true" (eventCancel)="cancel()" [autoSize]="true" >
+    <new-fam [dataForm]="dataForm" [buttonAction]="false" (eventSave)="saveSucces($event)" ></new-fam>
+    <app-footer>
+        <div class="row" >
+            <div class="col-lg-6 col-md-4">
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <button (click)="saveFam()" class="btn btn-block btn-transition btn-outline-primary"><span
+                        class="fa fa-save"></span>&nbsp;&nbsp;Guardar
+                </button>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <button (click)="close()" class="btn btn-block btn-transition btn-outline-danger"><span
+                        class="fa fa-remove"></span>&nbsp;&nbsp;Cancelar
+                </button>
+            </div>
+        </div>
+    </app-footer>
+</app-modal>

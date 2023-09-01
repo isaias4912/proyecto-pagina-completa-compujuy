@@ -1,0 +1,144 @@
+<div id="div" class="row">
+    <div class="col-md-12">
+        <app-panel [idCollapse]="'panelFiltro'">
+            <form *ngIf="showFilter" id="formFilter">
+                <div class="row">
+                    <div class="col-lg-11 col-md-11 col-sm-12">
+                        <div class="row form-group">
+                            <label class="col-form-label-sm col-md-1" for="fechaDesdeInp">Desde</label>
+                            <div class="col-md-3">
+                                <app-date [(ngModel)]="filterTransacciones.fechaInicial"
+                                    [name]="'fechaDesdeInp'">
+                                </app-date>
+                            </div>
+                            <label class="col-form-label-sm col-md-1" for="fechaHastaInp">Hasta</label>
+                            <div class="col-md-3">
+                                <app-date [(ngModel)]="filterTransacciones.fechaFinal" [name]="'fechaHastaInp'"
+                                   >
+                                </app-date>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-1 col-md-1 col-sm-12">
+                        <div class="row form-group">
+                            <div class="btn-group btn-group-sm btn-block" role="group">
+                                <button type="submit" (click)="query()"
+                                    class="btn btn-transition btn btn-outline-light">
+                                    <i class="fa fa-search green-strong"></i>
+                                </button>
+                                <button type="button" (click)="reset()" class="btn-transition btn btn-outline-light">
+                                    <i class="fa fa-trash-o blue"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </app-panel>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6 buttons-small">
+    </div>
+    <div class="col-md-6 float-right">
+        <div class="float-right">
+            <app-resgister [paramPagination]="paramPagination" (registerChanged)="pageChanged()">
+            </app-resgister>
+        </div>
+    </div>
+</div>
+<div *ngIf="transacciones$ | async as transacciones; else loading;">
+    <ng-container *ngIf="transacciones.length; else noItems">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table *ngIf="transacciones.length > 0" class="table  table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width: 8%;">
+                                    <app-sort [text]="'Id/Cód.'" [order]="'id'" [paramPagination]="paramPagination"
+                                        (sortChanged)="pageChanged()"></app-sort>
+                                </th>
+                                <th>
+                                    <span>Estado</span>
+                                </th>
+                                <th>
+                                    <span>Caja</span>
+                                </th>
+                                <th>
+                                    <span>Fecha Apertura</span>
+                                </th>
+                                <th>
+                                    <span>Fecha de Cierre</span>
+                                </th>
+                                <th>
+                                    <span>Detalle</span>
+                                </th>
+                                <th style="width: 120px;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let transaccion of transacciones">
+                                <td>
+                                    {{transaccion.id}}
+                                </td>
+                                <td *ngIf="transaccion.estado == 1">
+                                    <span class="green-strong">Abierta</span>
+                                </td>
+                                <td *ngIf="transaccion.estado == 2">
+                                    <span class="red">Cerrada</span>
+                                </td>
+                                <td *ngIf="transaccion.estado != 2 && transaccion.estado != 1">
+                                </td>
+                                <td>
+                                    {{transaccion.caja.nombre}}
+                                </td>
+                                <td>
+                                    {{transaccion.fechaApertura}}
+                                </td>
+                                <td>
+                                    {{transaccion.fechaCierre}}
+                                </td>
+                                <td>
+                                    {{transaccion.detalle}}
+                                </td>
+                                <td class="buttons-small">
+                                    <div class="float-right">
+                                        <!-- <button (click)="detailVenta(venta)" title="Entradas/Ingresos"
+                                            class="btn-sm btn-transition btn btn-outline-primary">
+                                            <i class="fa fa-level-up"></i>
+                                        </button>
+                                        <button (click)="detailVentaFE(venta)" title="Salidas/Egresos"
+                                            class="btn-sm btn-transition btn btn-outline-danger">
+                                            <i class="fa fa-level-down"></i>
+                                        </button> -->
+                                        <button (click)="summary(transaccion)" title="Resumen de la caja"
+                                            class="btn-sm btn-transition btn btn-outline-success">
+                                            <i class="fa fa-list-alt"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="container-fluid">
+                <ngb-pagination [(page)]="paramPagination.page" [pageSize]="paramPagination.pageSize"
+                    [collectionSize]="paramPagination.totalItems" (pageChange)="pageChanged()"
+                    [maxSize]="5" [boundaryLinks]="true" class="d-flex justify-content-center">
+                </ngb-pagination>
+            </div>
+        </div>
+    </ng-container>
+    <ng-template #noItems>
+        <div class="form-group row alert alert-warning">
+            Sin datos
+        </div>
+    </ng-template>
+</div>
+<ng-template #loading>
+    <app-loading></app-loading>
+</ng-template>

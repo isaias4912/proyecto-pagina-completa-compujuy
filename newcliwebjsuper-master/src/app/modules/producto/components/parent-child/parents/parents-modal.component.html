@@ -1,0 +1,10 @@
+<app-modal [title]="title">
+    <div *ngIf="parents$ | async as parents; else loading;">
+        <ng-container *ngIf="parents">
+            <parent-child [data]="dataParentChild" (doubleClickEvent)="selectParentOrChild($event)" [collapse]="false" ></parent-child>
+        </ng-container>
+    </div>
+    <ng-template #loading>
+        <div class="spinner-border text-primary" role="status"></div>Cargando informacion...
+    </ng-template>
+</app-modal>

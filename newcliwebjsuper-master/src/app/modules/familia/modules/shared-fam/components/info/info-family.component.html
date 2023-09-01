@@ -1,0 +1,5 @@
+<div>
+    <a *ngIf="lnk==1" title="Ver la familia del producto" [routerLink]="['/familias/lista']"
+        [queryParams]="{id: encrypt(familia.id)}" id="{{name}}" href>{{familia.nombre}}</a>
+    <span *ngIf="lnk==3" id="{{name}}" class="hand" >{{familia.nombre}}</span>
+</div>

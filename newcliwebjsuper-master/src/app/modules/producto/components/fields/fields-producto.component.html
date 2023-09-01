@@ -1,0 +1,812 @@
+<div class="row">
+    <div class="col-md-1 d-none d-sm-block">
+        <button [disabled]="activeIndex===0" (click)="previous()"
+            class="border-0 btn-transition btn btn-outline-primary" style="margin-top: 0.5em">
+            <span class="fa fa-chevron-left fa-2x"></span>
+        </button>
+    </div>
+    <div class="col-md-10 col-xs-12">
+        <steps [model]="items" [(activeIndex)]="activeIndex" [readonly]="false"></steps>
+    </div>
+    <div class="col-md-1 d-none d-sm-block" style="text-align: right">
+        <button [disabled]="activeIndex===3" (click)="next()" class="border-0 btn-transition btn btn-outline-primary"
+            style="margin-top: 0.5em">
+            <span class="fa fa-chevron-right fa-2x"></span>
+        </button>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <hr>
+    </div>
+</div>
+<div id="smartwizard">
+    <div [hidden]="!(activeIndex===0)" id="step-1" class="">
+        <form id="formInfoBasica" [formGroup]="formInfoBasica" class="form-group-min">
+            <div [hidden]="!(formIB.codigoEspecial.value!=null && formIB.codigoEspecial.value!='')"
+                class="row form-group">
+                <label class="col-md-2 col-form-label label-help" for="txtCodigoEspecial">Código interno
+                    <i title="Codigo interno del producto, generado <b>automaticamente</b> a partir de la familia con orden consecutivo."
+                        class="help-ns fa fa-question-circle"></i>
+                </label>
+                <div class="col-md-4">
+                    <input id="txtCodigoEspecial" name="txtCodigoEspecial" formControlName="codigoEspecial"
+                        [readonly]="true" class="form-control form-control-sm" type="text" />
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="col-md-2 col-form-label label-help" for="txtNombreProd">Producto padre
+                    <i title="Producto padre del producto, si no esta dado de alta, aparecera la leyenda <b class='red' >'NUEVO'</b>  y se dara de alta automaticamente en esta misma pantalla, y debera elegir la familia para el mismo, si esta dado de alta busquelo y seleccione, tambien puede buscarlo en el boton (<i class='fa fa-list green-strong'></i>) que esta a la derecha del campo de ingreso"
+                        class="help-ns fa fa-question-circle"></i>
+                </label>
+                <div class="col-md-4">
+                    <select-product-parent [name]="'txtNombreProd'" (selectValue)="selectValueProdPadre($event)">
+                    </select-product-parent>
+                    <div formGroupName="productoPadre">
+                        <input type="hidden" id="productoPadreId" name="productoPadreId" formControlName="id">
+                        <input type="hidden" id="productoPadreNombre" name="productoPadreNombre"
+                            formControlName="nombre">
+                        <span
+                            *ngIf="(dataForm?.informacionBasica?.submitted && formInfoBasica.get('productoPadre')['controls'].id.errors?.required) 
+                            || (dataForm?.informacionBasica?.submitted && formInfoBasica.get('productoPadre')['controls'].nombre.errors?.required)"
+                            class="text-danger">
+                            Debe seleccionar un producto padre
+                        </span>
+                    </div>
+                </div>
+                <label class="col-md-2 col-form-label label-help" for="txtDesAdicProd">Nombre
+                    <i title="Nombre del producto, tener en cuenta que el nombre final depende de este"
+                        class="help-ns fa fa-question-circle"></i></label>
+                <div class="col-md-4">
+                    <!-- <input id="txtDesAdicProd" name="txtDesAdicProd" formControlName="nombre"
+                        class="form-control form-control-sm" type="text" (input)="changeNombre()" maxlength="50"
+                        enter="{{formInfoBasica.get('productoPadre.id').value == 0||formInfoBasica.get('productoPadre.id').value==undefined?{type:'select2', field:'txtFamiliaProd'}:'txtContNetProd'}}" /> -->
+                    <input id="txtDesAdicProd" name="txtDesAdicProd" formControlName="nombre"
+                        class="form-control form-control-sm" type="text" (input)="changeNombre()" maxlength="50"
+                        [enter]="formInfoBasica.get('productoPadre.id').value == 0||formInfoBasica.get('productoPadre.id').value==undefined?{type:'select2', field:'txtFamiliaProd'}:'txtContNetProd'" />
+                    <span
+                        *ngIf="dataForm?.informacionBasica?.submitted && formInfoBasica.controls.nombre.errors?.required"
+                        class="text-danger">
+                        Debe completar el nombre
+                    </span>
+                </div>
+            </div>
+            <div class="row form-group" id="divFamilia">
+                <label class="col-md-2 col-form-label label-help" for="txtDesAdicProd">Nombre final
+                    <i title="Nombre final del producto, esta compuesto por el nombre del producto padre (el nombre si no existia o el nombre corto si ya existia) mas el nombre del producto"
+                        class="help-ns fa fa-question-circle"></i>
+                </label>
+                <div class="col-md-4">
+                    <input formControlName="nombreFinal" [readonly]="true" class="form-control form-control-sm"
+                        type="text" />
+                    <span
+                        *ngIf="dataForm?.informacionBasica?.submitted && formInfoBasica.controls.nombreFinal.errors?.required"
+                        class="text-danger">
+                        El nombre final se debe autocompletar
+                    </span>
+                </div>
+                <label class="col-md-2 col-form-label label-help" for="txtFamiliaProd">Familia
+                    <i title="Familia del producto, depende del producto padre, si el producto padre es <b class='red' >NUEVO</b> se habilita para seleccionar la familia, en caso de que ya exista el producto padre se autocompleta automaticamente con la familia correspondiente."
+                        class="help-ns fa fa-question-circle"></i>
+                </label>
+                <div class="col-md-4">
+                    <select-family [name]="'txtFamiliaProd'" [multiple]="false"
+                        (selectValue)="selectValueFamilia($event)" [nextFocus]="'txtContNetProd'"></select-family>
+                    <div formGroupName="productoPadre">
+                        <div formGroupName="familia">
+                            <input type="hidden" id="productoPadreFamiliaId" name="productoPadreFamiliaId"
+                                formControlName="id">
+                            <span
+                                *ngIf="dataForm?.informacionBasica?.submitted && formInfoBasica.get('productoPadre').get('familia')['controls'].id.errors?.required"
+                                class="text-danger">
+                                Debe completar la famila
+                            </span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="col-md-2 col-form-label label-help" for="txtContNetProd">C. Neto
+                    <i title="Contenido neto del producto,la cantidad consumible del artículo/producto comercial incluida en un paquete, como está declarado en la etiqueta, que puede incluir: peso neto, volumen, unidades, litros etc."
+                        class="help-ns fa fa-question-circle"></i>
+                </label>
+                <div class="col-md-4">
+                    <input id="txtContNetProd" name="txtContNetProd" formControlName="contenidoNeto"
+                        class="form-control  form-control-sm" type="number" enter="cmbUniProd" />
+                    <span
+                        *ngIf="dataForm?.informacionBasica?.submitted && formInfoBasica.controls.contenidoNeto.errors?.required"
+                        class="text-danger">
+                        Debe completar el cont. neto
+                    </span>
+                </div>
+                <label class="col-md-2 col-form-label label-help" for="cmbUniProd">Unidad
+                    <i title="Unidad en la que se mide el producto." class="help-ns fa fa-question-circle"></i>
+                </label>
+                <div class="col-md-4">
+                    <select id="cmbUniProd" name="cmbUniProd" #cmbUniProd formControlName="unidad"
+                        class="form-control form-control-sm"
+                        [enter]="tipoProducto == 'COMPUESTO'?'txtProducto0':'btnNext'">
+                        <option [ngValue]="null">Sel. la unidad</option>
+                        <option *ngFor="let unidad of dataNewUpdate?.unidades" [ngValue]="unidad">{{unidad.nombre}}
+                        </option>
+                    </select>
+                    <span
+                        *ngIf="dataForm?.informacionBasica?.submitted && formInfoBasica.controls.unidad.errors?.required"
+                        class="text-danger">
+                        Debe seleccionar una unidad
+                    </span>
+                </div>
+            </div>
+            <div *ngIf="tipoProducto == 'COMPUESTO'" class="row form-group">
+                <label class="col-md-2 col-form-label label-help">Prod. que lo componen
+                    <i title="<p>Productos que componen el producto compuesto</p><p>Un producto compuesto  tiene las mismas características que un producto simple, a excepción que esta compuesto por uno o mas productos simples o compuestos.</p>"
+                        class="help-ns fa fa-question-circle"></i>
+                </label>
+                <div class="col-md-10">
+                    <div class="table-responsive">
+                        <table class="table table-min table-striped">
+                            <thead>
+                                <tr>
+                                    <th class="label-help">Producto
+                                        <i title="Producto que  forma parte del producto compuesto"
+                                            class="help-ns fa fa-question-circle"></i>
+                                    </th>
+                                    <th class="label-help">Cantidad
+                                        <i title="Cantidad del producto que forma parte del producto compuesto"
+                                            class="help-ns fa fa-question-circle"></i>
+                                    </th>
+                                    <th class="label-help">Detalle
+                                        <i title=" Detalle, observación, o descripción adicional"
+                                            class="help-ns fa fa-question-circle"></i>
+                                    </th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <ng-container *ngFor="let item of $any(fpc).controls; let $index = index;"
+                                    [formGroup]="item">
+                                    <tr>
+                                        <td class="center">
+                                            <input formControlName="index" type="hidden">
+                                            <select-prod #selectsProd formControlName="producto"
+                                                [class]="'item-pc-prod'" [name]="'txtProducto'+$index" [type]="1"
+                                                [precios]="1" [nextFocus]="'cantProd'+$index" [index]="$index">
+                                            </select-prod>
+                                        </td>
+                                        <td>
+                                            <input id="cantProd{{$index}}" name="cantProd{{$index}}" type="number"
+                                                formControlName="cantidad" class="form-control form-control-sm"
+                                                enter="{{'detalle'+$index}}" />
+                                        </td>
+                                        <td>
+                                            <input id="detalle{{$index}}" name="detalle{{$index}}" type="text"
+                                                formControlName="descripcion" class="form-control form-control-sm"
+                                                enter="{{'buttonAddProdComp'+$index}}" />
+                                        </td>
+                                        <td class="buttons-small">
+                                            <div class="float-right">
+                                                <button [hidden]="!($index== (fpc.controls.length-1))"
+                                                    id="buttonAddProdComp{{$index}}" name="buttonAddProdComp{{$index}}"
+                                                    (click)="addItemProdCompuesto($index + 1);" type="button"
+                                                    class="btn-sm btn-transition btn btn-outline-success">
+                                                    <i class="fa fa-plus"></i>
+                                                </button>
+                                                <button [hidden]="$index== 0 && ($index== (fpc.controls.length-1))"
+                                                    id="buttonRemoveProdComp{{$index}}"
+                                                    name="buttonRemoveProdComp{{$index}}"
+                                                    (click)="removeItemProdCompuesto(item);" type="button"
+                                                    class="btn-sm btn-transition btn btn-outline-danger">
+                                                    <i class="fa fa-remove"></i>
+                                                </button>
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr *ngIf="fpc.invalid && dataForm?.productoCompuesto?.submitted">
+                                        <td>
+                                            <div class="align-top" *ngIf="item.controls.producto.errors?.required"
+                                                class="text-danger">
+                                                Debe ingresar un producto
+                                            </div>
+
+                                        </td>
+                                        <td>
+                                            <div class="align-top" *ngIf="item.controls.cantidad.errors?.required"
+                                                class="text-danger">
+                                                Debe ingresar una cantidad
+                                            </div>
+                                            <div class="align-top" *ngIf="item.controls.cantidad.errors?.min"
+                                                class="text-danger">
+                                                Debe ingresar una cantidad mayor a 0
+                                            </div>
+                                            <div class="align-top" *ngIf="item.controls.cantidad.errors?.max"
+                                                class="text-danger">
+                                                Debe ingresar una cantidad menor
+                                            </div>
+                                        </td>
+                                        <td>
+                                            <div class="align-top" *ngIf="item.controls.detalle.errors?.maxlength"
+                                                class="text-danger">
+                                                Debe ingresar un detalle mas corto
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </ng-container>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="col-md-2 col-form-label label-help" for="editorDescripcion">Descripción
+                    <i title="Aqui puede agregar toda descripcion adicional, y puede formatear el texto, tambien puede agregar imagenes ademas de las imagenes que se agregan en la pestaña 'Imagenes'"
+                        class="help-ns fa fa-question-circle"></i>
+                </label>
+                <div class="col-md-10">
+                    <div class="height:auto;">
+                        <quill-editor [placeholder]="'Ingrese detalle extra'" [modules]="editor_modules"
+                            formControlName="detalle"></quill-editor>
+                    </div>
+                    <!-- <div id="editor">
+
+                    </div> -->
+
+
+                    <!-- <quill-editor></quill-editor> -->
+                    <!-- <ckeditor editorUrl="http://localhost:4200/assets/js/ckeditor/ckeditor.js" ></ckeditor> -->
+                    <!-- <ckeditor [editor]="Editor" ></ckeditor> -->
+                </div>
+            </div>
+        </form>
+    </div>
+    <div [hidden]="!(activeIndex===1)" id="step-2" class="">
+        <form id="formImagenesProducto" class="form-group-min">
+            <div class="row form-group">
+                <div class="float-left">
+                    <image-upload [path]="'productos/upload/image'" (loadImage)="loadImage($event)"
+                        [dataImage]="dataImage" (progressUpImage)="progressUpImage($event)"
+                        [target]="'addImageProducto'"></image-upload>&nbsp;
+                    <button (click)="removeAll()" [disabled]="!producto.imagenProducto.length" type="button"
+                        title="Limpiar todo" class="btn-sm btn-transition btn btn-outline-info"><span
+                            class="fa fa-eraser"></span>&nbsp;Limpiar todo</button>&nbsp;
+                    <button [disabled]="!dataImage.showProgress" (click)="cancelUploadIMage();" type="button"
+                        title="Cancelar carga de imagen" class="btn-sm btn-transition btn btn-outline-danger "><span
+                            class="fa fa-remove"></span>&nbsp;Cancelar</button>
+                </div>
+            </div>
+            <div [hidden]="!dataImage.showProgress">
+                <div class="row form-group progress">
+                    <div class="progress-bar" role="progressbar" aria-valuenow="25" aria-valuemin="0"
+                        aria-valuemax="100" [style.width]="dataImage.valueProgress+'%'">{{dataImage.valueProgress}}%
+                    </div>
+                </div>
+            </div>
+            <div id="files" class="files"></div>
+            <div class="errorUpload" id="errorUpload"></div>
+            <div class="form-group">
+                <ng-container *ngIf="producto.imagenProducto.length; else noItems">
+                    <div class="table-responsive">
+                        <table id="tableProdImagenes" class="table table-hover table-striped">
+                            <thead>
+                                <tr>
+                                    <th>Imagen</th>
+                                    <th>Nombre</th>
+                                    <th>Tipo</th>
+                                    <th>Tamaño</th>
+                                    <th>Orden</th>
+                                    <th></th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr *ngFor="let imagen of producto.imagenProducto | sort:'orden'; let index= index "
+                                    id="tr{{index}}">
+                                    <td class="ace-thumbnails clearfix center">
+                                        <image-preview [path]="pathService.getUrl('/images/products/')"
+                                            [image]="imagen" [text]="false" [tags]="false" [width]="50" [height]="50">
+                                        </image-preview>
+                                    </td>
+                                    <td class="center">{{imagen.alt}}</td>
+                                    <td class="center">{{imagen.tipo}}</td>
+                                    <td class="center">{{imagen.tamanio}}</td>
+                                    <td class="center">
+                                        <span class="float-left">{{imagen.orden}}</span>
+                                        <span
+                                            *ngIf="imagen.orden > 1 || imagen.orden == null || imagen.orden == undefined"
+                                            title="Subir orden" (click)="upImageOrder(imagen, index);"
+                                            class="text-16 fa fa-arrow-circle-up float-right green-strong hand"></span>
+                                        <span *ngIf="index < (producto.imagenProducto.length - 1)" title="Bajar orden"
+                                            (click)="downImageOrder(imagen, index);"
+                                            class="text-16 fa fa-arrow-circle-down float-right blue hand"></span>
+                                    </td>
+                                    <td class="center buttons-small">
+                                        <button (click)="removeImage(imagen);"
+                                            class="btn-sm btn-transition btn btn-outline-danger"
+                                            title="Eliminar la imagen seleccionada.">
+                                            <i class="fa fa-remove"></i>
+                                        </button>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </ng-container>
+                <ng-template #noItems>
+                    <div class="form-group row alert alert-info">
+                        Sin imagenes
+                    </div>
+                </ng-template>
+            </div>
+        </form>
+    </div>
+    <div [hidden]="!(activeIndex===2)" id="step-3" class="">
+        <form id="formPrecios" [formGroup]="formPrecios" ng-init="initPrecios();" class="form-group-min">
+            <div class="row form-group">
+                <label class="col-md-2 col-form-label label-help" for="txtTipoPrecioIva">I.V.A. del Producto
+                    <i title="IVA del producto, este afectara en las ventas en caso de tributar en la AFIP como R.I."
+                        class="help-ns fa fa-question-circle"></i>
+                </label>
+                <div class="col-md-2">
+                    <select id="txtTipoPrecioIva" name="txtTipoPrecioIva" formControlName="$$iva"
+                        class="form-control form-control-sm" enter="txtPrecioCosto">
+                        <option *ngFor="let iva of dataUtil.ivas" [ngValue]="iva">{{iva.descripcion}}
+                        </option>
+                    </select>
+                    <div *ngIf="dataForm?.precios?.submitted && formPrecios.controls.$$iva.errors?.required"
+                        class="text-danger">
+                        Complete el IVA
+                    </div>
+                </div>
+                <!-- <div class="col-md-3">
+                        <label class="pos-rel">
+                            <input ng-model="dataUtil.updateIva" type="checkbox"
+                                ng-click="focusTo('#txtTipoPrecioIva');" class="ace" enter="" />
+                            <span class="lbl">&nbsp;&nbsp;Modificar IVA</span>
+                        </label>
+                    </div> -->
+            </div>
+            <div formGroupName="dataUtil">
+                <div class="row form-group">
+                    <label class="col-md-2 col-form-label label-help" for="txtTipoPrecioCon">Precio con
+                        <i title="Calcular el precio con el IVA incluido o no.(campo no registrado y no obligatorio)"
+                            class="help-ns fa fa-question-circle"></i>
+                    </label>
+                    <div class="col-md-2">
+                        <select id="txtTipoPrecioCon" name="txtTipoPrecioCon" (change)="changeValuePrice();"
+                            formControlName="tipoPrecio" class="form-control form-control-sm" enter="txtPrecioCosto">
+                            <option *ngFor="let tipoPrecio of dataUtil.tiposPrecioIva" [ngValue]="tipoPrecio.id">
+                                {{tipoPrecio.nombre}}
+                            </option>
+                        </select>
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label class="col-md-2 col-form-label label-help" for="txtPrecioCosto">Precio pagado
+                        <i title="Precio pagado, cuanto pago por el producto, los cálculos en esta sección se haran de acuerdo a este.(campo no registrado y no obligatorio)"
+                            class="help-ns fa fa-question-circle"></i>
+                    </label>
+                    <div class="col-md-2">
+                        <input formControlName="precioCosto" (input)="changeValuePrice();" id="txtPrecioCosto"
+                            name="txtPrecioCosto" type="number" class="form-control form-control-sm"
+                            enter="txtPagoIva" />
+                    </div>
+                </div>
+                <div class="row form-group">
+                    <label class="col-md-2 col-form-label label-help" for="txtPagoIva">Pago por IVA
+                        <i title="Pago realizado de IVA, segun el precio pagado y el valor de IVA ingresado. (campo no registrado y no obligatorio)"
+                            class="help-ns fa fa-question-circle"></i>
+                    </label>
+                    <div class="col-md-2">
+                        <input formControlName="pagoIva" id="txtPagoIva" name="txtPagoIva" type="number"
+                            class="form-control form-control-sm" enter="txtPrecioSIva" />
+                    </div>
+                    <label class="col-md-2 col-form-label label-help" for="txtPrecioSIva">Precio sin IVA
+                        <i title="Pago realizado sin IVA, de acuerdo si se ingreso el precio pagado con IVA incluido o no. (campo no registrado y no obligatorio)"
+                            class="help-ns fa fa-question-circle"></i>
+                    </label>
+                    <div class="col-md-2">
+                        <input formControlName="precionSIva" id="txtPrecioSIva" name="txtPrecioSIva" type="number"
+                            class="form-control form-control-sm" enter="txtPrecioFinal" />
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label class="col-md-2 col-form-label label-help" for="txtPrecioFinal"><b>Precio final/costo</b>
+                    <i title="Precio de costo, segun el precio pagado, este es el precio de costo que se registra para el producto."
+                        class="help-ns fa fa-question-circle"></i></label>
+                <div class="col-md-2">
+                    <input formControlName="precioCosto" id="txtPrecioFinal" name="txtPrecioFinal" type="number"
+                        class="form-control form-control-sm" enter="txtPrecioVenta" min="0" />
+                    <span *ngIf="dataForm?.precios?.submitted && formPrecios.controls.precioCosto.errors?.required"
+                        class="text-danger">
+                        Debe completar el precio de costo
+                    </span>
+                </div>
+                <label class="col-md-2 col-form-label label-help" for="txtPrecioVenta"><b>Precio Venta</b>
+                    <i title="Precio de venta, autocalculado segun el porcentaje de ganancia configurado, lo puede modificar."
+                        class="help-ns fa fa-question-circle"></i></label>
+                <div class="col-md-2">
+                    <input formControlName="precioVenta" id="txtPrecioVenta" name="txtPrecioVenta" type="number"
+                        class="form-control form-control-sm" enter="btnNext" min="0" />
+                    <span *ngIf="dataForm?.precios?.submitted && formPrecios.controls.precioVenta.errors?.required"
+                        class="text-danger">
+                        Debe completar el precio de venta
+                    </span>
+                </div>
+            </div>
+        </form>
+    </div>
+    <div [hidden]="!(activeIndex===3)" id="step-4" class="">
+        <div class="row">
+            <div class="col-md-12">
+                <div [formGroup]="formInfoBasica" class="row form-group">
+                    <label class="col-form-label col-md-2 label-help" for="chkProdPesable">Producto pesable
+                        <i title="Indica si un producto es pesable, por ejemplo las verduras son pesables."
+                            class="help-ns fa fa-question-circle"></i>
+                    </label>
+                    <div class="col-md-1">
+                        <div class="pretty p-switch">
+                            <input formControlName="pesable" id="chkProdPesable" name="chkProdPesable"
+                                (change)="changePesable()" type="checkbox" />
+                            <div class="state p-primary">
+                                <label></label>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <label class="col-md-1 pull-left inline">
+                    <input id="chkProdPesable" name="chkProdPesable" ng-model="producto.pesable" type="checkbox"
+                        ng-change="producto.ingresoCantidadManual=false" class="ace ace-switch ace-switch-5"
+                        title="Habilitado para cuando el prod. es pesable, por ejemplo fiambres, verduras etc." />
+                    <span class="lbl middle"></span>
+                </label> -->
+                    <label class="col-form-label col-md-2 label-help" for="chkIngresoManual">Ingreso de peso manual
+                        <i title="Indica si el ingreso del peso del producto se ingresa manualmente, esto es útil para cuando no se cuenta con el control de etiquetas de peso, si esta opción está habilitada a la hora de realizar la venta (por el punto de venta de versión escritorio) el cursor luego de leer el producto se ubicará directamente sobre la celda de cantidad."
+                            class="help-ns fa fa-question-circle"></i>
+                    </label>
+                    <div class="col-md-1">
+                        <div class="pretty p-switch">
+                            <input formControlName="ingresoCantidadManual" id="chkIngresoManual" name="chkIngresoManual"
+                                type="checkbox" />
+                            <div class="state p-primary">
+                                <label></label>
+                            </div>
+                        </div>
+                    </div>
+                    <!-- <label class="col-md-1 pull-left inline">
+                    <input ng-disabled="!producto.pesable" id="chkIngresoManual" name="chkIngresoManual"
+                        ng-model="producto.ingresoCantidadManual" type="checkbox" class="ace ace-switch ace-switch-5"
+                        title="Si el prod. es pesable,  y esta opción esta habilitada, en la venta permitira introducir la cantidad automaticamente despues de seleccionar el producto." />
+                    <span class="lbl middle"></span>
+                </label> -->
+                </div>
+            </div>
+        </div>
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+                <div class="card-title label-help">Código/s de barra
+                    <i title="Códigos de barra del producto, puede ingresar uno o más, el codigo de barra es único para cada producto."
+                        class="help-ns fa fa-question-circle"></i>
+                </div>
+                <div class="row">
+                    <div [hidden]="c.length > 0" class="col-md-12">
+                        <a (click)="addBarCode();" id="firstAddBarCode" #firstAddBarCode [routerLink]=""
+                            class="hand">Agregar un codigo de
+                            barra&nbsp;<i class="green-strong fa fa-plus"></i></a>
+                    </div>
+                    <div *ngIf="c.length && c.length > 0" class="col-md-12">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 12%;" class="label-help">Tipo
+                                            <i title="Tipo de código, puede ser <p><b>Normal:</b>Un código con una longitud mínimo de 4 caracteres, es el que gralmente se ecuentra impreso en los paquetes o envoltorios de los productos</p><p><b>Especial:</b>Un código con una longitud mínima de 1 carácter (siempre con el prefijo *, el sistema lo añade automáticamente), útil para casos en donde vendemos productos de manera reiterada y no queremos ingresar todo el código, o productos que no tienen código y le queremos asignar uno especial, por ejemplo podríamos tener el producto Cerveza X 700 mll, esta podría tener un código especial “*1”, a la hora de realizar la venta solo ingresamos “*1” .</p>"
+                                                class="help-ns fa fa-question-circle"></i>
+                                        </th>
+                                        <th style="width: 25%;" class="label-help">Codigo
+                                            <i title="Códigos de barra del producto, es único en el sistema, debe validarlo, si es nuevo o si lo modifica, presionando en el boton derecho (<i class='fa fa-arrow-right blue' ></i>) del campo de ingreso"
+                                                class="help-ns fa fa-question-circle"></i>
+                                        </th>
+                                        <th class="label-help">Descripción
+                                            <i title="Descripción adicional del código"
+                                                class="help-ns fa fa-question-circle"></i>
+                                        </th>
+                                        <th style="width: 12%;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let codigo of $any(c).controls; let i = index;" [formGroup]="codigo">
+                                        <td class="center">
+                                            <select id="cmbStockTipoBarCode{{i}}" formControlName="tipo"
+                                                name="cmbStockTipoBarCode{{i}}"
+                                                class="form-control form-control-sm item-cb-tipo" focus-me="true"
+                                                enter="txtStockCod{{i}}">
+                                                <option [ngValue]="null">Seleccione el tipo</option>
+                                                <option *ngFor="let tipo of dataStock.tiposCodigo"
+                                                    [ngValue]="tipo.value">
+                                                    {{tipo.label}}
+                                                </option>
+                                            </select>
+                                            <span
+                                                *ngIf="dataForm?.existencia.codigosBarra.submitted && codigo.controls.tipo.errors?.required"
+                                                class="text-danger">
+                                                Debe seleccionar un tipo
+                                            </span>
+                                        </td>
+                                        <td class="center">
+                                            <div class="input-group input-group-sm item-cb-cant">
+                                                <div *ngIf="codigo.controls.tipo.value==2" class="input-group-prepend">
+                                                    <span class="input-group-text fa fa-asterisk"></span>
+                                                </div>
+                                                <input id="txtStockCod{{i}}" formControlName="codigo"
+                                                    name="txtStockCod{{i}}"
+                                                    [readonly]="codigo.controls.codigo.validateCode && !codigo.controls.codigo.exist && codigo.controls.codigo.valid"
+                                                    (input)="changeValueBarCode(codigo.controls.codigo)"
+                                                    (keyup.enter)="controlBarCode(codigo.controls.codigo, i, codigo.controls.$$codigo)"
+                                                    class="form-control form-control-sm" type="text" />
+                                                <div *ngIf="codigo.controls.codigo.loading" class="input-group-append">
+                                                    <span class="input-group-text">
+                                                        <div class="spinner-border spinner-border-sm" role="status">
+                                                            <span class="sr-only">Loading...</span>
+                                                        </div>
+                                                    </span>
+                                                </div>
+                                                <a id="btnControlCode{{i}}" disabled="true"
+                                                    *ngIf="!(codigo.controls.codigo.validateCode && !codigo.controls.codigo.exist && codigo.controls.codigo.valid)"
+                                                    (click)="controlBarCode(codigo.controls.codigo, i, codigo.controls.$$codigo)"
+                                                    class="input-group-append hand" title="Validar el código">
+                                                    <span class="blue input-group-text fa fa-arrow-right"></span>
+                                                </a>
+                                                <div *ngIf="codigo.controls.codigo.validateCode && !codigo.controls.codigo.exist && codigo.controls.codigo.valid"
+                                                    (click)="enableBarCode(codigo.controls.codigo, i)"
+                                                    class="input-group-append" title="Editar el código">
+                                                    <span class="blue input-group-text fa fa-edit"></span>
+                                                </div>
+                                            </div>
+                                            <span *ngIf="dataForm.existencia.codigosBarra.submitted && codigo.invalid">
+                                                <div *ngIf="codigo.controls.codigo.errors?.required"
+                                                    class="text-danger">
+                                                    Debe ingresar un código
+                                                </div>
+                                                <div *ngIf="codigo.controls.codigo.errors?.unique" class="text-danger">
+                                                    Ya ingreso ese código
+                                                </div>
+                                                <div *ngIf="codigo.controls.codigo.errors?.exist" class="text-danger">
+                                                    Ya existe el código en la base de datos
+                                                </div>
+                                                <div *ngIf="codigo.controls.codigo.errors?.validateCode"
+                                                    class="text-danger">
+                                                    Debe validar el código en la base de datos
+                                                </div>
+                                            </span>
+                                        </td>
+                                        <td class="center">
+                                            <input id="txtStockDesc{{i}}" name="txtStockDesc{{i}}"
+                                                formControlName="descripcion"
+                                                class="form-control form-control-sm  item-cb-desc" type="text"
+                                                enter="buttonAddBarCode{{i}}" />
+                                        </td>
+                                        <td class="buttons-small">
+                                            <button id="buttonAddBarCode{{i}}" name="buttonAddBarCode{{i}}"
+                                                [hidden]="!(i== (c.controls.length-1))" (click)="addBarCode();"
+                                                type="button" class="btn-sm btn-transition btn btn-outline-success">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                            <button id="buttonRemoveBarCode{{i}}" name="buttonRemoveBarCode{{i}}"
+                                                (click)="removeBarCode(codigo);"
+                                                class="btn-sm btn-transition btn btn-outline-danger">
+                                                <i class="fa fa-remove"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+                <div class="card-title label-help">Existencia en una sucursal
+                    <i title="Define en que sucursal tendremos disponible stock."
+                        class="help-ns fa fa-question-circle"></i>
+                </div>
+                <div class="row">
+                    <div [hidden]="ss.length > 0" class="col-md-12">
+                        <a (click)="addStockSucursal();" [routerLink]="" class="hand">Agregar
+                            existencia&nbsp;<i class="green-strong fa fa-plus"></i></a>
+                    </div>
+                    <div *ngIf="ss.length && ss.length > 0" class="col-md-12">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th style="width: 20%;" class="label-help">Sucursal
+                                            <i title="Sucursal en donde se define el stock."
+                                                class="help-ns fa fa-question-circle"></i>
+                                        </th>
+                                        <th style="width: 10%;" class="label-help">Stock de repo.
+                                            <i title="Stock que indica el punto en la que hay que realizar un pedido"
+                                                class="help-ns fa fa-question-circle"></i>
+                                        </th>
+                                        <th style="width: 10%;" class="label-help">Stock minimo
+                                            <i title="Stock que indica el punto en la cual la empresa puede soportar ventas, para productos que esten debajo de este stock la empresa deberá solicitar un pedido de stock de manera urgente."
+                                                class="help-ns fa fa-question-circle"></i>
+                                        </th>
+                                        <th class="label-help">Ubicación
+                                            simple
+                                            <i title="Ubicación del producto en la empresa, almacén, estante etc."
+                                                class="help-ns fa fa-question-circle"></i>
+                                        </th>
+                                        <th class="label-help">Descripción
+                                            <i title="Descripción adicional" class="help-ns fa fa-question-circle"></i>
+                                        </th>
+                                        <th style="width: 12%;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let stockSuc of $any(ss).controls; let i = index"
+                                        [formGroup]="stockSuc">
+                                        <td class="center">
+                                            <select id="cmbExistSucursal{{i}}" name="cmbExistSucursal{{i}}"
+                                                formControlName="sucursal" (change)="changeSucursal(stockSuc)"
+                                                class="form-control form-control-sm item-ss-suc"
+                                                enter="txtStockReposicion{{i}}">
+                                                <option [ngValue]="null">Seleccione la sucursal</option>
+                                                <option *ngFor="let suc of sucursales" [ngValue]="suc">
+                                                    {{suc.nombre}}
+                                                </option>
+                                            </select>
+                                            <input type="hidden" formControlName="$$idSucursal" />
+                                            <span
+                                                *ngIf="dataForm.existencia.stockSucursal.submitted && stockSuc.invalid">
+                                                <span *ngIf="stockSuc.controls.sucursal.errors?.required"
+                                                    class="text-danger">
+                                                    Debe seleccionar una sucursal
+                                                </span>
+                                                <span *ngIf="stockSuc.controls.$$idSucursal.errors?.unique"
+                                                    class="text-danger">
+                                                    Ya ingreso esa sucursal
+                                                </span>
+                                            </span>
+                                        </td>
+                                        <td class="center">
+                                            <input id="txtStockReposicion{{i}}" name="txtStockReposicion{{i}}"
+                                                formControlName="puntoReposicion" class="form-control form-control-sm"
+                                                type="number" enter="txtStockMin{{i}}" />
+                                        </td>
+                                        <td class="center">
+                                            <input id="txtStockMin{{i}}" name="txtStockMin{{i}}"
+                                                formControlName="stockMinimo" class="form-control form-control-sm"
+                                                type="number" enter="txtUbiSimple{{i}}" />
+                                        </td>
+                                        <td class="center">
+                                            <input id="txtUbiSimple{{i}}" name="txtUbiSimple{{i}}"
+                                                formControlName="ubicacion" class="form-control form-control-sm"
+                                                type="text" enter="txtDetalleStock{{i}}" />
+                                        </td>
+                                        <td class="center">
+                                            <input id="txtDetalleStock{{i}}" name="txtDetalleStock{{i}}"
+                                                formControlName="detalle" class="form-control form-control-sm"
+                                                type="text" enter="buttonAddStockSuc{{i}}" />
+                                        </td>
+                                        <td class="buttons-small">
+                                            <button id="buttonAddStockSuc{{i}}" name="buttonAddStockSuc{{i}}"
+                                                [hidden]="!(i== (ss.controls.length-1))" (click)="addStockSucursal();"
+                                                type="button" class="btn-sm btn-transition btn btn-outline-success">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                            <button id="buttonRemoveBarCode{{i}}" name="buttonRemoveBarCode{{i}}"
+                                                (click)="removeStockSucursal(i);"
+                                                class="btn-sm btn-transition btn btn-outline-danger">
+                                                <i class="fa fa-remove"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="main-card mb-3 card">
+            <div class="card-body">
+                <div class="card-title label-help">Proveedores
+                    <i title="Proveedores del producto, puede cargas uno o más."
+                        class="help-ns fa fa-question-circle"></i>
+                </div>
+                <div class="row">
+                    <div [hidden]="pr.length > 0" class="col-md-12">
+                        <a (click)="addProveedor();" [routerLink]="" class="hand">Agregar
+                            proveedor&nbsp;<i class="green-strong fa fa-plus"></i></a>
+                    </div>
+                    <div *ngIf="pr.length && pr.length > 0" class="col-md-12">
+                        <div class="table-responsive">
+                            <table class="table table-hover table-striped">
+                                <thead>
+                                    <tr>
+                                        <th class="label-help">Proveedor<i title="Proveedores del producto."
+                                                class="help-ns fa fa-question-circle"></i>
+                                        </th>
+                                        <th style="width: 12%;"></th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr *ngFor="let prov of $any(pr).controls; let i = index" [formGroup]="prov">
+                                        <!-- <tr> -->
+                                        <td class="center">
+                                            <select-prov #selectsProv formControlName="proveedor" [type]="type"
+                                                [name]="'selProveedor'+i" [index]="i">
+                                            </select-prov>
+                                            <span *ngIf="dataForm.existencia.proveedores.submitted && prov.invalid">
+                                                <span *ngIf="prov.controls.proveedor.errors?.required"
+                                                    class="text-danger">
+                                                    Debe seleccionar un proveedor
+                                                </span>
+                                                <span *ngIf="prov.controls.$$idProveedor.errors?.unique"
+                                                    class="text-danger">
+                                                    Ya ingreso ese proveedor
+                                                </span>
+                                            </span>
+                                        </td>
+                                        <td class="buttons-small">
+                                            <button id="buttonAddProv{{i}}" name="buttonAddProv{{i}}"
+                                                [hidden]="!(i== (pr.controls.length-1))" (click)="addProveedor();"
+                                                type="button" class="btn-sm btn-transition btn btn-outline-success">
+                                                <i class="fa fa-plus"></i>
+                                            </button>
+                                            <button id="buttonRemoveProv{{i}}" name="buttonRemoveProv{{i}}"
+                                                (click)="removeProveedor(prov);"
+                                                class="btn-sm btn-transition btn btn-outline-danger">
+                                                <i class="fa fa-remove"></i>
+                                            </button>
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <hr>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-8">
+    </div>
+    <div class="col-md-4">
+        <button-footer (clickCancel)="cancel()" (clickSaveAndReturn)="save(2)" (clickSaveAndNew)="save(1)"
+            [save]="false"></button-footer>
+    </div>
+    <!-- <div class="col-md-2">
+        <button (click)="previous()" [disabled]="activeIndex===0" class="btn btn-block btn-transition btn-primary"><span
+                class="fa fa-chevron-left"></span>&nbsp;&nbsp;Anterior
+        </button>
+    </div>
+    <div class="col-md-2">
+        <button (click)="cancel()" class="btn btn-block btn-transition btn-primary"><span
+                class="fa fa-remove"></span>&nbsp;&nbsp;Cancelar
+        </button>
+    </div>
+    <div class="col-md-2">
+        <button (click)="save(1)" class="btn btn-block btn-transition btn-primary"><span
+                class="fa fa-save"></span>&nbsp;&nbsp; {{type==1?'Guardar y nuevo':'Guardar'}}
+        </button>
+    </div>
+    <div class="col-md-2">
+        <button (click)="save(2)" class="btn btn-block btn-transition btn-primary"><span
+                class="fa fa-save"></span>&nbsp;&nbsp;Guardar y volver
+        </button>
+    </div> -->
+    <!-- <div class="col-md-2">
+        <button (click)="next()" [disabled]="activeIndex===3" id="btnNext" name="btnNext" #btnNextForm
+            class="btn btn-block btn-transition btn-primary"><span
+                class="fa fa-chevron-right"></span>&nbsp;&nbsp;Continuar
+        </button>
+    </div> -->
+</div>
+<app-size-detector></app-size-detector>

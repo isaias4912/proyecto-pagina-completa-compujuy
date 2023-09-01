@@ -1,0 +1,161 @@
+<div class="row">
+    <div class="col-md-12">
+        <div class="row">
+            <div class="col-md-12">
+                <app-panel [idCollapse]="'panelFiltro'">
+                    <form id="formFilter" class="form-group-min">
+                        <div class="row">
+                            <div class="col-lg-11 col-md-11 col-sm-12">
+                                <div class="row form-group">
+                                    <label for="txtNombre"
+                                        class="col-md-2 col-form-label padding-right-left-4">Nombre</label>
+                                    <div class="col-md-4">
+                                        <input id="txtNombre" name="txtNombre" [(ngModel)]="filterLista.nombre"
+                                            class="form-control form-control-sm" />
+                                    </div>
+                                    <label for="cmbFiltroEstado"
+                                        class="col-md-2 col-form-label padding-right-left-4">Estado</label>
+                                    <div class="col-md-4">
+                                        <select id="cmbFiltroEstado" name="cmbFiltroActivo"
+                                            [(ngModel)]="filterLista.activo" class="form-control form-control-sm">
+                                            <option *ngFor="let opcion of  dataOptions.filterActivo"
+                                                [ngValue]="opcion.value">{{opcion.name}}</option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-lg-1 col-md-1 col-sm-12">
+                                <div class="row form-group">
+                                    <div class="btn-group btn-group-sm btn-block" role="group">
+                                        <button type="submit" (click)="pageChanged()"
+                                            class="btn btn-transition btn btn-outline-light">
+                                            <i class="fa fa-search green-strong"></i>
+                                        </button>
+                                        <button type="button" (click)="reset()"
+                                            class="btn-transition btn btn-outline-light">
+                                            <i class="fa fa-trash-o blue"></i>
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </form>
+                </app-panel>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-6 buttons-small">
+                <button (click)="enabledOrDisabled(true)" [disabled]="disabledButtonsTable"
+                    class="btn-sm btn-transition btn btn-outline-success">
+                    <i class="fa fa-check"></i>Activar
+                </button>
+                <button (click)="enabledOrDisabled(false)" [disabled]="disabledButtonsTable"
+                    class="btn-sm btn-transition btn btn-outline-danger">
+                    <i class="fa fa-remove"></i>Desactivar
+                </button>
+                <button routerLink="new" class="btn-sm btn-transition btn btn-outline-primary">
+                    <i class="fa fa-plus"></i>Nuevo
+                </button>
+            </div>
+            <div class="col-md-6 float-right">
+                <div class="float-right">
+                    <app-resgister [paramPagination]="paramPagination" (registerChanged)="pageChanged()">
+                    </app-resgister>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div *ngIf="listaPrecios$ | async as listaPrecios; else loading;" class="col-md-12">
+                <ng-container *ngIf="listaPrecios.length; else noItems">
+                    <table class="table  table-striped">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <div class="pretty p-icon p-curve p-pulse mr-0">
+                                        <input type="checkbox" [(ngModel)]="checkAll"
+                                            (change)="checkAllRow(checkAll, listaPrecios)" />
+                                        <div class="state p-primary">
+                                            <label></label>
+                                        </div>
+                                    </div>
+                                </th>
+                                <th>
+                                    <app-sort [text]="'Fecha de Creación'" [order]="'fechaCreacion'"
+                                        [paramPagination]="paramPagination" (sortChanged)="pageChanged()"></app-sort>
+                                </th>
+                                <th>
+                                    <app-sort [text]="'Nombre'" [order]="'nombre'" [paramPagination]="paramPagination"
+                                        (sortChanged)="pageChanged()"></app-sort>
+                                </th>
+                                <th>Tipo</th>
+                                <th>Valor</th>
+                                <th>Detalle</th>
+                                <th>Estado</th>
+                                <th style="width: 120px;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let lista of listaPrecios">
+                                <td>
+                                    <div class="pretty p-icon p-curve p-pulse mr-0">
+                                        <input type="checkbox" [(ngModel)]="lista.$$activo"
+                                            (change)="checkRow(listaPrecios)" />
+                                        <div class="state p-primary">
+                                            <label></label>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    {{lista.fechaCreacion}}
+                                </td>
+                                <td>
+                                    {{lista.nombre}}
+                                </td>
+                                <td>
+                                    {{lista.tipo}}
+                                </td>
+                                <td>
+                                    {{lista.valor}}
+                                </td>
+                                <td>
+                                    {{lista.detalle}}
+                                </td>
+                                <td>
+                                    <span *ngIf="lista.activo" class="fa fa-check green-strong"></span>
+                                    <span *ngIf="!lista.activo" class="fa fa-remove red"></span>
+                                </td>
+                                <td class="buttons-small">
+                                    <button [routerLink]="['./', lista.id]"
+                                        class="btn-sm btn-transition btn btn-outline-primary">
+                                        <i class="fa fa-edit"></i>
+                                    </button>
+                                    <button (click)="removeLista(lista)"
+                                        title="Eliminar la lista de precio {{lista.nombre}}"
+                                        class="btn-sm btn-transition btn btn-outline-danger">
+                                        <i class="fa fa-remove"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </ng-container>
+                <ng-template #noItems>
+                    <div class="form-group row alert alert-warning">
+                        Sin datos
+                    </div>
+                </ng-template>
+            </div>
+        </div>
+        <div class="row" style="text-align: center !important;">
+            <div class="mx-auto">
+                <ngb-pagination [(page)]="paramPagination.page" [pageSize]="paramPagination.pageSize"
+                    [collectionSize]="paramPagination.totalItems" (pageChange)="pageChanged()"
+                    [maxSize]="5" [boundaryLinks]="true">
+                </ngb-pagination>
+            </div>
+        </div>
+    </div>
+</div>
+<ng-template #loading>
+    <div class="spinner-border text-primary" role="status"></div>Cargando informacion...
+</ng-template>

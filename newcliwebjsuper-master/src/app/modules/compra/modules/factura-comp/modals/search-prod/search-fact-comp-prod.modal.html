@@ -1,0 +1,19 @@
+<app-modal [title]="title">
+    <div [hidden]="factura">
+        <list-fact-comp [typeComponent]="TypeComponent.modal" [typeView]="'SELECT_PROD'" (selectInvoice)="selectInvoice($event)"></list-fact-comp>
+    </div>
+    <div *ngIf="factura">
+        <list-items-fact-comp [idFactura]="factura.id" (selectItem)="selectItemInvoice($event)"></list-items-fact-comp>
+    </div>
+    <div *ngIf="factura">
+        <div id="div" class="row">
+            <div class="col-md-10">
+            </div>
+            <div class="col-md-2">
+                <button (click)="goBack()" class="btn btn-block btn-transition btn-outline-primary"><span
+                        class="fa fa-remove"></span>&nbsp;&nbsp;Volver
+                </button>
+            </div>
+        </div>
+    </div>
+</app-modal>

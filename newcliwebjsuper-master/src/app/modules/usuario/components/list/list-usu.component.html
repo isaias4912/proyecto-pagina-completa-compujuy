@@ -1,0 +1,221 @@
+<div id="div" class="row">
+    <div class="col-md-12">
+        <app-panel [idCollapse]="'panelFiltro'">
+            <form id="formFilter">
+                <div class="row">
+                    <div class="col-lg-11 col-md-11 col-sm-12">
+                        <div class="row form-group margin-bottom-5">
+                            <label class="control-label col-md-1" for="txtFiltroUsuario">Usuario</label>
+                            <div class="col-md-2">
+                                <input type="text" id="txtFiltroUsuario" name="txtFiltroUsuario"
+                                    class="form-control form-control-sm" [(ngModel)]="filterUsuario.usuario"
+                                    maxlength="15" focus-me="true" />
+                            </div>
+                            <label class="control-label col-md-1" for="txtFiltroNombre">Apellido</label>
+                            <div class="col-md-2">
+                                <input type="text" id="txtFiltroApellido" name="txtFiltroApellido"
+                                    class="form-control form-control-sm" [(ngModel)]="filterUsuario.apellido"
+                                    maxlength="30" />
+                            </div>
+                            <label class="control-label col-md-1" for="txtFiltroNombre">Nombre</label>
+                            <div class="col-md-2">
+                                <input type="text" id="txtFiltroNombre" name="txtFiltroNombre"
+                                    class="form-control form-control-sm" [(ngModel)]="filterUsuario.nombre"
+                                    maxlength="30" />
+                            </div>
+                            <label class="control-label col-md-1" for="cmbFiltroActivo">Activos</label>
+                            <div class="col-md-2">
+                                <select id="cmbFiltroActivo" name="cmbFiltroActivo" class="form-control form-control-sm"
+                                    [(ngModel)]="filterUsuario.activo">
+                                    <option *ngFor="let opcion of dataOptions.filterActivo" [ngValue]="opcion.value">
+                                        {{opcion.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-1 col-md-1 col-sm-12">
+                        <div class="row form-group">
+                            <div class="btn-group btn-group-sm btn-block" role="group">
+                                <button type="submit" (click)="query()"
+                                    class="btn btn-transition btn btn-outline-light">
+                                    <i class="fa fa-search green-strong"></i>
+                                </button>
+                                <button type="button" (click)="reset()" class="btn-transition btn btn-outline-light">
+                                    <i class="fa fa-trash-o blue"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </app-panel>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6 buttons-small">
+        <button (click)="enabledOrDisabled(true)" [disabled]="disabledButtonsTable"
+            class="btn-sm btn-transition btn btn-outline-success">
+            <i class="fa fa-check"></i>&nbsp;Activar
+        </button>
+        <button (click)="enabledOrDisabled(false)" [disabled]="disabledButtonsTable"
+            class="btn-sm btn-transition btn btn-outline-danger">
+            <i class="fa fa-remove"></i>&nbsp;Desactivar
+        </button>
+        <button routerLink="/usuarios/nuevo" class="btn-sm btn-transition btn btn-outline-primary">
+            <i class="fa fa-plus"></i>&nbsp;Nuevo
+        </button>
+    </div>
+    <div class="col-md-6 float-right">
+        <div class="float-right">
+            <app-resgister [paramPagination]="paramPagination" (registerChanged)="pageChanged()">
+            </app-resgister>
+        </div>
+    </div>
+</div>
+<div *ngIf="usuarios$ | async as usuarios; else loading;">
+    <ng-container *ngIf="usuarios.length; else noItems">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <div class="pretty p-icon p-curve p-pulse mr-0">
+                                        <input type="checkbox" [(ngModel)]="checkAll"
+                                            (change)="checkAllRow(checkAll, usuarios)" />
+                                        <div class="state p-primary">
+                                            <label></label>
+                                        </div>
+                                    </div>
+                                </th>
+                                <th style="width: 12%;">
+                                    <app-sort [text]="'Usuario'" [order]="'usuario'" [paramPagination]="paramPagination"
+                                        (sortChanged)="pageChanged()"></app-sort>
+                                </th>
+                                <th style="width: 12%;">
+                                    <app-sort [text]="'DNI'" [order]="'persona.dni'" [paramPagination]="paramPagination"
+                                        (sortChanged)="pageChanged()"></app-sort>
+                                </th>
+                                <th style="width: 12%;">
+                                    <app-sort [text]="'Apellido'" [order]="'persona.apellido'"
+                                        [paramPagination]="paramPagination" (sortChanged)="pageChanged()"></app-sort>
+                                </th>
+                                <th style="width: 12%;">
+                                    <app-sort [text]="'Nombre'" [order]="'persona.nombre'"
+                                        [paramPagination]="paramPagination" (sortChanged)="pageChanged()"></app-sort>
+                                </th>
+                                <th>Rol</th>
+                                <th>Persona Asociada</th>
+                                <th>Imagen/Gravatar</th>
+                                <th style="width: 120px;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <!-- <tr ng-repeat="usuario in usuarios" *ngIf="usuario.usuario=='admin'?(dataUser.user=='admin'?true:false): true" > -->
+                            <tr *ngFor="let usuario of usuarios">
+                                <td>
+                                    <div class="pretty p-icon p-curve p-pulse mr-0">
+                                        <input type="checkbox" [(ngModel)]="usuario.$$activo"
+                                            (change)="checkRow(usuarios)" />
+                                        <div class="state p-primary">
+                                            <label></label>
+                                        </div>
+                                    </div>
+                                    <!-- <label class="pos-rel">
+                                        <input [(ngModel)]="usuario.$$activo" ng-click="checkRow(usuarios);" type="checkbox" class="ace" />
+                                        <span class="lbl"></span>
+                                    </label> -->
+                                </td>
+                                <td>
+                                    {{usuario.usuario}}
+                                </td>
+                                <td>
+                                    {{usuario.persona.dni}}
+                                </td>
+                                <td>
+                                    {{usuario.persona.apellido}}
+                                </td>
+                                <td>
+                                    {{usuario.persona.nombre}}
+                                </td>
+                                <td>
+                                    <p *ngFor="let rol of usuario.roles">
+                                        {{rol.alias}}
+                                    </p>
+                                </td>
+                                <td class="text-primary" *ngIf="usuario.persona != null">
+                                    <info-per [persona]="usuario.persona" ></info-per>
+
+                                    <!-- <a (click)="showDetailPersona(usuario.persona)"
+                                        class="hand">{{usuario.persona.apellido + ' ' + usuario.persona.nombre}}</a> -->
+                                </td>
+                                <td class="text-warning" *ngIf="usuario.persona == null">
+                                    Sin asociado
+                                </td>
+                                <td>
+                                    <a *ngIf="usuario.tipoLogo == 1">
+                                        <img width="42" class="rounded-circle" src="{{pathService.getUrl('/images/users/') + usuario.logo}}"
+                                            alt="{{usuario.usuario}}" />
+                                    </a>
+                                    <a *ngIf="usuario.tipoLogo == 0 || usuario.tipoLogo==null" target="_blank"
+                                        href="https://www.gravatar.com/avatar/{{usuario.keyGravatar}}?s=512&d=identicon">
+                                        <img width="42" class="rounded-circle"
+                                            src="https://www.gravatar.com/avatar/{{usuario.keyGravatar}}?s=52&d=identicon"
+                                            alt="{{usuario.usuario}}" />
+                                    </a>
+                                </td>
+                                <td class="buttons-small">
+                                    <div class="float-right">
+                                        <button [routerLink]="['/usuarios/modificar', encrypt(usuario.id)]"
+                                            title="Modificar el usuario {{usuario.usuario}}"
+                                            class="btn-sm btn-transition btn btn-outline-primary">
+                                            <i class="fa fa-edit"></i>
+                                        </button>
+                                        <button (click)="detail(usuario)"
+                                            title="Ver detalle del usuario {{usuario.usuario}}"
+                                            class="btn-sm btn-transition btn btn-outline-info">
+                                            <i class="fa fa-eye"></i>
+                                        </button>
+                                        <button *ngIf="usuario.usuario != 'admin'" (click)="remove(usuario)"
+                                            title="Eliminar el usuario {{usuario.usuario}}"
+                                            class="btn-sm btn-transition btn btn-outline-danger">
+                                            <i class="fa fa-remove"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                                <!-- <td> -->
+                                <!-- <button ui-sref="admin.usuarios.update({id:'{{encrypt(usuario.id)}}'})" class="btn btn-round btn-white btn-minier btn-white width-24" title="Editar el usuario" >
+                                        <i class="ace-icon fa fa-pencil bigger-120"></i>
+                                    </button>
+                                    <button ng-click="detailUsuario({type: 'usuario', id: usuario.id});" class="btn btn-round btn-white btn-minier btn-info width-24" title="Detalle del usuario" >
+                                        <i class="ace-icon fa fa-eye bigger-120"></i>
+                                    </button>
+                                    <button ng-show="usuario.usuario != 'admin'" ng-click="remove(usuario);" class="btn btn-round btn-white btn-minier btn-danger width-24" title="Elminar usuario" confirm-title="Atencion!!" confirm="Desea eliminar este Usuario - {{usuario.persona.apellido + ' ' + usuario.persona.nombre}}?"  confirm-ok="Confirmar" confirm-cancel="Cancelar" >
+                                        <i class="ace-icon fa fa-remove bigger-120"></i>
+                                    </button> -->
+                                <!-- </td> -->
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="container-fluid">
+                <ngb-pagination [(page)]="paramPagination.page" [pageSize]="paramPagination.pageSize"
+                    [collectionSize]="paramPagination.totalItems" (pageChange)="pageChanged()"
+                    [maxSize]="5" [boundaryLinks]="true" class="d-flex justify-content-center">
+                </ngb-pagination>
+            </div>
+        </div>
+    </ng-container>
+    <ng-template #noItems>
+        <div class="form-group row alert alert-warning">
+            Sin datos
+        </div>
+    </ng-template>
+</div>
+<ng-template #loading>
+    <app-loading></app-loading>
+</ng-template>

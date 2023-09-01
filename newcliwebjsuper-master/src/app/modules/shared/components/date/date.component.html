@@ -1,0 +1,11 @@
+<div [formGroup]="formDate" class="input-group input-group-sm">
+  <input id="{{name}}" name="{{name}}" placeholder="dd-mm-aaaa" formControlName="date" mask="00-00-0000"
+    [dropSpecialCharacters]="false" [clearIfNotMatch]="true" [showMaskTyped]="true" (click)="d.toggle()"
+    class="form-control form-control-sm" type="text" enter="{{enter}}" />
+  <input id="{{name+'_temp'}}" name="{{name+'_temp'}}" placeholder="dd-mm-aaaa" ngbDatepicker formControlName="dateTemp"
+    #inputDate #d="ngbDatepicker" (click)="d.toggle()" class="form-control form-control-sm" type="hidden"
+    enter="{{enter}}" />
+  <div class="input-group-append">
+    <button class="btn btn-sm btn-light" (click)="d.toggle()" type="button"><i class="fa fa-calendar"></i></button>
+  </div>
+</div>

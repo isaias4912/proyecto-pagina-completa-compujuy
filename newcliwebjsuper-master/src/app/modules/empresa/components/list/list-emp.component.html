@@ -1,0 +1,163 @@
+<div id="div" class="row">
+    <div class="col-md-12">
+        <app-panel [idCollapse]="'panelFiltro'">
+            <form id="formFilter">
+                <div class="row">
+                    <div class="col-lg-11 col-md-11 col-sm-12">
+                        <div class="row form-group">
+                            <label class="col-form-label col-md-1" for="txtFiltroCuit">CUIT/CUIL</label>
+                            <div class="col-md-2">
+                                <input type="number" id="txtFiltroCuit" name="txtFiltroCuit"
+                                    class="form-control form-control-sm" [(ngModel)]="filterEmpresa.cuit" />
+                            </div>
+                            <label class="col-form-label col-md-1" for="txtFiltroApellido">Razon Social</label>
+                            <div class="col-md-4">
+                                <input type="text" id="txtFiltroApellido" name="txtFiltroApellido"
+                                    class="form-control form-control-sm" [(ngModel)]="filterEmpresa.razonSocial" />
+                            </div>
+                            <label class="col-form-label col-md-1" for="cmbFiltroTipo">Tipo</label>
+                            <div class="col-md-2">
+                                <select id="cmbFiltroTipo" name="cmbFiltroTipo" class="form-control form-control-sm"
+                                    [(ngModel)]="filterEmpresa.tipoEmpresa">
+                                    <option *ngFor="let opcion of dataOptions.filterTipo" [ngValue]="opcion.value">
+                                        {{opcion.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-1 col-md-1 col-sm-12">
+                        <div class="row form-group">
+                            <div class="btn-group btn-group-sm btn-block" role="group">
+                                <button type="submit" (click)="query()"
+                                    class="btn btn-transition btn btn-outline-light">
+                                    <i class="fa fa-search green-strong"></i>
+                                </button>
+                                <button type="button" (click)="reset()" class="btn-transition btn btn-outline-light">
+                                    <i class="fa fa-trash-o blue"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </app-panel>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6 buttons-small">
+        <button *ngIf="typeView=='LIST'" routerLink="/empresas/nueva"
+            class="btn-sm btn-transition btn btn-outline-primary">
+            <i class="fa fa-plus"></i>&nbsp;Nuevo
+        </button>
+    </div>
+    <div class="col-md-6 float-right">
+        <div class="float-right">
+            <app-resgister [paramPagination]="paramPagination" (registerChanged)="pageChanged()">
+            </app-resgister>
+        </div>
+    </div>
+</div>
+<div *ngIf="empresas$ | async as empresas; else loading;">
+    <ng-container *ngIf="empresas.length; else noItems">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th style="width: 18%;">
+                                    <app-sort [text]="'CUIT'" [order]="'empresa.cuit'"
+                                        [paramPagination]="paramPagination" (sortChanged)="pageChanged()"></app-sort>
+                                </th>
+                                <th style="width: 24%;">
+                                    <app-sort [text]="'Razón Social'" [order]="'empresa.razonSocial'"
+                                        [paramPagination]="paramPagination" (sortChanged)="pageChanged()"></app-sort>
+                                </th>
+                                <th>
+                                    <span>Tipo</span>
+                                </th>
+                                <th>
+                                    <span>Persona Asociada</span>
+                                </th>
+                                <!-- <th class="">Cta. Cte.</th> -->
+                                <th style="width: 140px;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let empresa of empresas">
+                                <td>
+                                    {{empresa.cuit}}
+                                </td>
+                                <td>
+                                    {{empresa.razonSocial}}
+                                </td>
+                                <td>
+                                    {{empresa.tipoEmpresa}}
+                                </td>
+                                <td class="text-primary" *ngIf="empresa.persona != null">
+                                    <info-per [persona]="empresa.persona"></info-per>
+                                </td>
+                                <td class="text-warning" *ngIf="empresa.persona == null">
+                                    Sin asociado
+                                </td>
+                                <!-- <td *ngIf="empresa.cuentaCorriente" class="">
+                                    <span *ngIf="empresa.cuentaCorriente.activo" title="Cuenta corriente activa"
+                                        class="green fa fa-check"></span>
+                                    <span *ngIf="!empresa.cuentaCorriente.activo" title="Cuenta corriente inactiva"
+                                        class="text-warning fa fa-exclamation"></span>
+                                </td>
+                                <td *ngIf="empresa.cuentaCorriente == null" class="">
+                                    <span title="Sin cuenta corriente para este proveedor"
+                                        class="red fa fa-remove"></span>
+                                </td> -->
+                                <td class="buttons-small">
+                                    <div class="float-right">
+                                        <button *ngIf="typeView=='LIST'"
+                                            [routerLink]="['/empresas/modificar', encrypt(empresa.id)]"
+                                            title="Modificar la empresa {{empresa.razonSocial}}"
+                                            class="btn-sm btn-transition btn btn-outline-primary">
+                                            <i class="fa fa-edit"></i>
+                                        </button>
+                                        <button (click)="detail(empresa)"
+                                            title="Ver detalle de la empresa {{empresa.razonSocial}}"
+                                            class="btn-sm btn-transition btn btn-outline-info">
+                                            <i class="fa fa-eye"></i>
+                                        </button>
+                                        <button *ngIf="typeView=='LIST'" (click)="remove(empresa)"
+                                            title="Eliminar la empresa {{empresa.razonSocial}}"
+                                            class="btn-sm btn-transition btn btn-outline-danger">
+                                            <i class="fa fa-remove"></i>
+                                        </button>
+                                        <button *ngIf="typeView=='LIST' && empresa.cuentaCorriente"
+                                            [routerLink]="['/empresas/cta-cte/movimientos']"
+                                            [queryParams]="{empresa: encrypt(empresa.id), estado:0}"
+                                            title="Ver cuenta corriente con la empresa {{empresa.razonSocial }}"
+                                            class="btn-sm btn-transition btn btn-outline-secondary">
+                                            <i class="fa fa-money"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="container-fluid">
+                <ngb-pagination [(page)]="paramPagination.page" [pageSize]="paramPagination.pageSize"
+                    [collectionSize]="paramPagination.totalItems" (pageChange)="pageChanged()"
+                    [maxSize]="5" [boundaryLinks]="true" class="d-flex justify-content-center">
+                </ngb-pagination>
+            </div>
+        </div>
+    </ng-container>
+    <ng-template #noItems>
+        <div class="form-group row alert alert-warning">
+            Sin datos
+        </div>
+    </ng-template>
+</div>
+<ng-template #loading>
+    <app-loading></app-loading>
+</ng-template>

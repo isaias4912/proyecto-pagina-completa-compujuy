@@ -1,0 +1,67 @@
+<form id="formEmpresa" [formGroup]="formEmpresa" class="form-group-min">
+    <app-panel [idCollapse]="'panelDatProv'" [title]="'Datos del proveedor'" [collapse]="false">
+        <div class="row form-group">
+            <label class="col-form-label col-md-2" for="txtCuilProv">CUIT</label>
+            <div class="col-md-2">
+                <input id="txtCuilProv" name="txtCuilProv" #txtCUITEmp class="form-control form-control-sm"
+                    type="number" formControlName="cuit" enter="txtRazSocCli" [cantDigits]="11" />
+                <div *ngIf="f.cuit.errors?.existe_cuit" class="text-danger">
+                    El CUIT ya existe en el sistema
+                </div>
+                <div *ngIf="dataForm.submitted && formEmpresa.invalid">
+                    <div *ngIf="f.cuit.errors?.min" class="text-danger">
+                        El cuit es muy corto
+                    </div>
+                    <div *ngIf="f.cuit.errors?.required" class="text-danger">
+                        Campo obligatorio
+                    </div>
+                    <div *ngIf="f.cuit.errors?.no_validate_cuit" class="text-danger">
+                        Debe validar el CUIT
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <label class="col-form-label col-md-2" for="txtRazSocCli">Razón Social</label>
+            <div class="col-md-4">
+                <input id="txtRazSocCli" name="txtRazSocCli" class="form-control form-control-sm" type="text"
+                    formControlName="razonSocial" enter="txtTipoPro" />
+                <div *ngIf="dataForm.submitted && formEmpresa.invalid">
+                    <div *ngIf="f.razonSocial.errors?.required" class="text-danger">
+                        Campo obligatorio
+                    </div>
+                    <div *ngIf="f.razonSocial.errors?.maxlength" class="text-danger">
+                        Cantidad de caracteres excedida
+                    </div>
+                </div>
+            </div>
+            <label class="col-form-label col-md-1" for="txtTipoPro">Tipo</label>
+            <div class="col-md-2">
+                <select id="txtTipoPro" name="txtTipoPro" class="input form-control form-control-sm"
+                    formControlName="tipoEmpresa" enter="selectPersona">
+                    <option *ngFor="let opcion of dataOptions.tipos" [ngValue]="opcion.value">{{opcion.name}}</option>
+                </select>
+                <div *ngIf="dataForm.submitted && formEmpresa.invalid">
+                    <div *ngIf="f.tipoEmpresa.errors?.required" class="text-danger">
+                        Campo obligatorio
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <label class="col-form-label col-md-2">Persona asociada</label>
+            <div class="col-md-4">
+                <select-per formControlName="persona" [name]="'selectPersona'" [nextFocus]="'txtTipo'"
+                    [data]="empresa?.persona" [disabled]="empresa?true:false"></select-per>
+                <div *ngIf="dataForm.submitted && formEmpresa.invalid">
+                    <div *ngIf="f.persona.errors?.required" class="text-danger">
+                        Debe seleccionar una persona
+                    </div>
+                </div>
+            </div>
+        </div>
+    </app-panel>
+    <domicilio formControlName="domicilios" [domicilios]="empresa?.domicilios" [dataForm]="dataForm"></domicilio>
+    <telefono formControlName="telefonos" [telefonos]="empresa?.telefonos" [dataForm]="dataForm"></telefono>
+    <contacto formControlName="contactos" [contactos]="empresa?.contactos" [dataForm]="dataForm"></contacto>
+</form>

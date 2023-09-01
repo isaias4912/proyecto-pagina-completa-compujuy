@@ -1,0 +1,428 @@
+<div id="div" class="row">
+    <div class="col-md-12">
+        <form id="formFilter" class="form-group-min">
+            <div id="divFilter" class="row">
+                <div class="col-lg-12">
+                    <div class="card mb-2">
+                        <div class="card-header" id="headingOne">
+                            <div class="container-fluid" style="padding-right: 0px; padding-left: 0px;">
+                                <div class="row">
+                                    <!-- <div class="col-md-6" style="padding-left: 0px;">
+                                        <span class="float-sm-left">
+                                            <a class="btn-link float-sm-right hand ml-2" data-toggle="collapse"
+                                                (click)="bandera=collapsedArea.classList.contains('show')"
+                                                data-target="#collapseOne" aria-expanded="true"
+                                                aria-controls="collapseOne">
+                                                <i class="fa fa-filter"></i> &nbsp; Filtro de productos
+                                            </a>
+                                        </span>
+                                    </div> -->
+                                    <div class="col-md-12">
+                                        <span class="float-sm-left">
+                                            <a class="btn-link float-sm-right hand ml-2" data-toggle="collapse"
+                                                (click)="bandera=collapsedArea.classList.contains('show')"
+                                                data-target="#collapseOne" aria-expanded="true"
+                                                aria-controls="collapseOne">
+                                                <i class="fa fa-filter"></i> &nbsp; Filtro de productos
+                                            </a>
+                                        </span>
+                                        <a class="btn-link float-sm-right hand ml-2" data-toggle="collapse"
+                                            (click)="bandera=collapsedArea.classList.contains('show')"
+                                            data-target="#collapseOne" aria-expanded="true" aria-controls="collapseOne">
+                                            <i [hidden]="bandera" class="fa fa-chevron-up"></i>
+                                            <i [hidden]="!bandera" class="fa fa-chevron-down"></i>
+                                        </a>
+                                        <div class="float-sm-right">
+                                            <span class="font-size-12 text-primary label-help">Filtro <i
+                                                    title="Más o menos filtros"
+                                                    class="help-ns fa fa-question-circle"></i></span>&nbsp;
+                                            <div class="pretty p-switch">
+                                                <input [(ngModel)]="dataFilter.extraFilter" id="extraFilter"
+                                                    name="extraFilter" type="checkbox"
+                                                    (change)="showOrHideExtraFilter()" />
+                                                <div class="state p-primary">
+                                                    <label></label>
+                                                </div>
+                                            </div>&nbsp;
+                                            <span class="font-size-12 text-primary label-help">Tipo<i
+                                                    title="AND - OR seleccione la opcion y  se hara el tipo de unión seleccionado, en la consulta a traves de los campos Nombre, Codigo de Barra y Familia/s"
+                                                    class="help-ns fa fa-question-circle"></i></span>&nbsp;
+                                            <div class="pretty p-default p-curve p-toggle">
+                                                <input id="chkTipo" [(ngModel)]="data.type" name="chkTipo"
+                                                    (change)="changueType()" type="checkbox" />
+                                                <div class="state p-primary p-on">
+                                                    <label><span style="font-size: 10px;">AND</span></label>
+                                                </div>
+                                                <div class="state p-info p-off">
+                                                    <label><span style="font-size: 10px;">OR</span></label>
+                                                </div>
+                                            </div>&nbsp;
+                                            <span class="font-size-12 text-primary label-help">Mostrar stock <i
+                                                    title="Mostrar el stock de los productos en las distintas sucursales habilitadas"
+                                                    class="help-ns fa fa-question-circle"></i></span>&nbsp;
+                                            <div class="pretty p-switch">
+                                                <input [(ngModel)]="data.showStock" id="chkTipo" name="chkTipo"
+                                                    (change)="changueShowStock()" type="checkbox" />
+                                                <div class="state p-primary">
+                                                    <label></label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div id="collapseOne" #collapsedArea class="collapse show" aria-labelledby="headingOne"
+                            data-parent="#divFilter">
+                            <div class="card-body padding-top-bottom-8">
+                                <form class="">
+                                    <div class="row">
+                                        <div class="col-lg-11">
+                                            <div class="row form-group  margin-bottom-5">
+                                                <label for="txtFiltroNombre"
+                                                    class="col-sm-1 col-form-label padding-right-left-4">Nombre</label>
+                                                <div class="col-sm-4">
+                                                    <input type="text" id="txtFiltroNombre" name="txtFiltroNombre"
+                                                        class="form-control form-control-sm"
+                                                        [(ngModel)]="dataFilter.producto.nombre"
+                                                        placeholder="Nombre o descripcion del prod." />
+                                                </div>
+                                                <label for="txtFiltroCodBarra"
+                                                    class="col-sm-1 col-form-label padding-right-left-4">Cód. de
+                                                    b.</label>
+                                                <div class="col-sm-3">
+                                                    <input type="text" id="txtFiltroCodBarra" name="txtFiltroCodBarra"
+                                                        class="form-control form-control-sm"
+                                                        [(ngModel)]="dataFilter.producto.codigoBarras[0].codigo"
+                                                        placeholder="Cód. de barra o parte de el" />
+                                                </div>
+                                                <label for="txtFiltroCodEspecial"
+                                                    class="col-sm-1 col-form-label padding-right-left-4">Cód.
+                                                    int.</label>
+                                                <div class="col-sm-2">
+                                                    <input type="text" id="txtFiltroCodEspecial"
+                                                        name="txtFiltroCodEspecial" class="form-control form-control-sm"
+                                                        [(ngModel)]="dataFilter.producto.codigoEspecial"
+                                                        placeholder="Cód. interno de la app." />
+                                                </div>
+                                            </div>
+                                            <div class="row form-group margin-bottom-5">
+                                                <label for="cmbFiltroFamilia"
+                                                    class="col-sm-1 col-form-label padding-right-left-4">Familia</label>
+                                                <div class="col-sm-4">
+                                                    <select-family [(ngModel)]="dataFilter.familias"
+                                                        [name]="'cmbFiltroFamilia'" [multiple]="true">
+                                                    </select-family>
+                                                </div>
+                                                <label for="cmbTipo"
+                                                    class="col-sm-1 col-form-label padding-right-left-4">Tipo</label>
+                                                <div class="col-sm-3">
+                                                    <select id="cmbTipo" name="cmbTipo" [(ngModel)]="dataFilter.tipo"
+                                                        class="form-control form-control-sm">
+                                                        <option *ngFor="let tipo of data.filterTipo"
+                                                            [ngValue]="tipo.value">
+                                                            {{tipo.name}}</option>
+                                                    </select>
+                                                </div>
+                                                <label for="cmbFiltroActivo"
+                                                    class="col-sm-1 col-form-label">Activos</label>
+                                                <div class="col-sm-2">
+                                                    <select id="cmbFiltroActivo" name="cmbFiltroActivo"
+                                                        [(ngModel)]="dataFilter.activo"
+                                                        class="form-control form-control-sm">
+                                                        <option *ngFor="let activo of data.filterActivo"
+                                                            [ngValue]="activo.value">
+                                                            {{activo.name}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                            <div id="divFilterExtra" #collapsedAreaFilt
+                                                class="row form-group margin-bottom-5 collapse show">
+                                                <label class="col-sm-1 col-form-label padding-right-left-4"
+                                                    for="cmbFiltroSucursal">Sucursal</label>
+                                                <div class="col-sm-4">
+                                                    <select-sucursal [(ngModel)]="dataFilter.sucursales"
+                                                        [name]="'cmbFiltroSucursal'"
+                                                        (finishRender)="finishRenderSel2Suc()"></select-sucursal>
+                                                </div>
+                                                <label class="col-sm-1 col-form-label padding-right-left-4"
+                                                    for="cmbFiltroStock">Stock</label>
+                                                <div class="col-sm-3">
+                                                    <select id="cmbFiltroStock" name="cmbFiltroStock"
+                                                        [(ngModel)]="dataFilter.filterStock"
+                                                        class="form-control form-control-sm">>
+                                                        <option *ngFor="let stock of data.filterStock"
+                                                            [ngValue]="stock.value">
+                                                            {{stock.name}}</option>
+                                                    </select>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col-lg-1">
+                                            <button type="submit" (click)="query()" #btnQuery id="btnQuery"
+                                                name="btnQuery" title="Realice la busqueda segun los filtros aplicados"
+                                                class="btn-sm btn-block btn-transition btn btn-outline-info">
+                                                <i class="fa fa-search"></i>
+                                            </button>
+                                            <button type="button" (click)="reset()"
+                                                title="Limpiar los campos de busqueda"
+                                                class="btn-sm btn-block btn-transition btn btn-outline-secondary">
+                                                <i class="fa fa-trash-o"></i>
+                                            </button>
+                                        </div>
+                                    </div>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </form>
+    </div>
+</div>
+<div *ngIf="productos?.length" class="row">
+    <div class="col-md-6 buttons-small">
+        <button (click)="enabledOrDisabled(true)" [disabled]="disabledButtonsTable"
+            class="btn-sm btn-transition btn btn-outline-success" title="Active el o los productos seleccionados">
+            <i class="fa fa-check"></i>Activar
+        </button>
+        <button (click)="enabledOrDisabled(false)" [disabled]="disabledButtonsTable"
+            class="btn-sm btn-transition btn btn-outline-danger" title="Desactive el o los productos seleccionados">
+            <i class="fa fa-remove"></i>Desactivar
+        </button>
+        <button routerLink="/productos/nuevo" class="btn-sm btn-transition btn btn-outline-primary"
+            title="Ingrese un nuevo producto">
+            <i class="fa fa-plus"></i>Nuevo
+        </button>
+        <button (click)="printList('pdf')" class="btn-sm btn-transition btn btn-outline-secondary"
+            title="Reporte en formatdo PDF">
+            <i class="fa fa-file-pdf-o red"></i>&nbsp;PDF
+        </button>
+        <button (click)="printList('xls')" class="btn-sm btn-transition btn btn-outline-secondary"
+            title="Reporte en formato para excel">
+            <i class="fa fa-file-excel-o green"></i>&nbsp;XLS
+        </button>
+        <!-- <button (click)="printList('doc')" class="btn-sm btn-transition btn btn-outline-secondary"
+            title="Reporte en formato para word">
+            <i class="fa fa-file-word-o blue"></i>&nbsp;DOC
+        </button> -->
+        <button (click)="printList('csv')" class="btn-sm btn-transition btn btn-outline-secondary"
+            title="Reporte en formato para CSV, similar a excel">
+            <i class="fa fa-file-archive-o green-strong"></i>&nbsp;CVS
+        </button>
+        <!-- <button (click)="printList('html')" class="btn-sm btn-transition btn btn-outline-secondary"
+            title="Reporte en formato para html para navegadores">
+            <i class="fa fa-file-text yellow"></i>&nbsp;HTML
+        </button> -->
+    </div>
+    <div class="col-md-6 float-right">
+        <div class="float-right">
+            <app-resgister [paramPagination]="paramPagination" (registerChanged)="pageChanged()">
+            </app-resgister>
+        </div>
+    </div>
+</div>
+<div *ngIf="productos$ | async as productos; else loading;">
+    <ng-container *ngIf="productos.length; else noItems">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table class="table table-hover table-striped">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <div class="pretty p-icon p-curve p-pulse mr-0">
+                                        <input type="checkbox" [(ngModel)]="checkAll"
+                                            (change)="checkAllRow(checkAll, productos)" />
+                                        <div class="state p-primary">
+                                            <label></label>
+                                        </div>
+                                    </div>
+                                </th>
+                                <th></th>
+                                <th style="width: 5%;">
+                                    <app-sort [text]="'Id/Cód.'" [order]="'id'" [paramPagination]="paramPagination"
+                                        (sortChanged)="pageChanged()"></app-sort>
+                                </th>
+                                <th style="width: 8%;">
+                                    <app-sort [text]="'Cód. int.'" [order]="'codigoEspecial'"
+                                        [paramPagination]="paramPagination" (sortChanged)="pageChanged()">
+                                    </app-sort>
+                                </th>
+                                <th style="width: 14%;">
+                                    <app-sort [text]="'Producto padre'" [order]="'producto.nombre'"
+                                        [paramPagination]="paramPagination" (sortChanged)="pageChanged()">
+                                    </app-sort>
+                                    <!-- |<app-sort [text]="'Detalle'" [order]="'nombre'" [paramPagination]="paramPagination"
+                                        (sortChanged)="pageChanged()">
+                                    </app-sort> -->
+
+                                </th>
+                                <th style="width: 20%;">
+                                    <app-sort [text]="'Nombre Final'" [order]="'nombreFinal'"
+                                        [paramPagination]="paramPagination" (sortChanged)="pageChanged()">
+                                    </app-sort>
+                                </th>
+                                <th style="width: 14%;">Código/s de Barra</th>
+                                <th style="width: 8%;">Familia</th>
+                                <th style="width: 8%;">Cont. Neto</th>
+                                <th *ngIf="dataFilter.showStock">Stock</th>
+                                <th title="Precio Venta">Precio v.</th>
+                                <th>Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let item of productos">
+                                <td>
+                                    <div class="pretty p-icon p-curve p-pulse mr-0">
+                                        <input type="checkbox" [(ngModel)]="item.$$activo"
+                                            (change)="checkRow(productos)" />
+                                        <div class="state p-primary">
+                                            <label></label>
+                                        </div>
+                                    </div>
+                                </td>
+                                <td>
+                                    <image-preview *ngIf="item.imagen"
+                                        [path]="pathService.getUrl('/images/products/thumbnails/')"
+                                        [image]="item.imagen" [text]="false" [tags]="false" [width]="48" [height]="48"
+                                        [size]="'48'" [colorbox]="false" [link]="false">
+                                    </image-preview>
+                                </td>
+                                <td>{{item.id}}</td>
+                                <td>{{item.codigoEspecial}}</td>
+                                <!-- <td>{{item.productoPadre.nombre}} {{item.nombre}}</td> -->
+                                <td>
+                                    <info-product-parent [productParent]="item.productoPadre"></info-product-parent>
+                                    <!-- {{item.nombre}} -->
+                                </td>
+                                <td>
+                                    <div class="nombre-final">{{item.nombreFinal}}</div>
+                                </td>
+                                <td>
+                                    <span *ngFor="let cod of item.codigoBarras; let i = index">
+                                        <br *ngIf="i > 0">
+                                        <span id="spnCode{{i}}">{{cod.codigo}}&nbsp;<a [routerLink]=""
+                                                (click)="copytoClipboard(cod.codigo, 'Código');"><span
+                                                    title="Copiar código"
+                                                    class="fa fa-copy green-strong pull-right text-12"></span></a>
+                                        </span>
+                                    </span>
+                                </td>
+                                <td>
+                                    <info-family [familia]="item.productoPadre.familia"></info-family>
+                                </td>
+                                <td>{{item.contenidoNeto}} ({{item.unidad.nombreCorto}})</td>
+                                <td [hidden]="!dataFilter.showStock">
+                                    <span *ngFor="let ss of item.stockSucursales; let i= index" class="spnStock"
+                                        title="<div class='form-group' ><div class='col-md-12 text-bold' >{{ss.sucursal.nombre +' - '+ss.sucursal.id}}</div><div class='col-md-12' >Stock: <span class='red' >{{ss.stock}}</span></div><div class='col-md-12' >Stock mínimo: <span  >{{ss.stockMinimo}}</span></div><div class='col-md-12' >Stock de reposición: <span  >{{ss.puntoReposicion}}</span></div></div>">
+                                        <br ng-if="i > 0">{{ss.sucursal.id}}:{{ss.stock}}
+                                    </span>
+                                </td>
+                                <td class="text-right">{{formatDecimal(item.precioVenta)}}&nbsp;&nbsp;&nbsp;&nbsp;</td>
+                                <td class="buttons-small">
+                                    <div class="float-right btn-action buttons-table-ns"
+                                        style="width: 100px !important;">
+                                        <button *ngIf="item.tipo==1"
+                                            [routerLink]="['/productos/update', encrypt(item.id)]"
+                                            title="Editar el producto {{item.productoPadre.nombre}} {{item.nombre}}"
+                                            class="btn-sm btn-transition btn btn-outline-primary d-xs-none">
+                                            <i class="fa fa-pencil"></i>
+                                        </button>
+                                        <button *ngIf="item.tipo==2"
+                                            [routerLink]="['/productos/update-producto-compuesto', encrypt(item.id)]"
+                                            title="Editar el producto compuesto {{item.productoPadre.nombre}} {{item.nombre}}"
+                                            class="btn-sm btn-transition btn btn-outline-primary">
+                                            <i class="fa fa-pencil"></i>
+                                        </button>
+                                        <button (click)="showDetailProduct(item)"
+                                            title="Detalle del producto {{item.productoPadre.nombre}} {{item.nombre}}"
+                                            class="btn-sm btn-transition btn btn-outline-info">
+                                            <i class="fa fa-eye"></i>
+                                        </button>
+                                        <button [routerLink]="['/productos/precios/update', encrypt(item.id)]"
+                                            title="Modificar precio del producto {{item.productoPadre.nombre}} {{item.nombre}}"
+                                            class="btn-sm btn-transition btn btn-outline-danger">
+                                            <i class="fa fa-refresh"></i>
+                                        </button>
+                                        <div id="menuActions" class="dropdown d-inline-block">
+                                            <button type="button" aria-haspopup="true" aria-expanded="false"
+                                                data-toggle="dropdown"
+                                                title="Más acciones sobre el producto {{item.productoPadre.nombre}} {{item.nombre}}"
+                                                class="btn-transition btn btn-outline-dark">
+                                                <i class="fa fa-ellipsis-v" style="font-size: 18px;"></i>
+                                            </button>
+                                            <div tabindex="-1" role="menu" aria-hidden="true"
+                                                class="dropdown-menu dropdown-menu-right">
+                                                <button [routerLink]="['/productos/stock/add', encrypt(item.id)]"
+                                                    type="button" tabindex="0" class="dropdown-item"
+                                                    title="Ingresar stock al producto">Ingreso de
+                                                    existencia</button>
+                                                <button (click)="showListMovimientosProd(item)" type="button"
+                                                    tabindex="0" class="dropdown-item"
+                                                    title="Ver todos los movimientos de existencia">Ver
+                                                    mov.
+                                                    de existencia</button>
+                                                <button (click)="showListMovimientosPriceProd(item)" type="button"
+                                                    tabindex="0" class="dropdown-item"
+                                                    title="Ver los movimientos de  precios del producto">Ver
+                                                    mov. de
+                                                    precios</button>
+                                                <button [routerLink]="['/productos', encrypt(item.id),'history']"
+                                                    title="Historial del producto {{item.productoPadre.nombre}} {{item.nombre}}"
+                                                    type="button" tabindex="0" class="dropdown-item">Historial del
+                                                    producto</button>
+                                                <button (click)="showParents(item)" type="button" tabindex="0"
+                                                    class="dropdown-item"
+                                                    title="Arbol que indica padres e hijos del producto.">Ver
+                                                    árbol</button>
+                                                <button *ngIf="item.activo" (click)="enabledOrDisabledOne(item, false)"
+                                                    type="button" tabindex="0" class="dropdown-item"
+                                                    title="Desactivar el producto">Desactivar</button>
+                                                <button *ngIf="!item.activo" (click)="enabledOrDisabledOne(item, true)"
+                                                    type="button" tabindex="0" class="dropdown-item"
+                                                    title="Activar el producto">Activar</button>
+                                                <button (click)="printDetail(item)" type="button" tabindex="0"
+                                                    class="dropdown-item"
+                                                    title="Imprimir el detalle el producto">Imprimir
+                                                    detalle</button>
+                                                <button (click)="barCodeProducto(item)" type="button" tabindex="0"
+                                                    class="dropdown-item"
+                                                    title="Ver y descargar el codigo de barra">Código
+                                                    de
+                                                    Barra</button>
+                                                <button (click)="showStock(item)" type="button" tabindex="0"
+                                                    class="dropdown-item" title="Ver stock de ">Ver
+                                                    Stock</button>
+                                                <button (click)="delete(item)" type="button" tabindex="0"
+                                                    class="dropdown-item"
+                                                    title="Eliminar este producto">Eliminar</button>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="container-fluid">
+                <ngb-pagination [(page)]="paramPagination.page" [pageSize]="paramPagination.pageSize"
+                    [collectionSize]="paramPagination.totalItems" (pageChange)="pageChanged()" [maxSize]="5"
+                    [boundaryLinks]="true" class="d-flex justify-content-center">
+                </ngb-pagination>
+            </div>
+        </div>
+    </ng-container>
+    <ng-template #noItems>
+        <div class="form-group row alert alert-warning">
+            Sin datos
+        </div>
+    </ng-template>
+</div>
+<ng-template #loading>
+    <app-loading></app-loading>
+</ng-template>
+<app-size-detector></app-size-detector>

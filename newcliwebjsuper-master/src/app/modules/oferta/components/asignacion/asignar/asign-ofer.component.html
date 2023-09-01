@@ -1,0 +1,183 @@
+<div *ngIf="oferta$ | async as oferta; else loading;">
+    <ng-container *ngIf="oferta; else noItems">
+        <app-panel [idCollapse]="'panelFiltro'" [title]="'Datos de la oferta'" [collapse]="false">
+            <div id="div" class="row">
+                <div class="col-md-12">
+                    <!-- <div class="row"> -->
+                        <div class="row form-group margin-bottom-0">
+                            <label class="label-detail col-md-4">Nombre:<span
+                                    class="label-value-detail">{{oferta.nombre}}</span></label>
+                        </div>
+                        <div class="row form-group margin-bottom-0">
+                            <label class="label-detail col-md-4">Fecha vig. desde:<span
+                                    class="label-value-detail">{{oferta.fechaDesde}}</span></label>
+                            <label class="label-detail col-md-4">Fecha vig. hasta:<span
+                                    class="label-value-detail">{{oferta.fechaHasta}}</span></label>
+                        </div>
+                        <div class="row form-group margin-bottom-0">
+                            <label class="label-detail col-md-3">Categoría:<span
+                                    class="label-value-detail">{{replaceGuionBajo(oferta.categoriaOferta)}}</span></label>
+                        </div>
+                        <div class="row form-group margin-bottom-0">
+                            <label *ngIf="oferta.tipoOferta != null && oferta.tipoOferta != ''"
+                                class="label-detail col-md-3">Tipo:<span
+                                    class="label-value-detail">{{replaceGuionBajo(checkTipoOferta(oferta.tipoOferta, oferta.cantidad))}}</span></label>
+                            <label *ngIf="oferta.tipoOfertaTipo != null && oferta.tipoOfertaTipo != ''"
+                                class="label-detail col-md-3">Subtipo:<span
+                                    class="label-value-detail">{{replaceGuionBajo(oferta.tipoOfertaTipo)}}</span></label>
+                            <label *ngIf="oferta.tipoDescuento != null && oferta.tipoDescuento != ''"
+                                class="label-detail col-md-3">Descuento por:<span
+                                    class="label-value-detail">{{oferta.tipoDescuento}}</span></label>
+                            <label *ngIf="oferta.valor != null && oferta.valor != ''"
+                                class="label-detail col-md-3">Valor:<span
+                                    class="label-value-detail">{{oferta.valor}}</span></label>
+                        </div>
+                    <!-- </div> -->
+                </div>
+            </div>
+        </app-panel>
+        <div class="row">
+            <div class="col-md-12">
+                <table class="table table-hover table-striped">
+                    <thead>
+                        <tr>
+                            <th style="width: 34% !important;">Producto</th>
+                            <th style="width: 14% !important;">Estado</th>
+                            <th>Descuento</th>
+                            <th>Precio/Venta actual</th>
+                            <th>Precin con la oferta</th>
+                            <th style="width: 75px !important;"></th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <ng-container *ngFor="let item of $any(fi).controls; let $index = index;" [formGroup]="item">
+                            <tr>
+                                <td class="center">
+                                    <input formControlName="index" type="hidden">
+                                    <select-prod #selectsProd formControlName="$$producto" [name]="'txtProducto'+$index"
+                                        [type]="1" [precios]="1" [nextFocus]="'estadoOferta'+$index" [index]="$index">
+                                    </select-prod>
+                                </td>
+                                <td>
+                                    <select id="estadoOferta{{$index}}" name="estadoOferta{{$index}}"
+                                        formControlName="estado" class="form-control form-control-sm"
+                                        enter="{{'descuento'+$index}}">
+                                        <option *ngFor="let opt of dataOption.estados" [ngValue]="opt.val">{{opt.label}}
+                                        </option>
+                                    </select>
+                                </td>
+                                <td>
+                                    <div class="input-group input-group-sm">
+                                        <div class="input-group-prepend">
+                                            <span class="blue input-group-text fa fa-dollar"></span>
+                                        </div>
+                                        <input id="descuento{{$index}}" name="descuento{{$index}}" type="number"
+                                            [readonly]="true" formControlName="descuento"
+                                            class="form-control form-control-sm"
+                                            enter="{{'precioActualOferta'+$index}}" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="input-group input-group-sm">
+                                        <div class="input-group-prepend">
+                                            <span class="blue input-group-text fa fa-dollar"></span>
+                                        </div>
+                                        <input id="precioActualOferta{{$index}}" name="precioActualOferta{{$index}}"
+                                            type="number" [readonly]="true" formControlName="precioActual"
+                                            class="form-control form-control-sm" enter="{{'precioOferta'+$index}}" />
+                                    </div>
+                                </td>
+                                <td>
+                                    <div class="input-group input-group-sm">
+                                        <div class="input-group-prepend">
+                                            <span class="blue input-group-text fa fa-dollar"></span>
+                                        </div>
+                                        <input id="precioOferta{{$index}}" name="precioOferta{{$index}}" type="number"
+                                            (input)="changeValor(item)" [readonly]="oferta.tipoDescuento != 'VALOR'"
+                                            formControlName="precioOferta" class="form-control form-control-sm"
+                                            enter="{{'buttonAdd'+$index}}" />
+                                    </div>
+                                </td>
+                                <td class="buttons-small">
+                                    <button [hidden]="!($index== (fi.controls.length-1))" id="buttonAdd{{$index}}"
+                                        name="buttonAdd{{$index}}" (click)="addItem($index + 1);" type="button"
+                                        class="btn-sm btn-transition btn btn-outline-success">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                    <button [hidden]="$index== 0 && ($index== (fi.controls.length-1))"
+                                        id="buttonRemoveBarCode{{$index}}" name="buttonRemoveBarCode{{$index}}"
+                                        (click)="removeItem(item);"
+                                        class="btn-sm btn-transition btn btn-outline-danger">
+                                        <i class="fa fa-remove"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr *ngIf="fi.invalid">
+                                <td>
+                                    <div class="align-top"
+                                        *ngIf="dataForm?.submitted && item.controls.producto.errors?.required"
+                                        class="text-danger">
+                                        Debe ingresar un producto
+                                    </div>
+                                </td>
+                                <td>
+                                    <!-- <div *ngIf="dataForm?.submitted && contac.controls.descripcion.errors?.required"
+                                        class="text-danger">
+                                        Debe ingresar una cuenta
+                                    </div>
+                                    <div *ngIf="dataForm?.submitted && contac.controls.descripcion.errors?.email"
+                                        class="text-danger">
+                                        Debe ingresar una cuenta de email valida
+                                    </div> -->
+                                </td>
+                                <td></td>
+                                <td></td>
+                                <td>
+                                    <div class="align-top"
+                                        *ngIf="dataForm?.submitted && item.controls.precioOferta.errors?.required && oferta.tipoDescuento == 'VALOR'"
+                                        class="text-danger">
+                                        Debe ingresar un precio
+                                    </div>
+                                    <div class="align-top"
+                                        *ngIf="dataForm?.submitted && item.controls.precioOferta.errors?.min && oferta.tipoDescuento == 'VALOR'"
+                                        class="text-danger">
+                                        Debe ingresar un precio mayor a 0
+                                    </div>
+                                </td>
+                                <td></td>
+                            </tr>
+                        </ng-container>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+        <hr>
+        <div class="row">
+            <div class="col-1">
+            </div>
+            <div class="col-md-3">
+                <button (click)="cancel()" class="btn btn-block btn-transition btn-outline-danger"><span
+                        class="fa fa-remove"></span>&nbsp;&nbsp;Cancelar
+                </button>
+            </div>
+            <div class="col-md-3">
+                <button (click)="save(1)" class="btn btn-block btn-transition btn-outline-primary"><span
+                        class="fa fa-save"></span>&nbsp;&nbsp;Guardar y seguir agregando
+                </button>
+            </div>
+            <div class="col-md-3">
+                <button (click)="save(2)" class="btn btn-block btn-transition btn-outline-success"><span
+                        class="fa fa-save"></span>&nbsp;&nbsp; Guardar y volver
+                </button>
+            </div>
+        </div>
+    </ng-container>
+    <ng-template #noItems>
+        <div class="form-group row alert alert-warning">
+            Sin datos
+        </div>
+    </ng-template>
+</div>
+<ng-template #loading>
+    <app-loading></app-loading>
+</ng-template>

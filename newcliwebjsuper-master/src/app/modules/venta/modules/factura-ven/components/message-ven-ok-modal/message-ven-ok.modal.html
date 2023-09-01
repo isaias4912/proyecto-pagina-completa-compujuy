@@ -1,0 +1,64 @@
+<div class="modal-header modal-danger">
+    <h6 class="modal-title" id="modal-basic-title">{{title}}</h6>
+    <button type="button" class="close text-danger" aria-label="Close" (click)="activeModal.dismiss()">
+        <span aria-hidden="true">&times;</span>
+    </button>
+</div>
+<div class="modal-body">
+    <div class="row form-group">
+        <div class="col-md-2 text-center">
+            <span *ngIf="type=='warning'" class="fa fa-warning font-size-28 text-warning"></span>
+            <span *ngIf="type=='success'" class="fa fa-check font-size-28 text-success"></span>
+            <span *ngIf="type=='danger'" class="fa fa-warning font-size-28 text-danger"></span>
+        </div>
+        <div class="col-md-10">
+            {{message}}
+        </div>
+    </div>
+</div>
+<div class="modal-footer">
+    <div class="row">
+        <div class="col-lg-3 col-md-3">
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-12">
+            <button (click)="close()" class="btn btn-block btn-transition btn-outline-focus"><span
+                    class="fa fa-file-pdf-o red"></span>&nbsp;&nbsp;Descargar
+            </button>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-12">
+            <button (click)="close()" class="btn btn-block btn-transition btn-outline-focus"><span
+                    class="fa fa-envelope blue"></span>&nbsp;&nbsp;Enviar mail
+            </button>
+        </div>
+        <div class="col-lg-3 col-md-3 col-sm-12">
+            <button (click)="close()" class="btn btn-block btn-transition btn-outline-success"><span
+                    class="fa fa-check"></span>&nbsp;&nbsp;Aceptar
+            </button>
+        </div>
+    </div>
+</div>
+
+
+<!-- <app-modal [title]="title" [footer]="true" (eventCancel)="cancel()">
+    <div class="row form-group">
+        <div class="col-md-4 text-center">
+            <span *ngIf="type=='warning'" class="fa fa-warning font-size-28 text-warning" ></span>
+            <span *ngIf="type=='success'" class="fa fa-check font-size-28 text-success" ></span>
+            <span *ngIf="type=='danger'" class="fa fa-warning font-size-28 text-danger" ></span>
+        </div>
+        <div class="col-8">
+            {{message}}
+        </div>
+    </div>
+    <app-footer>
+        <div class="row">
+            <div class="col-lg-9 col-md-8">
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <button (click)="close()" class="btn btn-block btn-transition btn-outline-success"><span
+                        class="fa fa-check"></span>&nbsp;&nbsp;Aceptar
+                </button>
+            </div>
+        </div>
+    </app-footer>
+</app-modal> -->

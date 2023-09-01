@@ -1,0 +1,30 @@
+<div class="ace-thumbnails clearfix center">
+    <a *ngIf="image.tipo!=null && link" href="{{fullPath}}" class='gallery' data-rel="colorbox">
+        <img width="{{width}}" alt="{{image.alt}}" src="{{fullPath}}"
+            onerror="this.src='assets/images/image_not_found.png';" />
+        <div *ngIf="text" class="text">
+            <div class="inner">{{image?.alt}}</div>
+        </div>
+    </a>
+    <img *ngIf="image.tipo!=null && !link" width="{{width}}" alt="{{image.alt}}" src="{{fullPath}}"
+        onerror="this.src='assets/images/image_not_found.png';" />
+    <div *ngIf="text" class="text">
+        <div class="inner">{{image?.alt}}</div>
+    </div>
+    <a *ngIf="image.tipo==null" class='gallery' data-rel="colorbox">
+        <img width="{{width}}" alt="{{image.alt}}" src="{{fullPath}}"
+            onerror="this.src='assets/images/image_not_found.png';" />
+        <div *ngIf="text" class="text">
+            <div class="inner">{{image?.alt}}</div>
+        </div>
+    </a>
+    <div *ngIf="tags" class="tags">
+        <span class="label-holder">
+            <div class="mb-1 mr-0 badge badge-primary">{{image.tamanio}}</div>
+        </span>
+
+        <span class="label-holder">
+            <div class="mb-1 mr-0 badge badge-danger">{{image.tipo}}</div>
+        </span>
+    </div>
+</div>

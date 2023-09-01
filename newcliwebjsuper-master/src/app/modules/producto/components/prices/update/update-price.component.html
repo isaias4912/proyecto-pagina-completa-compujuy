@@ -1,0 +1,104 @@
+<!-- <div *ngIf="producto$ | async; else loading"> -->
+<div class="row">
+    <div class="col-lg-8 p-0">
+        <div class="col-lg-12">
+            <app-panel [idCollapse]="'selProd'" [collapse]="false" [footer]="true" [title]="data.title">
+                <form id="formPriceProd" [formGroup]="formPriceProd" class="form-group-min">
+                    <div class="row form-group">
+                        <label class="col-md-2 col-form-label label-help">Producto
+                            <i title="Busque el producto que desea cambiar el precio, tipee y presione enter o presione en el boton (<i class='fa fa-list green-strong'></i>) que esta a la derecha del campo de busqueda."
+                                class="help-ns fa fa-question-circle"></i>
+                        </label>
+                        <div class="col-md-10">
+                            <select-prod formControlName="producto" [name]="'txtProducto'" [type]="1  "></select-prod>
+                            <div *ngIf="dataForm.submitted && formPriceProd.invalid">
+                                <div *ngIf="f.producto.errors?.required" class="text-danger">
+                                    Debe seleccionar un producto
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div *ngIf="producto" class="row form-group">
+                        <label class="col-md-2 col-form-label label-help" for="txtModPrecioCosto"><b>Precio costo</b>
+                            <i title="Precio de costo, puede calcularlo con ayuda presionando en el boton (<i class='fa fa-rocket red'></i>) que esta a la derecha del campo."
+                                class="help-ns fa fa-question-circle"></i>
+                        </label>
+                        <div class="col-md-4">
+                            <change-price formControlName="precioCosto" [tooltip]="'txtToolPrecioCosto'"
+                                [preciofinal]="producto.precioCosto" [enter]="'txtPrecioVenta'"
+                                [name]="'txtPrecioCosto'"></change-price>
+                        </div>
+                        <label class="col-md-2 col-form-label label-help" for="txtModPrecioVenta"><b>Precio de
+                                venta</b>
+                            <i title="Precio de venta, puede calcularlo con ayuda presionando en el boton (<i class='fa fa-rocket red'></i>) que esta a la derecha del campo."
+                                class="help-ns fa fa-question-circle"></i>
+                        </label>
+                        <div class="col-md-4">
+                            <change-price formControlName="precioVenta" [tooltip]="'txtToolPrecioVenta'"
+                                [preciofinal]="producto.precioVenta" [enter]="'btnSavePrecio'"
+                                [name]="'txtPrecioVenta'"></change-price>
+                        </div>
+                    </div>
+                </form>
+                <app-footer>
+                    <div class="row">
+                        <div class="col-md-6">
+                        </div>
+                        <div class="col-md-6">
+                            <button-footer (clickCancel)="cancel()" (clickSave)="savePorProducto()" (clickSaveAndReturn)="savePorProducto(2)" (clickSaveAndNew)="savePorProducto(1)">
+                            </button-footer>
+                        </div>
+                    </div>
+                </app-footer>
+            </app-panel>
+        </div>
+        <div *ngIf="productoRel" class="col-lg-12">
+            <app-panel [idCollapse]="'selProdRel'" [collapse]="false" [footer]="true" [title]="'Producto relacionado'"
+                [tooltip]="'Producto relacionado con el producto seleccionado, puede ser un padre o un hijo, dependiendo si es un producto compuesto o simple.'">
+                <form id="formPriceProdRel" [formGroup]="formPriceProdRel">
+                    <div class="row form-group">
+                        <label class="col-md-2 col-form-label">Producto:</label>
+                        <div class="col-md-10">
+                            <input readonly id="txtDesAdicProd" name="txtDesAdicProd" value="{{productoRel.nombreFinal}}" class="form-control form-control-sm"
+                                type="text" />
+                            
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label class="col-md-2 col-form-label" for="txtModPrecioCosto"><b>Precio
+                                final/costo</b></label>
+                        <div class="col-md-4">
+                            <change-price formControlName="precioCosto" [tooltip]="'txtToolPrecioCostoRel'"
+                                [preciofinal]="productoRel.precioCosto"></change-price>
+                        </div>
+                        <label class="col-md-2 col-form-label" for="txtModPrecioVenta"><b>Precio de
+                                venta</b></label>
+                        <div class="col-md-4">
+                            <change-price formControlName="precioVenta" [tooltip]="'txtToolPrecioVentaRel'"
+                                [preciofinal]="productoRel.precioVenta"></change-price>
+                        </div>
+                    </div>
+                </form>
+                <app-footer>
+                    <div class="row">
+                        <div class="col-md-6">
+                        </div>
+                        <div class="col-md-6">
+                            <button-footer (clickCancel)="cancelProdRel()" (clickSave)="savePorProductoRel()" [saveAndReturn]="false" [saveAndNew]="false">
+                            </button-footer>
+                        </div>
+                    </div>
+                </app-footer>
+            </app-panel>
+        </div>
+    </div>
+    <div class="col-lg-4 p-0">
+        <div *ngIf="producto">
+            <parent-child [data]="dataParentChild" (doubleClickEvent)="selectParentOrChild($event)"
+                [tooltipPadre]="'Si el producto tiene padres, osea es parte de un producto compuesto, apareceran aqui en un gráfico. Puede seleccionar en el gráfico un producto para cambiarlo de precio.'"
+                [tooltipHijo]="'Si el producto tiene hijos, osea es un producto compuesto, apareceran aqui en un gráfico. Puede seleccionar en el gráfico un producto para cambiarlo de precio.'">
+            </parent-child>
+        </div>
+    </div>
+</div>
+<ng-template #loading>Cargando información...</ng-template>

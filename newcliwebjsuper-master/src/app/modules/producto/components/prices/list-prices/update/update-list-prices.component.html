@@ -1,0 +1,48 @@
+<div class="row">
+    <div class="col-md-12">
+        <div *ngIf="lista$ | async as lista; else loading;">
+            <ng-container *ngIf="lista; else noItem">
+                <fields-list-prices [lista]="lista" [dataForm]="dataForm"></fields-list-prices>
+            </ng-container>
+            <ng-template #noItem>
+                <div class="form-group row alert alert-warning">
+                    Sin datos
+                </div>
+            </ng-template>
+        </div>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <hr>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-8">
+    </div>
+    <div class="col-md-4">
+        <button-footer (clickCancel)="cancel()" [saveAndReturn]="false" (clickSave)="updateListPrice()" (clickSaveAndNew)="updateListPrice(1)" [save]="false">
+        </button-footer>
+    </div>
+
+    <div class="col-md-2">
+    </div>
+    <div class="col-md-3">
+        <button (click)="cancel()" class="btn btn-block btn-transition btn-outline-danger"><span
+                class="fa fa-remove"></span>&nbsp;&nbsp;Cancelar
+        </button>
+    </div>
+    <div class="col-md-3">
+        <button (click)="updateListPrice()" id="btnSave" name="btnSave"
+            class="btn btn-block btn-transition btn-outline-success"><span class="fa fa-save"></span>&nbsp;&nbsp;Guardar
+        </button>
+    </div>
+    <div class="col-md-3">
+        <button (click)="updateListPrice(1)" class="btn btn-block btn-transition btn-outline-primary"><span
+                class="fa fa-save"></span>&nbsp;&nbsp;Guardar y volver
+        </button>
+    </div>
+</div>
+<ng-template #loading>
+    <div class="spinner-border text-primary" role="status"></div>Cargando informacion...
+</ng-template>

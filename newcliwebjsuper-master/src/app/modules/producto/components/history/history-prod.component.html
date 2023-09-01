@@ -1,0 +1,51 @@
+<div class="container mt-5 mb-5">
+    <div class="row">
+        <div infinite-scroll [infiniteScrollDistance]="scrollDistance" [infiniteScrollUpDistance]="scrollUpDistance"
+            [infiniteScrollThrottle]="throttle" (scrolled)="loadMore()" class="col-md-6 offset-md-3">
+            <div *ngIf="producto$ | async as prod; else loadingProd">
+                <h5>Historial de <span class="text-primary">{{prod.data.nombreFinal}}</span></h5>
+            </div>
+            <ng-template #loadingProd>Cargando información...</ng-template>
+            <ul class="mainul timeline">
+                <li *ngFor="let item of historial;" class="timeline">
+                    <span id="{{tooltip}}_txtValueOne" class="mr-1 ml-1 badge badge-pill badge-primary">
+                        {{item.dia}}
+                    </span>
+                    <div>
+                        <ul class="timeline">
+                            <li *ngFor="let event of item.event">
+                                <span id="{{tooltip}}_txtValueOne" class="mr-1 ml-1 badge badge-pill "
+                                    [ngClass]="{'badge-success': event.tipo == 'Venta', 'badge-secondary': event.tipo == 'Ingreso', 'badge-danger': event.tipo == 'Egreso', 'badge-dark': event.tipo == 'Pase'}">
+                                    <b>{{event.hora}}</b>&nbsp;&nbsp;
+                                    <span *ngIf="event.tipo == 'Venta'" class="grey">Venta del producto</span>
+                                    <span *ngIf="event.tipo == 'Ingreso'" class="grey">Ingreso</span>
+                                    <span *ngIf="event.tipo == 'Egreso'" class="grey">Egreso</span>
+                                    <span *ngIf="event.tipo == 'Pase'" class="grey">Pase - {{event.subtipo}}</span>
+                                </span>
+                                <div>
+                                    <div *ngIf="event.tipo == 'Venta'" class="widget-main">
+                                        Factura de venta - {{event.id}}
+                                    </div>
+                                    <div *ngIf="event.tipo == 'Ingreso'" class="widget-main">
+                                        Ingreso de stock - {{event.id}}
+                                    </div>
+                                    <div *ngIf="event.tipo == 'Egreso'" class="widget-main">
+                                        Egreso de stock - {{event.id}}
+                                    </div>
+                                    <div *ngIf="event.tipo == 'Pase'" class="widget-main">
+                                        Pase de stock - {{event.id}}
+                                    </div>
+                                </div>
+                            </li>
+                        </ul>
+                    </div>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div *ngIf="finish" class="row">
+        <div class="col-md-12 alert alert-warning">
+            No existen mas datos de historial sobre el producto
+        </div>
+    </div>
+</div>

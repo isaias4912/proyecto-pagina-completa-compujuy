@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<!--
+To change this license header, choose License Headers in Project Properties.
+To change this template file, choose Tools | Templates
+and open the template in the editor.
+-->
+<html>
+	<head>
+		<title>TODO supply a title</title>
+		<meta charset="UTF-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1.0">
+		<!-- Font Awesome -->
+		<link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.8.2/css/all.css">
+		<!-- Google Fonts -->
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700&display=swap">
+		<!-- Bootstrap core CSS -->
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/css/bootstrap.min.css" rel="stylesheet">
+		<!-- Material Design Bootstrap -->
+		<link href="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.0/css/mdb.min.css" rel="stylesheet">
+		<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.css">
+
+	</head>
+	<body>
+		<!--Main Navigation-->
+		<header>
+			<!--Navbar-->
+			<nav class="navbar navbar-expand-lg navbar-dark fixed-top" style="background-color: #FFFFFF" >
+				<div class="container">
+					<!-- Navbar brand -->
+					<a class="navbar-brand" href="https://newstock.compujuy.com.ar"><img width="140" src="images/logoNewstockPage.png" alt="Newstock" /></a>
+					<!-- Collapse button -->
+					<!--					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#basicExampleNav"
+												aria-controls="basicExampleNav" aria-expanded="false" aria-label="Toggle navigation">
+											<span class="navbar-toggler-icon"></span>
+										</button>
+										 Collapsible content 
+										<div class="collapse navbar-collapse" id="basicExampleNav">
+											 Links 
+											<ul class="navbar-nav mr-auto">
+												<li class="nav-item active">
+													<a class="nav-link" href="#">Home
+														<span class="sr-only">(current)</span>
+													</a>
+												</li>
+												<li class="nav-item">
+													<a class="nav-link" href="#">Features</a>
+												</li>
+												<li class="nav-item">
+													<a class="nav-link" href="#">Pricing</a>
+												</li>
+					
+												 Dropdown 
+												<li class="nav-item dropdown">
+													<a class="nav-link dropdown-toggle" id="navbarDropdownMenuLink" data-toggle="dropdown" aria-haspopup="true"
+													   aria-expanded="false">Dropdown</a>
+													<div class="dropdown-menu dropdown-primary" aria-labelledby="navbarDropdownMenuLink">
+														<a class="dropdown-item" href="#">Action</a>
+														<a class="dropdown-item" href="#">Another action</a>
+														<a class="dropdown-item" href="#">Something else here</a>
+													</div>
+												</li>
+					
+											</ul>
+											 Links 
+					
+											<form class="form-inline">
+												<div class="md-form my-0">
+													<input class="form-control mr-sm-2" type="text" placeholder="Search" aria-label="Search">
+												</div>
+											</form>
+										</div>-->
+					<!-- Collapsible content -->
+				</div>
+			</nav>
+			<!--/.Navbar-->
+			<!--Mask-->
+			<div id="intro" class="view">
+				<div class="mask">
+				</div>
+			</div>
+			<!--/.Mask-->
+
+		</header>
+		<main style="margin-top: 80px;" >
+			<div class="container">
+				<!--Section: Contact-->
+				<section id="contact">
+
+					<!-- Heading -->
+					<!--<h2 class="mb-5 font-weight-bold text-center">Contact us</h2>-->
+
+					<!--Grid row-->
+					<div class="row">
+
+						<!--Grid column-->
+						<div class="col-lg-8 col-md-8 mx-auto">
+							<!-- Form contact -->	
+							<div class="card">
+								<div class="card-body">
+									<!--Title-->
+									<h4 class="card-title">Confirmación de pago</h4>
+									<p class="card-text">Informa tu pago realizado, recibiras rta. en menos de 24hs, si tienes algun problema con el formulario, tambien puedes enviar mail a rafa2299@gmail.com o bien enviar whatsapp mediante el siguiente enlace
+										<a target="_blank" href="https://api.whatsapp.com/send?text=Mensaje&phone=3884642513">...enviar whatsapp <i class="fab fa-whatsapp" style="color: #07ce05"  ></i>  </a> </p>
+									<form class="pl-2 pr-2 grey-text formMessage" id="formMessage" novalidate>
+										<div class="md-form form-sm"> <i class="fas fa-user prefix"></i>
+											<label for="form3">Tu nombre y apellido</label>
+											<input type="text" id="nombre" name="nombre" class="form-control form-control-sm" required  maxlength="150">
+											<div class="invalid-feedback">
+												Ingrese su nombre y apellido
+											</div>
+										</div>
+										<div class="md-form form-sm"> <i class="fas fa-envelope prefix"></i>
+											<label for="form2">Tu email</label>
+											<input type="email" id="email" name="email" class="form-control form-control-sm" required maxlength="80" >
+											<div class="invalid-feedback">
+												Ingrese su email, debe ser valido por ej: admin@gmail.com
+											</div>
+										</div>
+										<div class="md-form form-sm"> <i class="fas fa-phone prefix"></i>
+											<label for="form22">Tu telefono</label>
+											<input type="number" id="telefono" name="telefono" class="form-control form-control-sm" max="999999999999" >
+										</div>
+										<div class="md-form form-sm"> <i class="fas fa-tag prefix"></i>
+											<label for="form34">Asunto</label>
+											<input type="text" id="asunto" name="asunto" class="form-control form-control-sm" required maxlength="40" >
+											<div class="invalid-feedback">
+												Ingrese un asunto, máximo 40 caracteres
+											</div>
+										</div>
+										<div class="md-form form-sm"> <i class="fas fa-pencil-alt prefix"></i>
+											<label for="form8">Mensaje adicional</label>
+											<textarea type="text" id="message" name="message" class="md-textarea form-control form-control-sm" rows="4" required maxlength="500" ></textarea>
+											<div class="invalid-feedback">
+												Ingrese el mensaje a enviar, debe contener menos de 500 caracteres
+											</div>
+										</div>
+										<div class="text-center mt-4">
+											<button class="btn btn-primary" type="submit" >Enviar mensaje <i class="far fa-paper-planeml-1"></i></button>
+										</div>
+									</form>
+									<!-- Form contact -->
+								</div>
+							</div>
+						</div>
+					</div>
+				</section>
+			</div>
+		</main>
+		<!--Footer-->
+		<footer>
+
+		</footer>
+		<!--Footer-->
+		<!--Section: Contact-->
+		<!-- JQuery -->
+		<script type="text/javascript" src="js/config.js"></script>
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
+		<!-- Bootstrap tooltips -->
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.4/umd/popper.min.js"></script>
+		<!-- Bootstrap core JavaScript -->
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/4.5.0/js/bootstrap.min.js"></script>
+		<!-- MDB core JavaScript -->
+		<script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/mdbootstrap/4.19.0/js/mdb.min.js"></script>
+		<script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+		<script>
+            init();
+            (function () {
+
+                'use strict';
+                window.addEventListener('load', function () {
+                    var forms = document.getElementsByClassName('formMessage');
+                    var validation = Array.prototype.filter.call(forms, function (form) {
+                        form.addEventListener('submit', function (event) {
+                            $("#asunto").prop('disabled', false);
+                            event.preventDefault();
+                            event.stopPropagation();
+                            if (form.checkValidity() === false) {
+                            } else {
+                                sendMessage();
+                            }
+                            form.classList.add('was-validated');
+                        }, false);
+                    });
+                }, false);
+            })();
+
+            function init() {
+                var asunto = getUrlParameter('asunto');
+                if (asunto) {
+                    if (asunto == 'pagorealizado') {
+                        $('#asunto').val('Pago realizado');
+                        $("#asunto").prop('disabled', true);
+
+                    }
+                }
+                setTimeout(function () {
+                    $("#nombre").focus();
+                }, 250);
+            }
+
+            function sendMessage() {
+                var data = $('#formMessage').serializeArray(); //  <-----------
+                var resp = {};
+                $.each(data,
+                        function (i, v) {
+                            resp[v.name] = v.value;
+                        });
+                $.ajax({
+                    type: "POST",
+                    url: baseUrl + "public/message",
+                    data: JSON.stringify(resp),
+                    contentType: "application/json; charset=utf-8",
+                    success: function () {
+                        toastr.success('Mensage enviado correctamente.');
+                        init();
+                        $("#formMessage :input").prop("disabled", true);
+                        $('#formMessage')[0].reset();
+                        setTimeout(function () {
+                            window.location.href = redirectPagoRealizado;
+                        }, 1500);
+                    },
+                    dataType: 'json'
+                });
+                return false; //don't submit
+            }
+            ;
+            function getUrlParameter(sParam) {
+                var sPageURL = window.location.search.substring(1),
+                        sURLVariables = sPageURL.split('&'),
+                        sParameterName,
+                        i;
+
+                for (i = 0; i < sURLVariables.length; i++) {
+                    sParameterName = sURLVariables[i].split('=');
+
+                    if (sParameterName[0] === sParam) {
+                        return sParameterName[1] === undefined ? true : decodeURIComponent(sParameterName[1]);
+                    }
+                }
+            }
+		</script>
+	</body>
+</html>

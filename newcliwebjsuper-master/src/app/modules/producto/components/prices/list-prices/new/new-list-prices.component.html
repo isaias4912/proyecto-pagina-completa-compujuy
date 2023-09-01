@@ -1,0 +1,18 @@
+<div class="row">
+    <div class="col-md-12">
+        <fields-list-prices [dataForm]="dataForm" ></fields-list-prices>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-12">
+        <hr>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-8">
+    </div>
+    <div class="col-md-4">
+        <button-footer (clickCancel)="cancel()" (clickSaveAndReturn)="saveListPrice(2)" (clickSaveAndNew)="saveListPrice(1)" [save]="false">
+        </button-footer>
+    </div>
+</div>

@@ -1,0 +1,20 @@
+<app-modal [title]="'Nueva persona'" [footer]="true" (eventCancel)="cancel()" >
+    <new-per [dataForm]="dataForm" [buttonAction]="false" (eventSave)="saveSucces($event)" ></new-per>
+    <app-footer>
+        <!-- <div app-footer-in > -->
+        <div class="row" >
+            <div class="col-lg-6 col-md-4">
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <button (click)="savePer()" class="btn btn-block btn-transition btn-outline-primary"><span
+                        class="fa fa-save"></span>&nbsp;&nbsp;Guardar
+                </button>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <button (click)="close()" class="btn btn-block btn-transition btn-outline-danger"><span
+                        class="fa fa-remove"></span>&nbsp;&nbsp;Cancelar
+                </button>
+            </div>
+        </div>
+    </app-footer>
+</app-modal>

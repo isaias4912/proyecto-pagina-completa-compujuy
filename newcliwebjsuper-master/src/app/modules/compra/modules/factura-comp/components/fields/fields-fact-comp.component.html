@@ -1,0 +1,252 @@
+<div *ngIf="dataCompra$ | async as dataCompra; else loading;">
+    <ng-container *ngIf="dataCompra; else noItems">
+        <form id="formFactComp" [formGroup]="formFactComp" class="form-group-min">
+            <div class="card mb-2">
+                <div class="card-header" id="headingOne" style="height: 2.5rem;">
+                    <div class="container-fluid" style="padding-right: 0px !important;">
+                        <div class="row">
+                            <div class="col-md-12">
+                                <span class="float-sm-left">
+                                    Datos del cbte.
+                                </span>
+                                <div class="float-sm-right">
+                                    <div class="d-inline-block dropdown buttons-small">
+                                        <button type="button" data-toggle="dropdown" aria-haspopup="true"
+                                            aria-expanded="false"
+                                            class="btn-transition dropdown-toggle btn btn-sm btn-outline-primary btn-font-size-7">
+                                            {{f.sucursal.value?.nombre}}
+                                        </button>
+                                        <div tabindex="-1" role="menu" aria-hidden="true"
+                                            class="dropdown-menu dropdown-menu-right">
+                                            <ul class="nav flex-column">
+                                                <li *ngFor="let suc of sucursales" class="nav-item">
+                                                    <a (click)="changeSucursal(suc)" class="nav-link">
+                                                        <span>
+                                                            {{suc.nombre}}
+                                                        </span>
+                                                        <div *ngIf="suc.active"
+                                                            class="ml-auto badge badge-pill badge-success">
+                                                            <span class="fa fa-check"></span>
+                                                        </div>
+                                                    </a>
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div id="collapseOne" class="collapse show" aria-labelledby="headingOne">
+                    <div class="card-body">
+                        <div class="row form-group">
+                            <div class="col-md-6" style="border-right: solid 1px #e9ecef;">
+                                <div class="row form-group">
+                                    <label class="col-form-label col-md-2" for="selProvCbte">Proveedor</label>
+                                    <div class="col-md-10">
+                                        <select-prov [name]="'selProvCbte'" formControlName="proveedor"
+                                            [nextFocus]="'txtNumComp'">
+                                        </select-prov>
+                                        <div *ngIf="dataForm.submitted && formFactComp.invalid">
+                                            <div *ngIf="f.proveedor.errors?.required" class="text-danger">
+                                                Campo obligatorio
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <label class="col-form-label col-md-2" for="cmbTipoDocProv">Tipo doc.</label>
+                                    <div class="col-md-4">
+                                        <select id="cmbTipoDocProv" name="cmbTipoDocProv"
+                                            formControlName="tipoDocProveedor" class="form-control form-control-sm"
+                                            enter="txtDocProv">
+                                            <option *ngFor="let doc of dataCompra.docs" title="{{doc.descripcion}}"
+                                                [ngValue]="doc.nombre">
+                                                {{doc.descripcion}}</option>
+                                        </select>
+                                    </div>
+                                    <label class="col-form-label col-md-2" for="txtDocProv">Número</label>
+                                    <div class="col-md-4">
+                                        <input type="text" id="txtDocProv" name="txtDocProv"
+                                            formControlName="nroDocProveedor" class="form-control form-control-sm"
+                                            enter="selTipoCbte" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-6">
+                                <div class="row form-group">
+                                    <label class="col-form-label col-md-2" for="selTipoCbte">Cbte.</label>
+                                    <div class="col-md-4">
+                                        <select id="selTipoCbte" name="selTipoCbte" formControlName="tipoCbte"
+                                            (change)="changeTipoCbte()"
+                                            class="form-control form-control-sm text-bold text-20" enter="txtNumComp">
+                                            <option *ngFor="let cbte of dataCompra.comprobantes"
+                                                title="{{cbte.descripcion}}" [ngValue]="cbte.nombre">
+                                                {{cbte.nombre}}</option>
+                                        </select>
+                                        <div *ngIf="dataForm.submitted && formFactComp.invalid">
+                                            <div *ngIf="f.tipoCbte.errors?.required" class="text-danger">
+                                                Campo obligatorio
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <label class="col-form-label col-md-2" for="txtNumComp">Número</label>
+                                    <div class="col-md-4">
+                                        <input id="txtNumComp" name="txtNumComp" formControlName="numero"
+                                            mask="0000-00000000" [dropSpecialCharacters]="false"
+                                            [clearIfNotMatch]="true" [showMaskTyped]="true"
+                                            class="form-control form-control-sm" enter="selTipoFact" />
+                                        <div *ngIf="dataForm.submitted && formFactComp.invalid">
+                                            <div *ngIf="f.numero.errors?.required" class="text-danger">
+                                                Campo obligatorio
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <label for="selTipoFact" class="col-md-2 col-form-label padding-right-left-4">Tipo
+                                        fact.</label>
+                                    <div class="col-md-4">
+                                        <select id="selTipoFact" name="selTipoFact" formControlName="tipoFactura"
+                                            class="form-control form-control-sm" enter="selConcepto">
+                                            <option *ngFor="let fact of dataCompra.facturas"
+                                                title="{{fact.descripcion}}" [ngValue]="fact.nombre">
+                                                {{fact.descripcion}}</option>
+                                        </select>
+                                        <div *ngIf="dataForm.submitted && formFactComp.invalid">
+                                            <div *ngIf="f.tipoFactura.errors?.required" class="text-danger">
+                                                Campo obligatorio
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <label for="selConcepto"
+                                        class="col-md-2 col-form-label padding-right-left-4">Concepto</label>
+                                    <div class="col-md-4">
+                                        <select id="selConcepto" name="selConcepto" formControlName="concepto"
+                                            class="form-control form-control-sm" enter="fechaCbte">
+                                            <option *ngFor="let conc of dataCompra.conceptos"
+                                                title="{{conc.descripcion}}" [ngValue]="conc.nombre" [disabled]="conc.id==2 || conc.id==3">
+                                                {{conc.descripcion}}</option>
+                                        </select>
+                                        <div *ngIf="dataForm.submitted && formFactComp.invalid">
+                                            <div *ngIf="f.concepto.errors?.required" class="text-danger">
+                                                Campo obligatorio
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <label class="col-form-label col-md-2" for="fechaCbte">Fecha</label>
+                                    <div class="col-md-4">
+                                        <app-date [name]="'fechaCbte'" formControlName="fechaCbte"
+                                            [enter]="'fechaVencCbte'">
+                                        </app-date>
+                                        <div *ngIf="dataForm.submitted && formFactComp.invalid">
+                                            <div *ngIf="f.fechaCbte.errors?.required" class="text-danger">
+                                                Campo obligatorio
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <label class="col-form-label col-md-2" for="fechaVencCbte">Fecha venc.</label>
+                                    <div class="col-md-4">
+                                        <app-date [name]="'fechaVencCbte'"
+                                            formControlName="fechaVencCbte" [enter]="'txtProducto0'">
+                                        </app-date>
+                                        <div *ngIf="dataForm.submitted && formFactComp.invalid">
+                                            <div *ngIf="f.fechaVencCbte.errors?.required" class="text-danger">
+                                                Campo obligatorio
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div *ngIf="f.concepto.value==2 || f.concepto.value==3" class="row form-group">
+                                    <label class="col-form-label col-md-2" for="fechaServDesde">Fec. serv. desde</label>
+                                    <div class="col-md-4">
+                                        <app-date [name]="'fechaServDesde'"
+                                            formControlName="fechaServDesde" [enter]="'fechaServHasta'">
+                                        </app-date>
+                                        <div *ngIf="dataForm.submitted && formFactComp.invalid">
+                                            <div *ngIf="f.fechaCbte.errors?.required" class="text-danger">
+                                                Campo obligatorio
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <label class="col-form-label col-md-2" for="fechaServHasta">Fec. serv. hasta</label>
+                                    <div class="col-md-4">
+                                        <app-date [name]="'fechaServHasta'"
+                                            formControlName="fechaServHasta" [enter]="'txtProducto0'">
+                                        </app-date>
+                                        <div *ngIf="dataForm.submitted && formFactComp.invalid">
+                                            <div *ngIf="f.fechaVencCbte.errors?.required" class="text-danger">
+                                                Campo obligatorio
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-12">
+                    <items-cbte [data]="dataCompra" [enableIva]="true" (finishViewEvent)="finishViewItems()"
+                        [typeCbte]="'VENTA'" [dataForm]="dataForm">
+                    </items-cbte>
+                </div>
+            </div>
+            <div class="row form-group">
+                <label for="txtCAE" class="col-md-1 col-form-label padding-right-left-4">CAE/CAI N°</label>
+                <div class="col-md-3">
+                    <input id="txtCAE" name="txtCAE" type="text" formControlName="cae"
+                        class="form-control form-control-sm" [cantDigits]="30" enter="fechaVenCae" />
+                    <div *ngIf="dataForm.submitted && formFactComp.invalid">
+                        <div *ngIf="f.cae.errors?.required" class="text-danger">
+                            Campo obligatorio
+                        </div>
+                        <div *ngIf="f.cae.errors?.maxlength" class="text-danger">
+                            Debe ingresar un numero valido de CAE/CAI
+                        </div>
+                    </div>
+                </div>
+                <label class="col-form-label col-md-1" for="fechaVenCae">Fecha V. C.</label>
+                <div class="col-md-2">
+                    <app-date [name]="'fechaVenCae'" formControlName="caeVenc"
+                        [enter]="'txtObservacion'">
+                    </app-date>
+                    <div *ngIf="dataForm.submitted && formFactComp.invalid">
+                        <div *ngIf="f.caeVenc.errors?.required" class="text-danger">
+                            Campo obligatorio
+                        </div>
+                    </div>
+                </div>
+                <label for="txtObservacion" class="col-md-1 col-form-label padding-right-left-4">Observación</label>
+                <div class="col-md-4">
+                    <input id="txtObservacion" name="txtObservacion" formControlName="observacion" type="text"
+                        class="form-control form-control-sm" />
+                    <div *ngIf="dataForm.submitted && formFactComp.invalid">
+                        <div *ngIf="f.observacion.errors?.maxlength" class="text-danger">
+                            Campo muy largo
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-12">
+                    <items-pago [formasPago]="dataCompra.formasPago" [dataForm]="dataForm" [asociada]="true">
+                    </items-pago>
+                </div>
+            </div>
+        </form>
+
+    </ng-container>
+    <ng-template #noItems>
+        <div class="form-group row alert alert-warning">
+            Sin datos para cargar una nueva caja
+        </div>
+    </ng-template>
+</div>
+<ng-template #loading>
+    <app-loading></app-loading>
+</ng-template>

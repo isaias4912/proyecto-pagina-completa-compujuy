@@ -1,0 +1,4 @@
+<select id="{{name}}" name="{{name}}" (change)="changeSelect()" [(ngModel)]="sucursal" class="form-control  form-control-sm" enter="{{enter}}"  >
+    <option [ngValue]="null" >{{textFirstOpt}}</option>     
+    <option *ngFor="let option of sucursales" [ngValue]="option" >{{option.nombre}}</option>     
+</select>

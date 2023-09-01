@@ -1,0 +1,93 @@
+<div class="row text-center mt-4">
+    <aside class="col-sm-4 mx-auto">
+        <div class="card">
+            <article class="card-body">
+                <h5 class="text-center mb-2 mt-1">Ingresá</h5>
+                <div class="text-center"><i class="fa fa-lock" style="font-size: 50px; color: #003974;">
+                    </i>
+                </div>
+                <hr>
+                <form (ngSubmit)="login()" [formGroup]="formLogin">
+                    <div class="form-group">
+                        <div class="input-group"
+                            title="Ingrese su email o usuario registrado en el sistema">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"> <i class="text-primary fa fa-user"></i>
+                                </span>
+                            </div>
+                            <input formControlName="username" id="username" name="username"
+                                class="form-control" placeholder="Email o usuario" type="email">
+                        </div>
+                        <div *ngIf="dataForm.submitted && formLogin.invalid">
+                            <div *ngIf="f.username.errors?.required" class="text-danger">
+                                Ingrese un usuario válido
+                            </div>
+                            <div *ngIf="f.username.errors?.maxlength" class="text-danger">
+                                Usuario muy largo
+                            </div>
+                            <div *ngIf="f.username.errors?.minlength" class="text-danger">
+                                Usuario muy corto
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <div class="input-group" title="Ingrese su contraseña válida">
+                            <div class="input-group-prepend">
+                                <span class="input-group-text"> <i class="text-primary fa fa-lock"></i>
+                                </span>
+                            </div>
+                            <input formControlName="password" id="password" name="password"
+                                class="form-control border-right-0 border" placeholder="Contraseña" type="{{typePass?'text':'password'}}">
+                            <div class="input-group-append">
+                                <span (click)="typePass=!typePass" class="input-group-text bg-transparent hand"><i
+                                        class="fa {{typePass?'fa-eye-slash':'fa-eye'}}"></i></span>
+                            </div>
+                            <!-- <span class="icon-inside"> <i class="text-primary fa fa-lock"></i>
+                            </span> -->
+                        </div>
+                        <div *ngIf="dataForm.submitted && formLogin.invalid">
+                            <div *ngIf="f.password.errors?.required" class="text-danger">
+                                Ingrese su contraseña
+                            </div>
+                            <div *ngIf="f.password.errors?.maxlength" class="text-danger">
+                                Contraseña muy larga
+                            </div>
+                            <div *ngIf="f.password.errors?.minlength" class="text-danger">
+                                Contraseña muy corta
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <!-- <recaptcha-demo-wrapper> -->
+                        <div class="col-md-12 col-sm-12 mx-auto">
+                            <div style="transform:scale(0.7);transform-origin:0;">
+                                <re-captcha formControlName="captcha" (resolved)="resolved($event)"
+                                    siteKey="{{captchaKey}}"></re-captcha>
+                            </div>
+                            <div *ngIf="dataForm.submitted && formLogin.invalid">
+                                <div *ngIf="f.captcha.errors?.required" class="text-danger">
+                                    El captcha se debe validar
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <button [disabled]="loading" type="submit" id="btnLogin" name="btnLogin"
+                            class="btn-transition btn btn-ns btn-block">
+                            <span *ngIf="!loading">Ingresar</span>
+                            <span *ngIf="loading">
+                                <span class="fa fa-circle-o-notch fa-spin">
+                                </span>&nbsp;Ingresando
+                            </span>
+                        </button>
+                    </div>
+                    <p class="text-center mb-0"><a [routerLink]="['/auth/register']" class="btn  pb-0">Crearme una
+                            cuenta</a>
+                    </p>
+                    <p class="text-center mb-0"><a [routerLink]="['/auth/recuperar-password']" class="btn">Olvide mi contraseña</a>
+                    </p>
+                </form>
+            </article>
+        </div>
+    </aside>
+</div>

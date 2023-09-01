@@ -1,0 +1,121 @@
+<app-panel [idCollapse]="'panelFiltro'" [title]="'Telefonos'" [collapse]="false">
+    <div class="row">
+        <div [hidden]="ft?.length > 0" class="col-md-12">
+            <a (click)="addTelefono();" id="firstAddBarCode" #firstAddBarCode [routerLink]="" class="hand">Agregar un
+                teléfono&nbsp;<i class="green-strong fa fa-plus"></i></a>
+        </div>
+        <div class="table-responsive">
+            <table *ngIf="ft.length && ft.length > 0" class="table table-hover table-striped">
+                <thead>
+                    <tr>
+                        <th style="width: 10%;">Tipo</th>
+                        <th style="width: 10%;">Prefijo</th>
+                        <th style="width: 20%;">Número</th>
+                        <th style="width: 40%;">Observación</th>
+                        <th style="width: 10%;">Principal</th>
+                        <th style="width: 20%;"></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngFor="let tel of $any(ft).controls; let $index = index;" [formGroup]="tel">
+                        <tr>
+                            <td class="center padding-right-left-4">
+                                <select id="txtTipoTelefono{{$index}}" formControlName="tipo"
+                                    ng-change="changeTipoTelefono($index, telefonos.tipo[$index]);"
+                                    name="txtTipoTelefono{{$index}}" class="input form-control form-control-sm item-tel-tipo"
+                                    enter="txtPrefijoTelefono{{$index}}" required>
+                                    <option *ngFor="let opcion of tiposTelefono" [ngValue]="opcion.id">{{opcion.value }}
+                                    </option>
+                                </select>
+                            </td>
+                            <td class="center padding-right-left-4">
+                                <div class="input-group input-group-sm item-tel-pref">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">0</span>
+                                    </div>
+                                    <input id="txtPrefijoTelefono{{$index}}" name="txtPrefijoTelefono{{$index}}"
+                                        formControlName="prefijo" class="form-control form-control-sm" type="number"
+                                        enter="txtNumeroTelefono{{$index}}" required [cantDigits]="5"
+                                        placeholder="Ej:11" />
+                                </div>
+                            </td>
+                            <td class="center padding-right-left-4">
+                                <div class="input-group input-group-sm item-tel-num">
+                                    <div *ngIf="tel.controls.tipo.value == 1" class="input-group-prepend">
+                                        <span class="input-group-text">15</span>
+                                    </div>
+                                    <input id="txtNumeroTelefono{{$index}}" name="txtNumeroTelefono{{$index}}"
+                                        formControlName="numero" class="form-control form-control-sm" type="number"
+                                        enter="txtDetalleTelefono{{$index}}" required [cantDigits]="15"
+                                        placeholder="Ej:17897980" />
+                                </div>
+                            </td>
+                            <td class="center padding-right-left-4">
+                                <input id="txtDetalleTelefono{{$index}}" name="txtDetalleTelefono{{$index}}"
+                                    formControlName="detalle" class="form-control form-control-sm" type="text"
+                                    enter="buttonAddTel{{$index}}" maxlength="300" />
+                            </td>
+                            <td class="center padding-right-left-4">
+                                <div class="pretty p-default p-round">
+                                    <input type="radio" formControlName="principalTel" (change)="changePrincipal(tel)"
+                                        name="principalTel" [value]="true">
+                                    <div class="state p-primary">
+                                        <label></label>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="buttons-small">
+                                <div class="float-right">
+                                    <button [hidden]="!($index== (ft.controls.length-1))" type="button"
+                                        id="buttonAddTel{{$index}}" name="buttonAddTel{{$index}}"
+                                        class="btn-sm btn-transition btn btn-outline-success" (click)="addTelefono()">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                    <button type="button" id="buttonRemoveTel{{$index}}"
+                                        name="buttonRemoveTel{{$index}}"
+                                        class="btn-sm btn-transition btn btn-outline-danger"
+                                        (click)="removeTelefono(tel);">
+                                        <i class="red ace-icon fa fa-remove bigger-120"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr *ngIf="ft.invalid || formTelefono.invalid">
+                            <td>
+                                <div class="align-top" *ngIf="dataForm?.submitted && tel.controls.tipo.errors?.required"
+                                    class="text-danger">
+                                    Debe ingresar un tipo
+                                </div>
+                            </td>
+                            <td>
+                                <div *ngIf="dataForm?.submitted && tel.controls.prefijo.errors?.required"
+                                    class="text-danger">
+                                    Debe ingresar un prefijo
+                                </div>
+                            </td>
+                            <td>
+                                <div *ngIf="dataForm?.submitted && tel.controls.numero.errors?.required"
+                                    class="text-danger">
+                                    Debe ingresar un número
+                                </div>
+                            </td>
+                            <td></td>
+                            <td>
+                                <div *ngIf="dataForm?.submitted && tel.controls.principal.errors?.required"
+                                    class="text-danger">
+                                    Campo obligatorio
+                                </div>
+                                <div *ngIf="dataForm?.submitted && formTelefono.errors?.invalid_principal"
+                                    class="text-danger">
+                                    Debe sel. un tel. principal
+                                </div>
+                            </td>
+                            <td></td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</app-panel>
+<app-size-detector></app-size-detector>

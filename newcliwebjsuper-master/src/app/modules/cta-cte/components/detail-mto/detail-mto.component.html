@@ -1,0 +1,175 @@
+<div *ngIf="listDetail$ | async as listDetail; else loading;">
+    <ng-container *ngIf="listDetail.length; else noItems">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table class="table" style="border-collapse:collapse;">
+                        <thead>
+                            <tr>
+                                <th></th>
+                                <th>Código</th>
+                                <th>Fecha</th>
+                                <th class="text-right">Monto Neto</th>
+                                <th class="text-right">Interes</th>
+                                <th class="text-right">Monto Total</th>
+                                <th class="text-right">Pago</th>
+                                <th class="text-right">Saldo</th>
+                                <th class="text-right">Saldo pagado</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <ng-container *ngFor="let p of listDetail; let i=index">
+                                <!-- <tr data-toggle="collapse" data-target="#demo{{i}}" class="accordion-toggle"> -->
+                                <tr [attr.data-toggle]="'collapse'" [attr.data-target]="'#demo_'+seed+'_'+i"
+                                    (click)="p.$$activeRow=!p.$$activeRow" class="accordion-toggle"
+                                    [ngClass]="{'selected-row': p.$$activeRow && i % 2, 'selected-row-inpar':p.$$activeRow && !(i % 2)}">
+                                    <td><span class="badge badge-pill badge-info">{{i}}</span></td>
+                                    <td>{{p.id}}</td>
+                                    <td>{{p.fecha}}</td>
+                                    <td class="text-right">
+                                        <span
+                                            class="badge badge-pill badge-primary">{{formatDecimal(p.montoNeto)}}</span>
+                                        <!-- {{formatDecimal(p.montoNeto)}} -->
+                                    </td>
+                                    <td class="text-right">{{formatDecimal(p.interes)}}</td>
+                                    <td class="text-right">
+                                        <span
+                                            class="badge badge-pill badge-secondary">{{formatDecimal(p.montoTotal)}}</span>
+                                        <!-- {{formatDecimal(p.montoTotal)}} -->
+                                    </td>
+                                    <td class="text-right"><b>{{formatDecimal(p.pago)}}</b></td>
+                                    <td class="text-right">
+                                        <span [ngClass]="{'badge-success':p.movimiento.pagado, 'badge-danger':!p.movimiento.pagado}"
+                                            class="badge badge-pill">{{formatDecimal(p.movimiento.montoTotal)}}</span>
+                                    </td>
+                                    <td class="text-right">
+                                        <span *ngIf="p.movimiento.pagado" class="green-strong fa fa-check-circle-o"
+                                            title="Saldo pagado"></span>
+                                        <span *ngIf="!p.movimiento.pagado" class="red fa fa-times-circle-o"
+                                            title="Saldo no pagado"></span>
+                                    </td>
+                                    <td class="text-right">
+                                        <span class="hand blue fa"
+                                            [ngClass]="{'fa-eye-slash':p.$$activeRow, 'fa-eye':!p.$$activeRow}"
+                                            style="font-size: 18px;"></span>
+                                    </td>
+                                </tr>
+                                <tr
+                                    [ngClass]="{'selected-row':p.$$activeRow && i % 2, 'selected-row-inpar':p.$$activeRow && !(i % 2), 'border-bot-selected-row':p.$$activeRow}">
+                                    <td colspan="10" class="hiddenRow"
+                                        style="padding: 0px !important; border: none !important;">
+                                        <div [ngClass]="{'show':isSelected(p.movimientos)}"
+                                            class="accordian-body collapse ml-2 mr-2" id="{{'demo_'+seed+'_'+i}}">
+                                            <div class="table-responsive">
+                                                <table class="table table-min margin-bottom-0"
+                                                    style="border-collapse:collapse;">
+                                                    <caption>Detalle del pago</caption>
+                                                    <thead>
+                                                        <tr>
+                                                            <th>Código</th>
+                                                            <th>Tipo</th>
+                                                            <th>Fecha</th>
+                                                            <th class="text-right">Monto Neto</th>
+                                                            <th class="text-right">Interes</th>
+                                                            <th class="text-right">Monto Total</th>
+                                                            <th class="text-right">Pagado</th>
+                                                            <th></th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
+                                                        <ng-container *ngFor="let m of p.movimientos; let i=index">
+                                                            <tr>
+                                                                <td>{{m.id}}</td>
+                                                                <td>
+                                                                    <div *ngIf="type=='CTA_CTE_CLI' && m.tipo==1"
+                                                                        class="text-primary">
+                                                                        <b>Venta</b>
+                                                                    </div>
+                                                                    <div *ngIf="type=='CTA_CTE_PROV' && m.tipo==1"
+                                                                        class="text-primary">
+                                                                        <b> Cbte. compra</b>
+                                                                    </div>
+                                                                    <div *ngIf="m.tipo==4" class="red">
+                                                                        <b> Saldo</b>
+                                                                    </div>
+                                                                </td>
+                                                                <td>
+                                                                    {{m.fecha}}
+                                                                </td>
+                                                                <td class="text-right">
+                                                                    {{formatDecimal(m.monto)}}
+                                                                </td>
+                                                                <td class="text-right">
+                                                                    {{formatDecimal(m.interes)}}
+                                                                </td>
+                                                                <td class="text-right">
+                                                                    <span
+                                                                        class="badge badge-pill badge-primary">{{formatDecimal(m.montoTotal)}}</span>
+                                                                    <!-- <b>{{formatDecimal(m.montoTotal)}}</b> -->
+                                                                </td>
+                                                                <td class="text-right">
+                                                                    <span *ngIf="m.pagado"
+                                                                        class="green-strong fa fa-check-circle-o"></span>
+                                                                    <span *ngIf="!m.pagado"
+                                                                        class="red fa fa-times-circle-o"></span>
+                                                                </td>
+                                                                <td class="text-right">
+                                                                    <span *ngIf="m.id!=mto.id" (click)="detail(m)"
+                                                                        title="Detalle de pagos"
+                                                                        class="fa fa-eye red hand">
+                                                                    </span>
+                                                                    <span *ngIf="m.id==mto.id"
+                                                                        title="Coincide con el detalle de pago seleccionado inicialmente"
+                                                                        class="fa fa-eye dis">
+                                                                    </span>&nbsp;
+                                                                    <span *ngIf="type=='CTA_CTE_CLI' && m.tipo==1"
+                                                                        (click)="detailVenta(m.pagoVentas.cbteEnc.id)"
+                                                                        title="Detalle de la venta realizada"
+                                                                        class="fa fa-file-text-o green-strong hand">
+                                                                    </span>
+                                                                    <span *ngIf="type=='CTA_CTE_PROV' && m.tipo==1"
+                                                                        (click)="detailCbteComp(m.pagoCbteComp.cbteCompEnc.id)"
+                                                                        title="Detalle del cbte. de compra"
+                                                                        class="fa fa-file-text-o green-strong hand">
+                                                                    </span>
+                                                                </td>
+                                                            </tr>
+                                                        </ng-container>
+                                                    </tbody>
+                                                </table>
+                                            </div>
+                                            <div class="margin-bottom-5">
+                                                <span *ngIf="!p.$$showFormaPago" class="hand"
+                                                    (click)="p.$$showFormaPago=true">Ver formas de
+                                                    pagos</span>
+                                                <!-- <span *ngIf="!showFormasPago" class="hand"
+                                                    (click)="showFormasPago=true">Ver formas de
+                                                    pagos</span> -->
+                                                <span *ngIf="p.$$showFormaPago" class="hand  float-right"
+                                                    (click)="p.$$showFormaPago=false">Ocultar formas de
+                                                    pagos</span>
+                                                <!-- <span *ngIf="showFormasPago" class="hand  float-right"
+                                                    (click)="showFormasPago=false">Ocultar formas de
+                                                    pagos</span> -->
+                                                <span *ngIf="p.$$showFormaPago" class="title">Formas de pago</span>
+                                                <detail-pago *ngIf="p.$$showFormaPago" [type]="type" [id]="p.id">
+                                                </detail-pago>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </ng-container>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </ng-container>
+    <ng-template #noItems>
+        <div class="form-group row alert alert-warning">
+            Sin datos
+        </div>
+    </ng-template>
+</div>
+<ng-template #loading>
+    <app-loading></app-loading>
+</ng-template>

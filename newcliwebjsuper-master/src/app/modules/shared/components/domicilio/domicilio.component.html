@@ -1,0 +1,122 @@
+<app-panel [idCollapse]="'panelFiltro'" [title]="'Domicilios'" [collapse]="false">
+    <div class="row">
+        <div [hidden]="fd?.length > 0" class="col-md-12">
+            <a (click)="addDomicilio();" id="firstAddBarCode" #firstAddBarCode [routerLink]="" class="hand">Agregar un
+                domicilio&nbsp;<i class="green-strong fa fa-plus"></i></a>
+        </div>
+        <div class="table-responsive" >
+            <table *ngIf="fd.length && fd.length > 0" class="table table-hover table-striped">
+                <thead>
+                    <tr>
+                        <th style="width: 22%;">Calle</th>
+                        <th style="width: 7%;">Num.</th>
+                        <th style="width: 5%;">Piso</th>
+                        <th style="width: 5%;">Dpto.</th>
+                        <th style="width: 15%;">Provincia</th>
+                        <th style="width: 15%;">Ciudad</th>
+                        <th>Observación</th>
+                        <th style="width: 5%;">Principal</th>
+                        <th></th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <ng-container *ngFor="let dom of $any(fd).controls; let $index = index;" [formGroup]="dom">
+                        <tr>
+                            <td class="center padding-right-left-4">
+                                <input id="txtCalleDom{{$index}}" formControlName="calle" name="txtCalleDom{{$index}}"
+                                    class="form-control form-control-sm item-dom-calle" type="text" enter="txtNumDom{{$index}}"
+                                    required maxlength="80" />
+                            </td>
+                            <td class="center padding-right-left-4">
+                                <input id="txtNumDom{{$index}}" formControlName="numero" name="txtNumDom{{$index}}"
+                                    class="form-control form-control-sm" type="number" enter="txtPisoDom{{$index}}"
+                                    [cantDigits]="8" />
+                            </td>
+                            <td class="center padding-right-left-4">
+                                <input id="txtPisoDom{{$index}}" name="txtPisoDom{{$index}}" formControlName="piso"
+                                    class="form-control form-control-sm" type="text" enter="txtDptoDom{{$index}}"
+                                    maxlength="3" />
+                            </td>
+                            <td class="center padding-right-left-4">
+                                <input id="txtDptoDom{{$index}}" name="txtDptoDom{{$index}}" formControlName="dpto"
+                                    class="form-control form-control-sm" type="text" enter="txtProvDom{{$index}}"
+                                    maxlength="3" />
+                            </td>
+                            <td class="center padding-right-left-4">
+                                <input id="txtProvDom{{$index}}" name="txtProvDom{{$index}}" formControlName="provincia"
+                                    class="form-control form-control-sm" type="text" enter="txtCiudad{{$index}}"
+                                    maxlength="30" />
+                            </td>
+                            <td class="center padding-right-left-4">
+                                <input id="txtCiudad{{$index}}" name="txtCiudad{{$index}}" formControlName="ciudad"
+                                    class="form-control form-control-sm" type="text" enter="txtDetalleDom{{$index}}"
+                                    maxlength="30" />
+                            </td>
+                            <td class="center padding-right-left-4">
+                                <input id="txtDetalleDom{{$index}}" name="txtDetalleDom{{$index}}"
+                                    formControlName="detalle" class="form-control form-control-sm" type="text"
+                                    enter="buttonAddDom{{$index}}" maxlength="150" />
+                            </td>
+                            <td class="center">
+                                <div class="pretty p-default p-round">
+                                    <input type="radio" formControlName="principalDom" (change)="changePrincipal(dom)"
+                                        name="principalDom" [value]="true">
+                                    <div class="state p-primary">
+                                        <label></label>
+                                    </div>
+                                </div>
+                            </td>
+                            <td class="buttons-small">
+                                <div class="float-right">
+                                    <button [hidden]="!($index== (fd.controls.length-1))" type="button"
+                                        id="buttonAddDom{{$index}}" name="buttonAddDom{{$index}}"
+                                        class="btn-sm btn-transition btn btn-outline-success" (click)="addDomicilio()">
+                                        <i class="fa fa-plus"></i>
+                                    </button>
+                                    <button type="button" id="buttonRemoveDom{{$index}}"
+                                        name="buttonRemoveDom{{$index}}"
+                                        class="btn-sm btn-transition btn btn-outline-danger"
+                                        (click)="removeDomicilio(dom);">
+                                        <i class="red ace-icon fa fa-remove bigger-120"></i>
+                                    </button>
+                                </div>
+                            </td>
+                        </tr>
+                        <tr *ngIf="fd.invalid || formDomicilio.invalid">
+                            <td>
+                                <div class="align-top"
+                                    *ngIf="dataForm?.submitted && dom.controls.calle.errors?.required"
+                                    class="text-danger">
+                                    Debe ingresar una calle
+                                </div>
+                            </td>
+                            <td>
+                                <div *ngIf="dataForm?.submitted && dom.controls.numero.errors?.required"
+                                    class="text-danger">
+                                    Debe ingresar un número
+                                </div>
+                            </td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                <div *ngIf="dataForm.submitted && formDomicilio.invalid">
+                                    <div *ngIf="dom.controls.principalDom.errors?.required" class="text-danger">
+                                        Campo obligatorio
+                                    </div>
+                                    <div *ngIf="formDomicilio.errors?.invalid_principal" class="text-danger">
+                                        Debe sel. un dom. principal
+                                    </div>
+                                </div>
+                            </td>
+                            <td></td>
+                        </tr>
+                    </ng-container>
+                </tbody>
+            </table>
+        </div>
+    </div>
+</app-panel>
+<app-size-detector></app-size-detector>

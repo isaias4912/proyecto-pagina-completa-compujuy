@@ -1,0 +1,27 @@
+<div class="row">
+  <div class="col-md-6">
+    <button (click)="onCancel()" class="btn btn-block btn-transition btn-outline-primary"><span
+        class="fa fa-remove"></span>&nbsp;&nbsp;Cancelar
+    </button>
+  </div>
+  <div class="col-md-6">
+    <div class="btn-group dropup d-flex">
+      <button *ngIf="save" (click)="onSave()" class="btn btn-block btn-outline-primary">Guardar</button>
+      <button *ngIf="saveAndReturn && !save" (click)="onSaveAndReturn()"
+        class="btn btn-block btn-outline-primary">Guardar y volver</button>
+      <button *ngIf="saveAndNew && !saveAndReturn and !save" (click)="onSaveAndReturn()"
+        class="btn btn-block btn-outline-primary">Guardar y nuevo</button>
+      <button type="button" aria-haspopup="true" aria-expanded="false" data-toggle="dropdown"
+        class="dropdown-toggle-split dropdown-toggle btn btn-outline-primary"><span class="sr-only">Toggle
+          Dropdown</span>
+      </button>
+      <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right"
+        x-placement="bottom-start"
+        style="position: absolute; transform: translate3d(69px, 33px, 0px); top: 0px; left: 0px; will-change: transform;">
+        <button *ngIf="save" (click)="onSaveAndNew()" type="button" tabindex="0" class="dropdown-item">Guardar</button>
+        <button *ngIf="saveAndReturn" (click)="onSaveAndReturn()" type="button" tabindex="0" class="dropdown-item">Guardar y volver</button>
+        <button *ngIf="saveAndNew" (click)="onSaveAndNew()" type="button" tabindex="0" class="dropdown-item">Guardar y nuevo</button>
+      </div>
+    </div>
+  </div>
+</div>

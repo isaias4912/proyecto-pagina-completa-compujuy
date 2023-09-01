@@ -1,0 +1,531 @@
+<form id="formConfig" [formGroup]="formConfig" class="form-group-min">
+    <div class="mb-3 card">
+        <div class="card-header card-header-tab-animation">
+            <ul class="nav nav-justified">
+                <li class="nav-item"><a data-toggle="tab" href="#tab-1" class="active nav-link">Config. Gral.</a>
+                </li>
+                <li class="nav-item"><a data-toggle="tab" href="#tab-2" class="nav-link">Ventas</a></li>
+                <li class="nav-item"><a data-toggle="tab" href="#tab-3" class="nav-link">AFIP</a></li>
+                <li class="nav-item"><a data-toggle="tab" href="#tab-4" class="nav-link">Reportes</a></li>
+            </ul>
+        </div>
+        <div class="card-body">
+            <div class="tab-content">
+                <div class="tab-pane active" id="tab-1" role="tabpanel">
+                    <app-panel [title]="'Datos generales'" [collapse]="false">
+                        <div class="row form-group">
+                            <label class="col-form-label col-md-2 label-help" for="txtCUIT">CUIT/CUIL Empresa/Dueño
+                                <i title="CUIT/CUIL Empresa/Dueño, este dato es para la AFIP, o para los datos de los comprobantes a emitir."
+                                    class="help-ns fa fa-question-circle"></i>
+                            </label>
+                            <div class="col-md-2">
+                                <input id="txtCUIT" name="txtCUIT" class="form-control form-control-sm" type="number"
+                                    formControlName="cuitEmpresa" enter="txtRazSoc" [cantDigits]="11" />
+                                <div *ngIf="dataForm.submitted && formConfig.invalid">
+                                    <div *ngIf="f.cuitEmpresa.errors?.required" class="text-danger">
+                                        Campo obligatorio
+                                    </div>
+                                    <div *ngIf="f.cuitEmpresa.errors?.maxlength" class="text-danger">
+                                        Campo muy largo
+                                    </div>
+                                    <div *ngIf="f.cuitEmpresa.errors?.minlength" class="text-danger">
+                                        Campo muy corto
+                                    </div>
+                                </div>
+                            </div>
+                            <label class="col-form-label col-md-2 label-help" for="txtRazSoc">Razón Social
+                                <i title="Razón Social, nombre o denomicación de la empresa/negocio."
+                                    class="help-ns fa fa-question-circle"></i>
+                            </label>
+                            <div class="col-md-2">
+                                <input id="txtRazSoc" name="txtRazSoc" class="form-control form-control-sm" type="text"
+                                    formControlName="razonSocial" enter="txtDomCom" />
+                                <div *ngIf="dataForm.submitted && formConfig.invalid">
+                                    <div *ngIf="f.razonSocial.errors?.required" class="text-danger">
+                                        Campo obligatorio
+                                    </div>
+                                    <div *ngIf="f.razonSocial.errors?.maxlength" class="text-danger">
+                                        Campo muy largo
+                                    </div>
+                                </div>
+                            </div>
+                            <label class="col-form-label col-md-2 label-help" for="txtDomCom">Dom. comercial
+                                <i title="Domicilio de la empresa, este dato por ejemplo puede aparecer en los comprobantes."
+                                    class="help-ns fa fa-question-circle"></i>
+                            </label>
+                            <div class="col-md-2">
+                                <input id="txtDomCom" name="txtDomCom" class="form-control form-control-sm" type="text"
+                                    formControlName="domicilioComercial" enter="cmbTipoEmpresa" />
+                                <div *ngIf="dataForm.submitted && formConfig.invalid">
+                                    <div *ngIf="f.domicilioComercial.errors?.required" class="text-danger">
+                                        Campo obligatorio
+                                    </div>
+                                    <div *ngIf="f.domicilioComercial.errors?.maxlength" class="text-danger">
+                                        Campo muy largo
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-form-label col-md-2 label-help" for="cmbTipoEmpresa">Condición - AFIP
+                                <i title="La condicion de AFIP se corresponde a como esta inscripto en la entidad tributaria(AFIP), de este dato depende los comprobantes a emitir por ej."
+                                    class="help-ns fa fa-question-circle"></i>
+                            </label>
+                            <div class="col-md-2">
+                                <select id="cmbTipoEmpresa" name="cmbTipoEmpresa" formControlName="tipoEmpresa"
+                                    class="form-control form-control-sm" enter='txtFecIniAct'>
+                                    <option *ngFor="let tipo of dataConfig.condiciones" [ngValue]="tipo.id">
+                                        {{tipo.name}}
+                                    </option>
+                                </select>
+                                <div *ngIf="dataForm.submitted && formConfig.invalid">
+                                    <div *ngIf="f.tipoEmpresa.errors?.required" class="text-danger">
+                                        Campo obligatorio
+                                    </div>
+                                </div>
+                            </div>
+                            <label class="col-form-label col-md-2 label-help" for="txtFecIniAct">Fec. Inicio de Act
+                                <i title="Fecha de inicio de actividades, este dato es utilizado para que sea mostrado en los comprobantes."
+                                    class="help-ns fa fa-question-circle"></i>
+                            </label>
+                            <div class="col-md-2">
+                                <app-date #fechaFecIniActForm [name]="'txtFecIniAct'" formControlName="fechaIniAct"
+                                    [enter]="'txtIngBru'">
+                                </app-date>
+                                <div *ngIf="dataForm.submitted && formConfig.invalid">
+                                    <div *ngIf="f.fechaIniAct.errors?.required" class="text-danger">
+                                        Campo obligatorio
+                                    </div>
+                                </div>
+                            </div>
+                            <label class="col-form-label col-md-2 label-help" for="txtIngBru">Ingresos Brutos
+                                <i title="Ingreso brutos en rentas de su pcia. localidad, o lo que corresponda segun su caso, este dato es utilizado para que sea mostrado en los comprobantes."
+                                    class="help-ns fa fa-question-circle"></i>
+                            </label>
+                            <div class="col-md-2">
+                                <input id="txtIngBru" name="txtIngBru" class="form-control form-control-sm" type="text"
+                                    formControlName="ingresosBrutos" enter='cmbPais' />
+                                <div *ngIf="dataForm.submitted && formConfig.invalid">
+                                    <div *ngIf="f.ingresosBrutos.errors?.required" class="text-danger">
+                                        Campo obligatorio
+                                    </div>
+                                    <div *ngIf="f.ingresosBrutos.errors?.maxlength" class="text-danger">
+                                        Campo muy largo
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row form-group">
+                            <label class="col-form-label col-md-2 label-help" for="cmbPais">Pais
+                                <i title="País donde se encuentra, solo válido para la Argentina la emision de comprobantes validos."
+                                    class="help-ns fa fa-question-circle"></i>
+                            </label>
+                            <div class="col-md-2">
+                                <select id="cmbPais" name="cmbPais" class="form-control form-control-sm"
+                                    formControlName="pais">
+                                    <option *ngFor="let pais of dataConfig.paises" [ngValue]="pais.nombre">
+                                        {{pais.nombre}}
+                                    </option>
+                                </select>
+                            </div>
+                        </div>
+                    </app-panel>
+                    <app-panel [title]="'Impresión'" [collapse]="false">
+                        <div class="row form-group">
+                            <label class="col-form-label col-md-2 label-help" for="txtImprHost">Host de impr.
+                                <i title="Host, pc en donde se imprimira, puede ser una direccion ip o un nombre de host, debe incluir el prefijo http o https."
+                                    class="help-ns fa fa-question-circle"></i>
+                            </label>
+                            <div class="col-md-2">
+                                <input id="txtImprHost" name="txtImprHost" class="form-control form-control-sm"
+                                    type="text"  formControlName="printHost" enter="txtPrintPort" />
+                                <div *ngIf="dataForm.submitted && formConfig.invalid">
+                                    <div *ngIf="f.printHost.errors?.maxlength" class="text-danger">
+                                        Campo muy largo
+                                    </div>
+                                    <div *ngIf="f.printHost.errors?.minlength" class="text-danger">
+                                        Campo muy corto
+                                    </div>
+                                </div>
+                            </div>
+                            <label class="col-form-label col-md-2 label-help" for="txtPrintPort">Puerto de impr.
+                                <i title="Puerto de impresión, del host o la pc en donde se imprime."
+                                    class="help-ns fa fa-question-circle"></i>
+                            </label>
+                            <div class="col-md-2">
+                                <input id="txtPrintPort" name="txtPrintPort" class="form-control form-control-sm"
+                                    type="number" formControlName="printPort" enter="printHost" />
+                                <div *ngIf="dataForm.submitted && formConfig.invalid">
+                                    <div *ngIf="f.printPort.errors?.max" class="text-danger">
+                                        Campo muy grande
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </app-panel>
+                    <app-panel [title]="'Facturación electrónica'" [collapse]="false">
+                        <div class="row form-group">
+                            <label class="col-form-label col-md-2 label-help">Puntos de venta
+                                <i title="Los puntos de ventas se corresponden con lo declarado en la AFIP, este dato es necesario para poder emitir comprobantes validos."
+                                    class="help-ns fa fa-question-circle"></i>
+                            </label>
+                            <div class="col-md-6">
+                                <table class="table table-hover table-striped">
+                                    <thead>
+                                        <tr>
+                                            <th style="width: 25%;">Nro</th>
+                                            <th>Descripción</th>
+                                            <th></th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        <ng-container *ngFor="let ptoVenta of $any(fpv).controls; let $index = index;"
+                                            [formGroup]="ptoVenta">
+                                            <tr>
+                                                <td class="center">
+                                                    <input id="txtNroPuntoVenta{{$index}}" formControlName="nro"
+                                                        name="txtNroPuntoVenta{{$index}}"
+                                                        class="form-control form-control-sm" type="text"
+                                                        enter="txtDescPuntoVenta{{$index}}" required maxlength="80" />
+                                                </td>
+                                                <td class="center">
+                                                    <input id="txtDescPuntoVenta{{$index}}"
+                                                        name="txtDescPuntoVenta{{$index}}" formControlName="descripcion"
+                                                        class="form-control form-control-sm" type="text"
+                                                        enter="buttonAddPtoVenta{{$index}}" maxlength="300" />
+                                                </td>
+                                                <td class="buttons-small">
+                                                    <div class="float-right">
+                                                        <button [hidden]="!($index== (fpv.controls.length-1))"
+                                                            type="button" id="buttonAddPtoVenta{{$index}}"
+                                                            name="buttonAddPtoVenta{{$index}}"
+                                                            class="btn-sm btn-transition btn btn-outline-success"
+                                                            (click)="addPtoVenta()">
+                                                            <i class="fa fa-plus"></i>
+                                                        </button>
+                                                        <button type="button" id="buttonRemovePtoVenta{{$index}}"
+                                                            name="buttonRemovePtoVenta{{$index}}"
+                                                            class="btn-sm btn-transition btn btn-outline-danger"
+                                                            (click)="removePtoVenta(ptoVenta);">
+                                                            <i class="red ace-icon fa fa-remove bigger-120"></i>
+                                                        </button>
+                                                    </div>
+                                                </td>
+                                            </tr>
+                                            <tr *ngIf="fpv.invalid">
+                                                <td>
+                                                    <div class="align-top"
+                                                        *ngIf="dataForm?.submitted && ptoVenta.controls.nro.errors?.required"
+                                                        class="text-danger">
+                                                        Debe ingresar un nro. de pto. de venta
+                                                    </div>
+                                                    <div class="align-top"
+                                                        *ngIf="dataForm?.submitted && ptoVenta.controls.nro.errors?.unique"
+                                                        class="text-danger">
+                                                        Ya ingreso ese nro de pto. de venta
+                                                    </div>
+                                                </td>
+                                                <td>
+                                                    <div *ngIf="dataForm?.submitted && ptoVenta.controls.descripcion.errors?.required"
+                                                        class="text-danger">
+                                                        Debe ingresar una descripcion
+                                                    </div>
+                                                    <div *ngIf="dataForm?.submitted && ptoVenta.controls.descripcion.errors?.maxlength"
+                                                        class="text-danger">
+                                                        Debe ingresar una descripcion mas corta
+                                                    </div>
+                                                </td>
+
+                                                <td></td>
+                                            </tr>
+                                        </ng-container>
+                                    </tbody>
+                                </table>
+                            </div>
+                        </div>
+                    </app-panel>
+                </div>
+                <div class="tab-pane" id="tab-2" role="tabpanel">
+                    <div class="row form-group">
+                        <label class="col-form-label col-md-2 label-help" for="cmbIVA">IVA
+                            <i title="IVA por defecto para las ventas y carga de productos."
+                                class="help-ns fa fa-question-circle"></i>
+                        </label>
+                        <div class="col-md-2">
+                            <select id="cmbIVA" name="cmbIVA" formControlName="iva" class="form-control form-control-sm"
+                                enter="txtMargen">
+                                <option *ngFor="let iva of dataConfig.ivas" [ngValue]="iva.valor">{{iva.descripcion}}
+                                </option>
+                            </select>
+                            <div *ngIf="dataForm.submitted && formConfig.invalid">
+                                <div *ngIf="f.iva.errors?.required" class="text-danger">
+                                    Campo obligatorio
+                                </div>
+                            </div>
+                        </div>
+                        <label class="col-form-label col-md-2 label-help" for="txtMargen">Margen de ganancia por
+                            defecto<i title="Margen de ganancia por de defecto, para la carga de precios de productos."
+                                class="help-ns fa fa-question-circle"></i></label>
+                        <div class="col-md-2">
+                            <input id="txtMargen" name="txtMargen" class="form-control form-control-sm" type="number"
+                                formControlName="margenGanancia" enter="txtGanCtaCte" />
+                            <div *ngIf="dataForm.submitted && formConfig.invalid">
+                                <div *ngIf="f.margenGanancia.errors?.required" class="text-danger">
+                                    Campo obligatorio
+                                </div>
+                                <div *ngIf="f.margenGanancia.errors?.min" class="text-danger">
+                                    Ingrese un valor mayor
+                                </div>
+                                <div *ngIf="f.margenGanancia.errors?.max" class="text-danger">
+                                    Ingrese un valor menor
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row form-group">
+                        <label class="col-form-label col-md-2 label-help" for="txtGanCtaCte">% Interes Cta. Cte.
+                            <i title="% Interes Cta. Cte., que se aplicara a las ventas realizadas con la forma de pago 'Cuenta corriente'."
+                                class="help-ns fa fa-question-circle"></i>
+                        </label>
+                        <div class="col-md-2">
+                            <input id="txtGanCtaCte" name="txtGanCtaCte" class="form-control form-control-sm"
+                                type="number" formControlName="cliCtaCteInteres" enter="txtDescripcion" />
+                            <div *ngIf="dataForm.submitted && formConfig.invalid">
+                                <div *ngIf="f.cliCtaCteInteres.errors?.required" class="text-danger">
+                                    Campo obligatorio
+                                </div>
+                                <div *ngIf="f.cliCtaCteInteres.errors?.min" class="text-danger">
+                                    Ingrese un valor mayor
+                                </div>
+                                <div *ngIf="f.cliCtaCteInteres.errors?.max" class="text-danger">
+                                    Ingrese un valor menor
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="tab-pane" id="tab-3" role="tabpanel">
+                    <a href="http://www.newstock.compujuy.com.ar/soporte/configuracion-sistema?view=article&id=21&catid=2"
+                        target="_blank">Ver tutorial</a>
+                    <app-panel [idCollapse]="'panelConfig1'" [collapse]="false"
+                        [title]="'Habilitar facturacion electrónica - AFIP (Producción)'">
+                        <div class="row form-group">
+                            <label class="col-form-label col-md-3 label-help" for="btnCertProd">Habilitar
+                                facturacion(Producción)
+                                <i title="Permite habilitar o deshabilitar la facturacción electrónica validad para AFIP, para habilitarla primero debe configurar AFIP y el sistema."
+                                    class="help-ns fa fa-question-circle"></i>
+                            </label>
+                            <div class="col-md-1">
+                                <div class="pretty p-switch">
+                                    <input formControlName="afipProduccion" id="btnCertProd" name="btnCertProd"
+                                        type="checkbox" (change)="enableProduccionAfip()" />
+                                    <div class="state p-primary">
+                                        <label></label>
+                                    </div>
+                                </div>
+                            </div>
+                            <!-- <label class="col-md-1 pull-left inline">
+                                <input id="btnCertProd" name="btnCertProd" formControlName="config.afipProduccion"
+                                    ng-change="enableProduccionAfip();" type="checkbox"
+                                    class="ace ace-switch ace-switch-5" confirm-title="Atencion!!"
+                                    confirm="{{config.afipProduccion?'Al deshabilitar el modo producción no podra emitir facturas electronicas con validez ante la AFIP.':'Si ya realizó las configuraciones necesarias  y el certificado es valido, podra emitir facturas electrónicas con validez ante la AFIP.'}}"
+                                    confirm-ok="Confirmar" confirm-cancel="Cancelar" />
+                                <span class="lbl middle"></span>
+                            </label> -->
+                        </div>
+                    </app-panel>
+                    <app-panel [idCollapse]="'panelConfig2'" [collapse]="false"
+                        [title]="'Configuracion facturacion electronica - AFIP'">
+                        <app-panel [idCollapse]="'panelConfig2-1'" [show]="!f.afipProduccion.value" [collapse]="true"
+                            [title]="'1 - Clave privada'">
+                            <div class="row form-group">
+                                <label class="col-form-label col-md-3 label-help" for="txtPrivateKey">Clave privada
+                                    <i title="Clave Privada (Private Key) de 2048 bits, necesaria para generar el pedido CSR (Certificate Signing Request)."
+                                        class="help-ns fa fa-question-circle"></i>
+                                </label>
+                                <div class="col-md-8">
+                                    <textarea id="txtPrivateKey" name="txtPrivateKey" rows="8"
+                                        class="form-control form-control-sm" formControlName="privateKey" enter=""
+                                        readonly="true"></textarea>
+                                </div>
+                            </div>
+                            <div class="row form-group">
+                                <label class="col-form-label col-md-3" for="btnCertDownloadPriv">Generar la clave
+                                    priv.</label>
+                                <div class="col-md-2">
+                                    <button [disabled]="config.afipProduccion" type="button"
+                                        class="btn btn-block btn-sm btn-success" id="btnCertDownloadPriv"
+                                        (click)="generatePrivateKey();">
+                                        <span class="fa fa-cog"></span>
+                                        Generar la clave priv.</button>
+                                </div>
+                            </div>
+                        </app-panel>
+                        <app-panel [idCollapse]="'panelConfig2-2'" [show]="!f.afipProduccion.value" [collapse]="true"
+                            [title]="'2 - Certificado CSR'">
+                            <form [formGroup]="formConfigAfipCSR">
+                                <div class="row form-group">
+                                    <label class="col-form-label col-md-3" for="txtCertO">O (Nombre de la empresa, quien
+                                        va a
+                                        facturar?)</label>
+                                    <div class="col-md-3">
+                                        <input [disabled]="config.afipProduccion" id="txtCertO" name="txtCertO"
+                                            class="form-control form-control-sm" type="text" formControlName="certO"
+                                            enter="txtCertCN" />
+                                        <div *ngIf="dataFormAfipCSR.submitted && formConfigAfipCSR.invalid">
+                                            <div *ngIf="fcacsr.certO.errors?.required" class="text-danger">
+                                                Campo obligatorio
+                                            </div>
+                                            <div *ngIf="fcacsr.certO.errors?.maxlength" class="text-danger">
+                                                Campo muy largo
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <label class="col-form-label col-md-3" for="txtCertCN">CN (Nombre del dueño la
+                                        empresa,
+                                        o repita el nombre de la empresa)</label>
+                                    <div class="col-md-3">
+                                        <input [disabled]="config.afipProduccion" id="txtCertCN" name="txtCertCN"
+                                            class="form-control form-control-sm" type="text" formControlName="certCN"
+                                            enter="txtCertSerialNum" />
+                                        <div *ngIf="dataFormAfipCSR.submitted && formConfigAfipCSR.invalid">
+                                            <div *ngIf="fcacsr.certCN.errors?.required" class="text-danger">
+                                                Campo obligatorio
+                                            </div>
+                                            <div *ngIf="fcacsr.certCN.errors?.maxlength" class="text-danger">
+                                                Campo muy largo
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <label class="col-form-label col-md-3" for="txtCertSerialNum">CUIT (CUIT de la
+                                        empresa)</label>
+                                    <div class="col-md-3">
+                                        <input [disabled]="config.afipProduccion" id="txtCertSerialNum"
+                                            name="txtCertSerialNum" class="form-control form-control-sm" type="numer"
+                                            formControlName="certSerialNumber" enter="txtCertPass" [cantDigits]="11" />
+                                        <div *ngIf="dataFormAfipCSR.submitted && formConfigAfipCSR.invalid">
+                                            <div *ngIf="fcacsr.certSerialNumber.errors?.required" class="text-danger">
+                                                Campo obligatorio
+                                            </div>
+                                            <div *ngIf="fcacsr.certSerialNumber.errors?.maxlength" class="text-danger">
+                                                Campo muy largo
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <label class="col-form-label col-md-3" for="txtCertPass">Contraseña de
+                                        certificado</label>
+                                    <div class="col-md-3">
+                                        <input [disabled]="config.afipProduccion" id="txtCertPass" name="txtCertPass"
+                                            class="form-control form-control-sm" type="password"
+                                            formControlName="certPassword" enter="btnCertGenCSR" />
+                                        <div *ngIf="dataFormAfipCSR.submitted && formConfigAfipCSR.invalid">
+                                            <div *ngIf="fcacsr.certPassword.errors?.required" class="text-danger">
+                                                Campo obligatorio
+                                            </div>
+                                            <div *ngIf="fcacsr.certPassword.errors?.maxlength" class="text-danger">
+                                                Campo muy largo
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row form-group">
+                                    <label class="col-form-label col-md-3" for="btnCertGenCSR">Generar el CSR</label>
+                                    <div class="col-md-2">
+                                        <button [disabled]="config.afipProduccion"
+                                            class="btn btn-block btn-sm btn-success" id="btnCertGenCSR"
+                                            (click)="generateCSR();">
+                                            <span class="fa fa-cog"></span>
+                                            Generar el CSR
+                                        </button>
+                                    </div>
+                                </div>
+                                <div *ngIf="!config.fileCertificateCSR" class="row form-group">
+                                    Certificado CSR no generado
+                                </div>
+                                <div *ngIf="config.fileCertificateCSR" class="row form-group">
+                                    <label class="col-form-label col-md-3" for="btnCertDownloadCSR">Descargar el
+                                        CSR</label>
+                                    <div class="col-md-2">
+                                        <button class="btn btn-block btn-sm btn-info" id="btnCertDownloadCSR"
+                                            (click)="downloadCSR();">
+                                            <span class="fa fa-download"></span>
+                                            Descargar el CSR</button>
+                                    </div>
+                                </div>
+                            </form>
+                        </app-panel>
+                        <app-panel [idCollapse]="'panelConfig2-3'" [show]="!f.afipProduccion.value" [collapse]="true"
+                            [title]="'3 - Certificado CRT'">
+                            <div *ngIf="!config.fileCertificateCRT" class="row form-group">
+                                <label class="col-form-label col-md-3" for="btnUploadCert">Subir certificado</label>
+                                <div class="col-md-6">
+                                    <image-upload [path]="'util/upload/crt'" (loadFile)="loadFile($event)"
+                                        [target]="'addFileCRT'"></image-upload>&nbsp;
+                                </div>
+                            </div>
+                            <div *ngIf="!config.fileCertificateCRT" class="row form-group">
+                                Certificado CRT no registrado/subido
+                            </div>
+                            <div *ngIf="config.fileCertificateCRT" class="row form-group">
+                                <label class="col-form-label col-md-3" for="btnCertDownloadCRT">Descargar el
+                                    CRT</label>
+                                <div class="col-md-2">
+                                    <button class="btn btn-block btn-sm btn-info" id="btnCertDownloadCRT"
+                                        (click)="downloadCRT();">
+                                        <span class="fa fa-download"></span>
+                                        Descargar el CRT</button>
+                                </div>
+                                <div class="col-md-4">
+                                    <span class="text-info">{{config.certNameCRT}}</span>
+                                </div>
+                            </div>
+                        </app-panel>
+                        <app-panel [idCollapse]="'panelConfig2-4'" [collapse]="false" [title]="'4 - Test'">
+                            <div class="row form-group">
+                                <label class="col-form-label col-md-3" for="btnCertTest">Realizar test</label>
+                                <div class="col-md-2">
+                                    <button [disabled]="!config.fileCertificateCRT"
+                                        class="btn btn-block btn-sm btn-info" id="btnCertTest" (click)="testAfip();">
+                                        <span class="fa fa-send-o"></span>
+                                        Test</button>
+                                </div>
+                            </div>
+                        </app-panel>
+                    </app-panel>
+
+                </div>
+                <div class="tab-pane" id="tab-4" role="tabpanel">
+                    <div class="row form-group">
+                        <label class="col-form-label col-md-2" for="logo">Logo para los reportes</label>
+                        <div class="col-md-1">
+                            <image-preview *ngIf="imagen" [path]="pathService.getUrl('/images/config/')" [image]="imagen"
+                                [text]="false" [tags]="false" [width]="100">
+                            </image-preview>
+                        </div>
+                        <div class="col-md-2">
+                            <image-upload [path]="'util/configuracion/upload/image/reporte'"
+                                (loadImage)="loadImage($event)" [target]="'addImageConfig'"></image-upload>&nbsp;
+                        </div>
+                    </div>
+                    <!-- <div class="row form-group">
+                        <label class="col-form-label col-md-2" for="editorDescripcion">Encabezado para reportes</label>
+                    </div>
+                    <div class="row form-group">
+                        <div class="col-md-12">
+                            <div class="height:auto;">
+                                <quill-editor [modules]="editor_modules" formControlName="encabezadoReporte">
+                                </quill-editor>
+                            </div>
+                        </div>
+                    </div> -->
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

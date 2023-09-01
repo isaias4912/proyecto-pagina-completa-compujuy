@@ -1,0 +1,235 @@
+<div id="div" class="row">
+    <div class="col-md-12">
+        <app-panel [idCollapse]="'panelFiltro'">
+            <form id="formFilter">
+                <div class="row">
+                    <div class="col-lg-11 col-md-11 col-sm-12">
+                        <div class="row form-group">
+                            <label class="col-form-label col-md-1" for="selectProv">Proveedor</label>
+                            <div class="col-md-4">
+                                <select-prov [(ngModel)]="filterMto.proveedor" (eventSelectProv)="onChangeProv($event)"
+                                [name]="'selectProv'" ></select-prov>
+                                <!-- <select-prov [(ngModel)]="filterMto.proveedor" -->
+                            </div>
+                            <label class="col-form-label col-md-1" for="cmbFiltroEstado">Estado</label>
+                            <div class="col-md-2">
+                                <select id="cmbFiltroEstado" name="cmbFiltroEstado" class="form-control form-control-sm"
+                                    [(ngModel)]="filterMto.estado" ng-keypress="$event.keyCode == 13 ? query() : null">
+                                    <option *ngFor="let opcion of dataOptions.filterEstados" [ngValue]="opcion.value">
+                                        {{opcion.name}}</option>
+                                </select>
+                            </div>
+                            <label class="col-form-label col-md-1" for="txtFactura">Factura</label>
+                            <div class="col-md-2">
+                                <input [(ngModel)]="filterMto.idFacturaCompra" type="number" id="txtFactura"
+                                    name="txtFactura" class="form-control form-control-sm" digits="true"
+                                    maxlength="30" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-1 col-md-1 col-sm-12">
+                        <div class="row form-group">
+                            <div class="btn-group btn-group-sm btn-block" role="group">
+                                <button type="submit" (click)="query()"
+                                    class="btn btn-transition btn btn-outline-light">
+                                    <i class="fa fa-search green-strong"></i>
+                                </button>
+                                <button type="button" (click)="reset()" class="btn-transition btn btn-outline-light">
+                                    <i class="fa fa-trash-o blue"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </app-panel>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6 buttons-small">
+        <!-- <div *ngIf="ctacte$ | async as ctacte"> -->
+        <ng-container *ngIf="infoCtaCte.cliente">
+            <div *ngIf="infoCtaCte.activoCtaCte" class="mr-1 ml-1 badge badge-success font-size-md">
+                Cuenta activa
+            </div>
+            <div *ngIf="!infoCtaCte.activoCtaCte" class="mr-1 ml-1 badge badge-danger font-size-md">
+                Cuenta inactiva
+            </div>
+            <div class="mr-1 ml-1 badge badge-light font-size-md">
+                Limite $ {{infoCtaCte.limite}}
+            </div>
+            <div class="mr-1 ml-1 badge badge-light font-size-md">
+                Margen $ {{infoCtaCte.margen}}
+            </div>
+        </ng-container>
+        <div class="mr-1 ml-1 badge badge-light font-size-md">
+            Saldo $ {{infoCtaCte.saldo}}
+        </div>
+        <!-- </div> -->
+    </div>
+    <div class="col-md-6 float-right">
+        <!-- <div class="float-right">
+            <app-resgister [paramPagination]="paramPagination" (registerChanged)="pageChanged()">
+            </app-resgister>
+        </div> -->
+    </div>
+</div>
+<div *ngIf="actions$ | async as proveedor; else loading;">
+    <ng-container *ngIf="movimientos?.length; else noItems">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table class="table table-striped table-hover table-fixed2">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <app-sort [text]="'Id/Cód.'" [order]="'id'" [paramPagination]="paramPagination"
+                                        (sortChanged)="pageChanged()"></app-sort>
+                                </th>
+                                <!-- <th>Código</th> -->
+                                <th>Tipo</th>
+                                <!-- <th>Fecha</th> -->
+                                <th>
+                                    <app-sort [text]="'Fecha'" [order]="'fecha'" [paramPagination]="paramPagination"
+                                        (sortChanged)="pageChanged()"></app-sort>
+                                </th>
+                                <!-- <th class="text-right">Deuda</th> -->
+                                <th class="text-right">
+                                    <app-sort [text]="'Deuda'" [order]="'monto'" [paramPagination]="paramPagination"
+                                        (sortChanged)="pageChanged()"></app-sort>
+                                </th>
+                                <th class="text-right">
+                                    Interes
+                                </th>
+                                <!-- <th class="text-right">Deuda Total</th> -->
+                                <th class="text-right">
+                                    <app-sort [text]="'Deuda Total'" [order]="'montoTotal'" [paramPagination]="paramPagination"
+                                        (sortChanged)="pageChanged()"></app-sort>
+                                </th>
+                                <!-- <th class="text-right">Saldo Total</th> -->
+                                <th class="text-right">
+                                    <app-sort [text]="'Saldo Total'" [order]="'saldo'" [paramPagination]="paramPagination"
+                                        (sortChanged)="pageChanged()"></app-sort>
+                                </th>
+                                <th *ngIf="filterMto.proveedor">
+                                    <div class="float-right">
+                                        <div class="pretty p-icon p-curve p-pulse mr-0">
+                                            <input type="checkbox" [(ngModel)]="checkAll"
+                                                [disabled]="filterMto.estado != 0"
+                                                (change)="checkAllRowCtaCte(checkAll, movimientos)" />
+                                            <div class="state p-primary">
+                                                <label></label>
+                                            </div>
+                                        </div>&nbsp;&nbsp;
+                                    </div>
+                                </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let mto of movimientos" [ngClass]="{'tr-background-select':mto.$$activo}">
+                                <td>
+                                    {{mto.id}}
+                                </td>
+                                <td>
+                                    <div *ngIf="mto.tipo==1" class="mr-1 ml-1 badge badge-pill badge-primary">
+                                        Cbte. compra
+                                    </div>
+                                    <div *ngIf="mto.tipo==4" class="mr-1 ml-1 badge badge-pill badge-danger">
+                                        Saldo
+                                    </div>
+                                </td>
+                                <td>
+                                    {{mto.fecha}}
+                                </td>
+                                <td class="text-right">
+                                    $&nbsp;{{formatDecimal(mto.monto)}}
+                                </td>
+                                <td class="text-right">
+                                    {{formatDecimal(mto.interes)}}&nbsp;%
+                                </td>
+                                <td class="text-right">
+                                    $&nbsp;{{formatDecimal(mto.montoTotal)}}
+                                </td>
+                                <td class="text-right">
+                                    $&nbsp;{{formatDecimal(mto.saldo)}}
+                                </td>
+                                <td class="buttons-small">
+                                    <div class="float-right">
+                                        <button *ngIf="mto.tipo==1"
+                                            (click)="detailCbteComp(mto.pagoCbteComp.cbteCompEnc.id)"
+                                            title="Ver el cbte. de compra"
+                                            class="btn-sm btn-transition btn btn-outline-primary">
+                                            <i class="fa fa-list-alt"></i>
+                                        </button>
+                                        <button (click)="detail(mto)" title="Ver pagos realizados"
+                                            class="btn-sm btn-transition btn btn-outline-info">
+                                            <i class="fa fa-eye"></i>
+                                        </button>&nbsp;&nbsp;
+                                        <div *ngIf="filterMto.proveedor" class="pretty p-icon p-curve p-pulse mr-0">
+                                            <input [disabled]="mto.pagado" type="checkbox" [(ngModel)]="mto.$$activo"
+                                                (change)="checkRowCtaCte(movimientos)" />
+                                            <div class="state p-primary">
+                                                <label></label>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="filterMto.proveedor" class="row">
+            <div class="col-md-12">
+                <form id="formCalc" #f="ngForm" (ngSubmit)="f.valid && showPago()">
+                    <div class="row form-group">
+                        <div class="col-md-2">
+                            <label class="col-form-label">Total</label>
+                            <input id="numTotPag" name="numTotPag" readonly="true" type="text"
+                                class="form-control form-control-sm text-bold" [(ngModel)]="dataPago.totalSaldoSeleccion" />
+                        </div>
+                        <div class="col-md-2">
+                            <label class="col-form-label">Pago. min.</label>
+                            <input id="numPagoMin" name="numPagoMin" readonly="true" type="text"
+                                class="form-control form-control-sm" [(ngModel)]="dataPago.pagoMinimo" />
+                        </div>
+                        <div class="col-md-2">
+                            <label class="col-form-label">Interes</label>
+                            <input id="numInteres" name="numInteres" ng-disabled="disabledButtonsTable" type="number"
+                                class="form-control form-control-sm" [(ngModel)]="dataPago.interes"
+                                required enter="btnCalc" #interesForm="ngModel" />
+                            <div *ngIf="interesForm.invalid" class="text-danger">
+                                <div *ngIf="interesForm.errors.required">
+                                    Debe ingresar un valor para el interes (-100 - 100)
+                                </div>
+                                <div *ngIf="interesForm.errors.range">
+                                    Ingrese un valor entre -100 y 100
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-2">
+                        </div>
+                        <div class="col-md-2">
+                            <label class="col-form-label">&nbsp;</label>
+                            <button id="btnCalc" name="btnCalc" [disabled]="disabledButtonsTable && dataPago.dataPago" type="submit"
+                                class="btn btn-transition btn-block btn-outline-primary">
+                                <i class="fa fa-dollar"></i>&nbsp;Calcular Pago
+                            </button>
+                        </div>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </ng-container>
+    <ng-template #noItems>
+        <div class="form-group row alert alert-warning">
+            Sin datos
+        </div>
+    </ng-template>
+</div>
+<ng-template #loading>
+    <app-loading></app-loading>
+</ng-template>

@@ -1,0 +1,141 @@
+<form *ngIf="roles$ | async as roles; else loading" id="formUsuario" [formGroup]="formUsuario" class="form-group-min">
+    <ng-container *ngIf="roles; else noItems">
+        <div class="row form-group">
+            <label class="col-form-label col-md-2" for="txtNombreNegEmp">Avatar/Foto</label>
+            <div *ngIf="f.tipoLogo.value != 0 && f.tipoLogo.value != null" class="col-md-1">
+                <image-preview *ngIf="imagen" [path]="pathService.getUrl(pathImage)" [image]="imagen" [text]="false"
+                    [tags]="false" [width]="50" [height]="50">
+                </image-preview>
+            </div>
+            <div *ngIf="f.tipoLogo.value == 0 || f.tipoLogo.value == null" class="col-md-1">
+                <image-preview *ngIf="imagen"
+                    [path]="'https://www.gravatar.com/avatar/'+usuario?.keyGravatar+'?s=65&d=identicon'"
+                    [image]="imagen" [text]="false" [tags]="false" [width]="50" [height]="50">
+                </image-preview>
+            </div>
+            <div class="col-md-2">
+                <image-upload [path]="pathImageUpload" (loadImage)="loadImage($event)" [dataImage]="dataImage"
+                    [target]="'addUsuario'"></image-upload>&nbsp;
+            </div>
+        </div>
+        <div class="row form-group">
+            <label class="col-form-label col-md-2" for="txtUsuarioUser">Usuario</label>
+            <div class="col-md-2">
+                <input id="txtUsuarioUser" name="txtUsuarioUser" class="form-control form-control-sm" type="text"
+                    formControlName="usuario" [readonly]="usuario?true:false" autocomplete="off" enter="txtUsuarioPassword1" minlength="4"
+                    maxlength="15" focus-me="true" />
+                <div *ngIf="dataForm.submitted && formUsuario.invalid">
+                    <div *ngIf="f.usuario.errors?.required" class="text-danger">
+                        Campo obligatorio
+                    </div>
+                    <div *ngIf="f.usuario.errors?.maxlength" class="text-danger">
+                        Campo muy largo
+                    </div>
+                    <div *ngIf="f.usuario.errors?.minlength" class="text-danger">
+                        Campo muy corto
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="usuario" class="row form-group">
+            <label class="col-form-label col-md-2" for="id-button-borders">Modificar Contraseña</label>
+            <div class="col-md-2">
+                <div class="pretty p-switch">
+                    <input formControlName="$$updatePassword" id="chkCantidad" name="chkCantidad"
+                        (change)="changueUpdatePassword()" type="checkbox" />
+                    <div class="state p-primary">
+                        <label></label>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="f.$$updatePassword.value || usuario==null || usuario== undefined" class="row form-group">
+            <label class="col-form-label col-md-2" for="txtUsuarioPassword1">Contraseña</label>
+            <div class="col-md-2">
+                <input id="txtUsuarioPassword1" name="txtUsuarioPassword1" class="form-control form-control-sm"
+                    type="password" formControlName="password" enter="txtUsuarioPassword2" minlength="4" maxlength="8"
+                    autocomplete="off" />
+                <div *ngIf="dataForm.submitted && formUsuario.invalid">
+                    <div *ngIf="f.password.errors?.required" class="text-danger">
+                        Campo obligatorio
+                    </div>
+                </div>
+            </div>
+            <label class="col-form-label col-md-2" for="txtUsuarioPassword2">Repetir contraseña</label>
+            <div class="col-md-2">
+                <input id="txtUsuarioPassword2" name="txtUsuarioPassword2" class="form-control form-control-sm"
+                    type="password" formControlName="$$password2" enter="txtUsuarioMail" minlength="4" maxlength="8"
+                    autocomplete="off" />
+                <div *ngIf="dataForm.submitted && formUsuario.invalid">
+                    <div *ngIf="f.$$password2.errors?.required" class="text-danger">
+                        Campo obligatorio
+                    </div>
+                    <div *ngIf="formUsuario.errors?.invalid_password" class="text-danger">
+                        No coinciden las contraseñas
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <label class="col-form-label col-md-2" for="txtUsuarioMail">Email Usuario</label>
+            <div class="col-md-6">
+                <input id="txtUsuarioMail" name="txtUsuarioMail" class="form-control form-control-sm" type="email"
+                    formControlName="mail" enter="txtUsuarioRol" maxlength="100" />
+                <div *ngIf="dataForm.submitted && formUsuario.invalid">
+                    <div *ngIf="f.mail.errors?.required" class="text-danger">
+                        Campo obligatorio
+                    </div>
+                    <div *ngIf="f.mail.errors?.email" class="text-danger">
+                        Debe ingresar una direccion de email valida
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="isShow()" [formGroup]="$any(fr.controls[0])" class="row form-group">
+            <label class="col-form-label col-md-2" for="txtUsuarioRol">Rol</label>
+            <div class="col-md-4">
+                <select id="txtUsuarioRol" name="txtUsuarioRol" formControlName="$$rol"
+                    class="form-control form-control-sm" enter="usuarioSeleccion">
+                    <option selected disabled [ngValue]="null"> Seleccion el rol</option>
+                    <option *ngFor="let rol of roles" [ngValue]="rol">{{rol.alias}}</option>
+                </select>
+                <div *ngIf="dataForm.submitted && formUsuario.invalid">
+                    <div *ngIf="fr.controls[0]['controls'].$$rol.errors?.required" class="text-danger">
+                        Campo obligatorio
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="row form-group">
+            <label class="col-form-label col-md-2">Persona asociada</label>
+            <div class="col-md-4">
+                <select-per formControlName="persona" [name]="'selectPersona'" [nextFocus]="''" 
+                    [data]="usuario?.persona" [disabled]="usuario?true:false"></select-per>
+                <div *ngIf="dataForm.submitted && formUsuario.invalid">
+                    <div *ngIf="f.persona.errors?.required" class="text-danger">
+                        Debe seleccionar una persona
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div *ngIf="isAdminFromUser(formUsuario.value)" class="row form-group">
+            <div class="col-md-5 col-md-offset-2">
+                <span class="text text-info">Para usuarios con rol de Admin se habilitan todas las sucursales</span>
+            </div>
+        </div>
+        <div *ngIf="!isAdminFromUser(formUsuario.value)" class="row form-group">
+            <label class="col-md-2 col-form-label no-padding-top" for="duallist">Sucursales habilitadas</label>
+            <div class="col-md-9" ng-if="isAdminFromUser(usuario)">
+                <select-suc-dual-list formControlName="sucursales"></select-suc-dual-list>
+            </div>
+        </div>
+    </ng-container>
+    <ng-template #noItems>
+        <div class="form-group row alert alert-warning">
+            Sin datos
+        </div>
+    </ng-template>
+</form>
+<ng-template #loading>
+    <app-loading></app-loading>
+</ng-template>

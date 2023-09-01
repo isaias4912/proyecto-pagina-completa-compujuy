@@ -1,0 +1,41 @@
+<div *ngIf="app$ | async as app; else loading;">
+    <ng-container *ngIf="app; else noItems">
+        <div class="row">
+            <div class="col-md-12">
+                <fields-app [app]="app" [dataForm]="dataForm"></fields-app>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-12">
+                <hr>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col-md-2">
+            </div>
+            <div class="col-md-3">
+                <button (click)="cancel()" class="btn btn-block btn-transition btn-outline-danger"><span
+                        class="fa fa-remove"></span>&nbsp;&nbsp;Cancelar
+                </button>
+            </div>
+            <div class="col-md-3">
+                <button (click)="save(1)" class="btn btn-block btn-transition btn-outline-info"><span
+                        class="fa fa-save"></span>&nbsp;&nbsp;Guardar
+                </button>
+            </div>
+            <div class="col-md-3">
+                <button (click)="save(2)" class="btn btn-block btn-transition btn-outline-primary"><span
+                        class="fa fa-save"></span>&nbsp;&nbsp;Guardar y volver
+                </button>
+            </div>
+        </div>
+    </ng-container>
+    <ng-template #noItems>
+        <div class="form-group row alert alert-warning">
+            Sin datos
+        </div>
+    </ng-template>
+</div>
+<ng-template #loading>
+    <app-loading></app-loading>
+</ng-template>

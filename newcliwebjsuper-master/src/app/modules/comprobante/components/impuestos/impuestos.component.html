@@ -1,0 +1,95 @@
+<div class="row">
+    <div [hidden]="fi?.length > 0" class="col-md-12">
+        <a (click)="addItem();" id="firstAdd" class="hand">Agregar un impuesto&nbsp;<i
+                class="green-strong fa fa-plus"></i></a>
+    </div>
+    <div class="col-md-12">
+        <table *ngIf="fi.length && fi.length > 0" class="table table-min table-striped">
+            <thead>
+                <tr>
+                    <th>Impuesto</th>
+                    <th>Porcentaje</th>
+                    <th>Subtotal</th>
+                    <th></th>
+                </tr>
+            </thead>
+            <tbody>
+                <ng-container *ngFor="let item of $any(fi).controls; let $index = index;" [formGroup]="item">
+                    <tr>
+                        <td class="center">
+                            <select id="selImpuesto{{$index}}" name="selImpuesto{{$index}}" formControlName="impuesto"
+                                (change)="changeImpuesto(item)" class="form-control form-control-sm"
+                                enter="{{'txtPorcentaje'+$index}}">
+                                <option *ngFor="let opt of impuestos" [ngValue]="opt">{{opt.descripcion}}
+                                </option>
+                            </select>
+                        </td>
+                        <td>
+                            <div class="input-group input-group-sm">
+                                <input id="txtPorcentaje{{$index}}" name="txtPorcentaje{{$index}}" type="number"
+                                    (input)="changePorcentaje(item)" formControlName="porcentaje"
+                                    class="form-control form-control-sm" enter="{{'txtSubtotal'+$index}}" />
+                                <div class="input-group-append">
+                                    <span class="blue input-group-text">%</span>
+                                </div>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="input-group input-group-sm">
+                                <div class="input-group-prepend">
+                                    <span class="blue input-group-text fa fa-dollar"></span>
+                                </div>
+                                <input id="txtSubtotal{{$index}}" name="txtSubtotal{{$index}}" type="number"
+                                    formControlName="importe" class="form-control form-control-sm"
+                                    enter="{{'subTotalProd'+$index}}" />
+                            </div>
+                        </td>
+
+                        <td class="buttons-small">
+                            <button [hidden]="!($index== (fi.controls.length-1))" id="buttonAdd{{$index}}"
+                                name="buttonAdd{{$index}}" (click)="addItem($index + 1);" type="button"
+                                class="btn-sm btn-transition btn btn-outline-success">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                            <button id="buttonRemoveBarCode{{$index}}" name="buttonRemoveBarCode{{$index}}"
+                                (click)="removeItem(item);" class="btn-sm btn-transition btn btn-outline-danger">
+                                <i class="fa fa-remove"></i>
+                            </button>
+                        </td>
+                    </tr>
+                    <tr *ngIf="fi.invalid">
+                        <td>
+                            <div class="align-top"
+                                *ngIf="dataForm?.submitted && item.controls.impuesto.errors?.required"
+                                class="text-danger">
+                                Debe ingresar un impuesto
+                            </div>
+                        </td>
+                        <td>
+                            <div class="align-top"
+                                *ngIf="dataForm?.submitted && item.controls.porcentaje.errors?.required"
+                                class="text-danger">
+                                Debe ingresar un porcentaje
+                            </div>
+                            <div class="align-top" *ngIf="dataForm?.submitted && item.controls.porcentaje.errors?.min"
+                                class="text-danger">
+                                Debe ingresar un porcentaje mayor a 0
+                            </div>
+                        </td>
+                        <td>
+                            <div class="align-top" *ngIf="dataForm?.submitted && item.controls.importe.errors?.required"
+                                class="text-danger">
+                                Debe ingresar un importe
+                            </div>
+                            <div class="align-top" *ngIf="dataForm?.submitted && item.controls.importe.errors?.min"
+                                class="text-danger">
+                                Debe ingresar un importe mayor a 0
+                            </div>
+                        </td>
+                        <td></td>
+                    </tr>
+                </ng-container>
+            </tbody>
+        </table>
+    </div>
+</div>

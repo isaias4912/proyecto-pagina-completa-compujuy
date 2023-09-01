@@ -1,0 +1,154 @@
+<div class="row">
+    <div class="col-md-12">
+        <app-panel [idCollapse]="'panelFiltro'">
+            <form id="formFilter" class="form-group-min">
+                <div class="row">
+                    <div class="col-lg-11 col-md-11 col-sm-12">
+                        <div class="row form-group">
+                            <label for="txtFiltroProd"
+                                class="col-md-1 col-form-label padding-right-left-4">Producto</label>
+                            <div class="col-md-3">
+                                <select-prod [name]="'txtProducto'" [(ngModel)]="filterPase.producto" [type]="1  ">
+                                </select-prod>
+                            </div>
+                            <label for="cmbSucursal"
+                                class="col-md-1 col-form-label padding-right-left-4">Sucursal</label>
+                            <div class="col-md-3">
+                                <select-sucursal-simple [name]="'cmbSucursal'" [(ngModel)]="filterPase.sucursal"
+                                    [enter]="'etnter'"></select-sucursal-simple>
+                            </div>
+                            <label for="cmbFiltroEstado"
+                                class="col-md-1 col-form-label padding-right-left-4">Estado</label>
+                            <div class="col-md-3">
+                                <select id="cmbFiltroEstado" name="cmbFiltroActivo" [(ngModel)]="filterPase.activo"
+                                    class="form-control form-control-sm">
+                                    <option *ngFor="let opcion of  dataOptions.filterActivo" [ngValue]="opcion.value">
+                                        {{opcion.name}}</option>
+                                </select>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-lg-1 col-md-1 col-sm-12">
+                        <div class="row form-group">
+                            <div class="btn-group btn-group-sm btn-block" role="group">
+                                <button type="button" (click)="pageChanged()"
+                                    class="btn btn-transition btn btn-outline-light">
+                                    <i class="fa fa-search green-strong"></i>
+                                </button>
+                                <button type="button" (click)="reset()" class="btn-transition btn btn-outline-light">
+                                    <i class="fa fa-trash-o blue"></i>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </form>
+        </app-panel>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-6 buttons-small">
+        <button routerLink="new" class="btn-sm btn-transition btn btn-outline-primary">
+            <i class="fa fa-plus"></i>Nuevo
+        </button>
+    </div>
+    <div class="col-md-6 float-right">
+        <div class="float-right">
+            <app-resgister [paramPagination]="paramPagination" (registerChanged)="pageChanged()">
+            </app-resgister>
+        </div>
+    </div>
+</div>
+<div *ngIf="pases$ | async as pases; else loading;">
+    <ng-container *ngIf="pases.length; else noItems">
+        <div class="row">
+            <div class="col-md-12">
+                <div class="table-responsive">
+                    <table class="table  table-striped">
+                        <thead>
+                            <tr>
+                                <th>
+                                    <app-sort [text]="'Producto'" [order]="'producto.nombreFinal'"
+                                        [paramPagination]="paramPagination" (sortChanged)="pageChanged()"></app-sort>
+                                </th>
+                                <th>
+                                    <app-sort [text]="'Fecha'" [order]="'fecha'" [paramPagination]="paramPagination"
+                                        (sortChanged)="pageChanged()"></app-sort>
+                                </th>
+                                <th>
+                                    Cantidad
+                                </th>
+                                <th>
+                                    Sucursal Origen
+                                </th>
+                                <th>
+                                    Sucursal Destino
+                                </th>
+                                <th>
+                                    <app-sort [text]="'Estado'" [order]="'estado'" [paramPagination]="paramPagination"
+                                        (sortChanged)="pageChanged()"></app-sort>
+                                </th>
+                                <th style="width: 120px;"></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let pase of pases; let i=index">
+                                <td>
+                                    <info-prod [name]="'nombreProducto'+i" [idProducto]="pase.producto.id"
+                                        [nombreProducto]="pase.producto.nombreFinal"></info-prod>
+
+                                    <!-- {{pase.producto.nombreFinal}} -->
+                                </td>
+                                <td>
+                                    {{pase.fecha}}
+                                </td>
+                                <td>
+                                    <div class="mr-1 ml-1 badge badge-pill badge-primary">
+                                        {{pase.cantidad}}
+                                    </div>
+                                </td>
+                                <td>
+                                    {{pase.sucursalOrigen.nombre}}
+                                </td>
+                                <td>
+                                    {{pase.sucursalDestino.nombre}}
+                                </td>
+                                <td>
+                                    {{pase.estado?'Aceptado':'No aceptado'}}
+                                </td>
+                                <td class="buttons-small">
+                                    <div class="float-right">
+                                        <button (click)="confirmPase(pase)" [disabled]="pase.estado"
+                                            class="btn-sm btn-transition btn btn-outline-success">
+                                            <i class="fa fa-check"></i>
+                                        </button>
+                                        <button (click)="removePase(pase)" [disabled]="pase.estado"
+                                            class="btn-sm btn-transition btn btn-outline-danger">
+                                            <i class="fa fa-remove"></i>
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        <div class="row">
+            <div class="container-fluid">
+                <ngb-pagination [(page)]="paramPagination.page" [pageSize]="paramPagination.pageSize"
+                    [collectionSize]="paramPagination.totalItems" (pageChange)="pageChanged()"
+                    [maxSize]="5" [boundaryLinks]="true" class="d-flex justify-content-center">
+                </ngb-pagination>
+            </div>
+        </div>
+    </ng-container>
+    <ng-template #noItems>
+        <div class="form-group row alert alert-warning">
+            Sin datos
+        </div>
+    </ng-template>
+</div>
+<ng-template #loading>
+    <app-loading></app-loading>
+</ng-template>

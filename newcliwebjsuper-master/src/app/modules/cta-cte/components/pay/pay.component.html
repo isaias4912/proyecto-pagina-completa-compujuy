@@ -1,0 +1,116 @@
+<div *ngIf="payments$ | async as payment; else loading;">
+    <ng-container *ngIf="payment.movimientosCtaCte.length; else noItems">
+        <form id="formPay" [formGroup]="formPay" class="form-group-min">
+            <div class="form-group margin-bottom-5">
+                <!-- <label class="label-detail col-md-3" >Total pago a registrar<span class="label-value-detail">{{dataPagosPreview.monto}}</span></label>
+        <label class="label-detail col-md-3" >Interes gral. aplicado:<span class="label-value-detail">{{dataPagosPreview.interes}}</span></label>
+        <label class="label-detail col-md-3" >Total pago con interes<span class="label-value-detail">{{dataPagosPreview.montoPaga}}</span></label> -->
+            </div>
+            <div class="form-group">
+                <table class="table table-striped table-hover margin-10 table-fixed2">
+                    <thead>
+                        <tr>
+                            <th>Cód. mto.</th>
+                            <th>Tipo</th>
+                            <th style="width: 150px;" >Fecha</th>
+                            <th class="text-right">Deuda total</th>
+                            <th class="text-right">Saldo Actual</th>
+                            <th class="text-right">Paga</th>
+                            <th class="text-right">Saldo a quedar</th>
+                            <th class="text-right">Pagado</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let d of payment.movimientosCtaCte">
+                            <td>{{d.id}}</td>
+                            <td>
+                                <div *ngIf="d.tipo==1" class="mr-1 ml-1 badge badge-pill badge-primary">
+                                    Venta
+                                </div>
+                                <div *ngIf="d.tipo==4" class="mr-1 ml-1 badge badge-pill badge-danger">
+                                    Saldo
+                                </div>
+                            </td>
+                            <td style="width: 150px;" >{{d.fecha}}</td>
+                            <td class="text-right">{{formatDecimal(d.montoTotal)}}</td>
+                            <td class="text-right">{{formatDecimal(d.saldoActual)}}</td>
+                            <td class="text-right">{{formatDecimal(d.paga)}}</td>
+                            <td class="text-right">{{formatDecimal(d.saldo)}}</td>
+                            <td class="text-right">
+                                <span *ngIf="!d.pagadoConfirm" class="red fa fa-clock-o"
+                                    title="Pendiente de pago"></span>
+                                <span *ngIf="d.pagadoConfirm" class="green-strong fa fa-check"
+                                    title="Pago confirmado"></span>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-2">
+                    <label class="col-form-label mb-0">Total</label>
+                    <input id="numTotPag" name="numTotPag" readonly="true" type="text"
+                        class="form-control form-control-sm" formControlName="montoNeto" />
+                </div>
+                <!-- <label class="col-md-1 col-form-label">Pago. min.</label>
+                <div class="col-md-2">
+                    <input id="numPagoMin" name="numPagoMin" readonly="true" type="text"
+                        class="form-control form-control-sm" formControlName="dataPago.pagoMinimo" />
+                </div> -->
+                <div class="col-md-2">
+                    <label class="col-form-label mb-0">Interes</label>
+                    <input id="numInteres" name="numInteres" readonly="true" type="number"
+                        class="form-control form-control-sm" formControlName="interes" />
+                </div>
+                <div class="col-md-2">
+                    <label class="col-form-label mb-0">Total a pagar</label>
+                    <input id="numTotal" name="numTotal" readonly="true" type="number"
+                        class="form-control form-control-sm" formControlName="montoTotal" />
+                </div>
+                <div class="col-md-2">
+                    <label class="col-form-label mb-0">Paga</label>
+                    <input id="numPaga" name="numPaga" type="number" class="form-control form-control-sm"
+                        formControlName="pagoCon" />
+                    <div *ngIf="f.pagoCon.errors?.required" class="text-danger">
+                        Campo obligatorio
+                    </div>
+                    <div *ngIf="f.pagoCon.errors?.min" class="text-danger">
+                        Debe ingresar un mayor valor
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <label class="col-form-label mb-0">Saldo</label>
+                    <input id="numSaldo" name="numSaldo" readonly="true" type="number"
+                        class="form-control form-control-sm" formControlName="saldo" />
+                </div>
+                <div class="col-md-2">
+                    <label class="col-form-label mb-0">Vuelto</label>
+                    <input id="numVuelto" name="numVuelto" readonly="true" type="number"
+                        class="form-control form-control-sm" formControlName="vuelto" />
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-12">
+                    <label class="control-label mb-0">Detalle adicional</label>
+                    <input type="text" id="txtDescripcion" name="txtDescripcion" class="form-control form-control-sm"
+                        formControlName="descripcion" enter="txtNombreSuc" maxlength="5000" />
+                </div>
+            </div>
+            <div class="row form-group">
+                <div class="col-md-12">
+                    <label class="control-label mb-0">Pagos</label>
+                    <items-pago [formasPago]="dataPago.formasPago" [dataForm]="dataForm" [asociada]="false" 
+                    (finishViewEvent)="finishLoadComponent($event)" ></items-pago>
+                </div>
+            </div>
+        </form>
+    </ng-container>
+    <ng-template #noItems>
+        <div class="form-group row alert alert-warning">
+            Sin datos
+        </div>
+    </ng-template>
+</div>
+<ng-template #loading>
+    <app-loading></app-loading>
+</ng-template>

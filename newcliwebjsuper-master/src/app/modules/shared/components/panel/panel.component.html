@@ -1,0 +1,41 @@
+<div class="card mb-2">
+    <div *ngIf="showHeader" class="card-header" [attr.id]="'heading-'+idCollapse" style="height: 2.5rem;">
+        <div class="container-fluid" style="padding-right: 0px; padding-left: 0px;">
+            <div class="row">
+                <div class="col-md-12 label-help" style="padding-left: 0px;">
+                    <span class="float-sm-left">
+                        <a *ngIf="collapse" class="btn-link float-sm-right hand ml-2" data-toggle="collapse"
+                            (click)="bandera=collapsedArea.classList.contains('show')"
+                            [attr.data-target]="'#'+idCollapse" aria-expanded="true" [attr.aria-controls]="idCollapse">
+                            <i *ngIf="iconFilter" class="fa fa-filter"></i> &nbsp;{{title}}
+                        </a>
+                        <span *ngIf="!collapse" class="label-help">{{title}}</span>
+                        <!-- <a class="btn-link float-sm-right hand ml-2" data-toggle="collapse"
+                            (click)="bandera=collapsedArea.classList.contains('show')" data-target="#collapseOne"
+                            aria-expanded="true" aria-controls="collapseOne">
+                        </a> -->
+                    </span>
+                    <i *ngIf="tooltip" title="{{tooltip}}"
+                        class="help-ns fa fa-question-circle {{name+'-help-ns'}}"></i>
+                    <a *ngIf="collapse" class="btn-link float-sm-right hand ml-2" data-toggle="collapse"
+                        (click)="bandera=collapsedArea.classList.contains('show')" [attr.data-target]="'#'+idCollapse"
+                        aria-expanded="true" [attr.aria-controls]="idCollapse">
+                        <i [hidden]="bandera" class="fa fa-chevron-up"></i>
+                        <i [hidden]="!bandera" class="fa fa-chevron-down"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div [attr.id]="idCollapse" #collapsedArea class="collapse" [ngClass]="{'show':show}"
+        [attr.aria-labelledby]="'heading-'+idCollapse">
+        <div class="card-body padding-top-bottom-8">
+            <ng-content></ng-content>
+        </div>
+    </div>
+    <div *ngIf="footer" class="card-footer">
+        <div class="container-fluid">
+            <ng-content select="app-footer"></ng-content>
+        </div>
+    </div>
+</div>

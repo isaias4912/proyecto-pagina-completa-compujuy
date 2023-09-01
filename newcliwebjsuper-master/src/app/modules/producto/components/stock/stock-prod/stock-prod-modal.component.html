@@ -1,0 +1,53 @@
+<app-modal [title]="title">
+    <div *ngIf="listStock$ | async as listStock; else loading;">
+        <ng-container *ngIf="listStock.length; else noItems">
+            <table class="table table-striped">
+                <thead>
+                    <tr>
+                        <th style="width: 18%;">Sucursal</th>
+                        <th style="width: 8%;">Stock de reposición</th>
+                        <th style="width: 8%;">Stock Mínimo</th>
+                        <th>Ubicación Simple</th>
+                        <th>Detalle</th>
+                        <th>Stock Actual</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr *ngFor="let sp of listStock">
+                        <td class="center">
+                            {{sp.sucursal.nombre}}
+                        </td>
+                        <td class="center">
+                            {{sp.puntoReposicion}}
+                        </td>
+                        <td class="center">
+                            {{sp.stockMinimo}}
+                        </td>
+                        <td class="center">
+                            {{sp.ubicacion}}
+                        </td>
+                        <td class="center">
+                            {{sp.detalle}}
+                        </td>
+                        <td class="center">
+                            <span *ngIf="sp.stock <= sp.puntoReposicion" class="font-weight-bold red">
+                                {{sp.stock}}
+                            </span>
+                            <span *ngIf="sp.stock > sp.puntoReposicion" class="font-weight-bold green-strong">
+                                {{sp.stock}}
+                            </span>
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </ng-container>
+        <ng-template #noItems>
+            <div class="form-group row alert alert-warning">
+              Sin datos para el stock
+            </div>
+        </ng-template>
+    </div>
+    <ng-template #loading>
+        <div class="spinner-border text-primary" role="status"></div>Cargando informacion...
+    </ng-template>
+</app-modal>

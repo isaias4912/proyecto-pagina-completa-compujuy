@@ -1,0 +1,86 @@
+<app-modal [title]="title" [footer]="true">
+    <form class="detail" class="form-group-min">
+        <div class="row form-group">
+            <label class="col-form-label col-md-1" for="cmbCodigo">Código</label>
+            <div class="col-md-3">
+                <select id="cmbCodigo" name="cmbCodigo" [(ngModel)]="codigo" (change)="changeCodigo()"
+                    class="form-control form-control-sm">
+                    <option *ngFor="let codigoBarra of producto.codigoBarras" [ngValue]="codigoBarra.codigo">
+                        {{codigoBarra.codigo}}</option>
+                </select>
+            </div>
+            <label class="col-form-label col-md-1" for="cmbFormat">Formato</label>
+            <div class="col-md-3">
+                <select id="cmbFormat" [(ngModel)]="format" name="cmbFormat" ng-model="format" (change)="changeType()"
+                    class="form-control form-control-sm">
+                    <option value="CODE128">CODE128 auto</option>
+                    <option value="CODE128A">CODE128 A</option>
+                    <option value="CODE128B">CODE128 B</option>
+                    <option value="CODE128C">CODE128 C</option>
+                    <option value="EAN13" selected>EAN13</option>
+                    <option value="EAN8">EAN8</option>
+                    <option value="UPC">UPC</option>
+                    <option value="CODE39">CODE39</option>
+                    <option value="ITF14">ITF14</option>
+                    <option value="ITF">ITF</option>
+                    <option value="MSI">MSI</option>
+                    <option value="MSI10">MSI10</option>
+                    <option value="MSI11">MSI11</option>
+                    <option value="MSI1010">MSI1010</option>
+                    <option value="MSI1110">MSI1110</option>
+                    <option value="pharmacode">Pharmacode</option>
+                </select>
+            </div>
+        </div>
+        <div class="row form-group">
+            <label class="col-md-1 col-form-label">Ancho</label>
+            <div class="col-md-10 slide-jsuper">
+                <!-- <span id="slideBarCodeWidth" class="ui-slider-blue"></span> -->
+                <ngx-slider [(value)]="width" (valueChange)="changeBarCode()" [options]="optionsBarCodeWidth">
+                </ngx-slider>
+            </div>
+            <label class="col-md-1 col-form-label red"><b>{{width}}</b></label>
+        </div>
+        <div class="row form-group">
+            <label class="col-md-1 col-form-label">Alto</label>
+            <div class="col-md-10  slide-jsuper">
+                <ngx-slider [(value)]="height" (valueChange)="changeBarCode()" [options]="optionsBarCodeHeigh">
+                </ngx-slider>
+
+                <!-- <span id="slideBarCodeHeight" class="ui-slider-blue"></span> -->
+            </div>
+            <label class="col-md-1 col-form-label red"><b>{{height}}</b></label>
+        </div>
+        <div class="row form-group">
+            <label class="col-md-1 col-form-label">Tamaño Fuente</label>
+            <div class="col-md-10  slide-jsuper">
+                <!-- <span id="slideBarCodeFont" class="ui-slider-blue"></span> -->
+                <ngx-slider [(value)]="fontSize" (valueChange)="changeBarCode()" [options]="optionsBarCodeFont">
+                </ngx-slider>
+            </div>
+            <label class="col-md-1 col-form-label red"><b>{{fontSize}}</b></label>
+        </div>
+        <div class="row form-group">
+            <div class="mx-auto">
+                <img id="barcode" />
+            </div>
+        </div>
+    </form>
+    <app-footer>
+        <!-- <div app-footer-in > -->
+        <div class="row" >
+            <div class="col-lg-6 col-md-4">
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <button (click)="downloadImage()" class="btn btn-block btn-transition btn-outline-dark"><span
+                        class="fa fa-download"></span>&nbsp;&nbsp;Descargar Imagen
+                </button>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-6">
+                <button (click)="cancel()" class="btn btn-block btn-transition btn-outline-danger"><span
+                        class="fa fa-remove"></span>&nbsp;&nbsp;Cancelar
+                </button>
+            </div>
+        </div>
+    </app-footer>
+</app-modal>

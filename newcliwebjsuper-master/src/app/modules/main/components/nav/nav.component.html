@@ -1,0 +1,143 @@
+<nav class="navbar navjs">
+    <a href="#" class="brand">
+        <div class="app-header__logo">
+            <div class="logo-src">
+            </div>
+        </div>
+    </a>
+    <div *ngIf="menuItems" class="menu-container">
+        <ul *ngIf="menuItems" class="mega-menu">
+            <li #allTheseThings id="liMain{{menu1.id}}" *ngFor="let menu1 of filterBy(menuItems, 'orden')"
+                [attr.data-xxx]="menu1.id" class="dropdown">
+                <div>
+                    <!-- <span id="menu{{menu1.id}}" >{{menu1.nombre}}</span> -->
+                    <a id="menu{{menu1.id}}" class="snav-link">
+                        {{menu1.nombre}}
+                    </a>
+                    <span class="fa fa-chevron-right">
+                    </span>
+                </div>
+                <ul class="menu">
+                    <li *ngFor="let menu2 of filterBy(menu1.menuItems, 'orden')" class="sub-dropdown">
+                        <div>
+                            <span>{{menu2.nombre}}</span>
+                            <span class="fa fa-chevron-right">
+                            </span>
+                        </div>
+                        <ul class="sub-menu">
+                            <ng-container *ngIf="menu2.menuItems?.length==0">
+                                <li class="sub-dropdown">
+                                    <a id="menu{{menu2.id}}" [routerLink]="[menu2.routerLink?menu2.routerLink:'']"
+                                        [attr.data-parents]="menu1.id+'-'+menu2.id">
+                                        <span>
+                                            {{menu2.nombre}}
+                                        </span>
+                                    </a>
+                                </li>
+                            </ng-container>
+                            <ng-container *ngIf="menu2.menuItems?.length>0">
+                                <li class="">
+                                    <span id="menu{{menu2.id}}"
+                                        class="text-ns text-bold menu-title">{{menu2.nombre}}</span>
+                                </li>
+                                <li *ngFor="let menu3 of menu2.menuItems">
+                                    <a id="menu{{menu3.id}}" [routerLink]="[menu3.routerLink?menu3.routerLink:'']"
+                                        [attr.data-parents]="menu1.id+'-'+menu2.id">
+                                        <span>
+                                            {{menu3.nombre}}
+                                        </span>
+                                    </a>
+                                </li>
+                            </ng-container>
+
+                        </ul>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div class="buttons">
+        <div class="btn-group">
+            <div class="ml-3 header-user-info">
+                <div class="widget-heading">
+                    {{userLogged.username}}&nbsp;
+                </div>
+                <div class="" *ngIf="userLogged.authorities?.length">
+                    {{getFormatRole(userLogged.authorities[0])}}
+                </div>
+            </div>
+            <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false" class="p-0 btn">
+                <img width="42" class="rounded-circle" src="{{userLogged.gravatar}}" alt="">
+                <i class="fa fa-angle-down ml-2 opacity-8"></i>
+            </a>
+            <div tabindex="-1" role="menu" aria-hidden="true" class="dropdown-menu dropdown-menu-right">
+                <button [routerLink]="['/usuarios/my']" type="button" tabindex="0" class="dropdown-item"
+                    title="Ver/modificar mi perfil">
+                    <i class="fa fa-user text-ns"></i>&nbsp;&nbsp;&nbsp;Perfil
+                </button>
+                <div tabindex="-1" class="dropdown-divider"></div>
+                <button (click)="logout()" type="button" tabindex="0" class="dropdown-item">
+                    <i class="fa fa-user-times text-ns"></i>&nbsp;&nbsp;Salir
+                </button>
+            </div>
+        </div>
+        <button class="menu-btn">
+            <span class="fa fa-bars text-20">
+            </span>
+        </button>
+    </div>
+</nav>
+<!-- <nav class="app-header navbar navbar-expand-md navbar-light navjs">
+    <a class="navbar-brand" href="#">
+        <div class="app-header__logo">
+            <div class="logo-src">
+            </div>
+        </div>
+    </a>
+    <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav">
+        <span class="navbar-toggler-icon"></span>
+    </button>
+    <div class="collapse navbar-collapse" id="navbarNav">
+        <div class="navbar-nav mr-auto">
+            <app-menu></app-menu>
+        </div>
+        <ul class="navbar-nav">
+            <div class="app-header-right">
+                <div class="header-btn-lg pr-0">
+                    <div class="widget-content p-0">
+                        <div class="widget-content-wrapper">
+                            <div class="widget-content-left  ml-3 header-user-info">
+                                <div class="widget-heading">
+                                    {{userLogged.username}}&nbsp;
+                                </div>
+                                <div class="widget-subheading" *ngIf="userLogged.authorities?.length">
+                                    {{getFormatRole(userLogged.authorities[0])}}
+                                </div>
+                            </div>
+                            <div class="widget-content-left">
+                                <div class="btn-group">
+                                    <a data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"
+                                        class="p-0 btn">
+                                        <img width="42" class="rounded-circle" src="{{userLogged.gravatar}}" alt="">
+                                        <i class="fa fa-angle-down ml-2 opacity-8"></i>
+                                    </a>
+                                    <div tabindex="-1" role="menu" aria-hidden="true"
+                                        class="dropdown-menu dropdown-menu-right">
+                                        <button [routerLink]="['/usuarios/my']" type="button" tabindex="0"
+                                            class="dropdown-item" title="Ver/modificar mi perfil">
+                                            <i class="fa fa-user text-ns"></i>&nbsp;&nbsp;&nbsp;Perfil
+                                        </button>
+                                        <div tabindex="-1" class="dropdown-divider"></div>
+                                        <button (click)="logout()" type="button" tabindex="0" class="dropdown-item">
+                                            <i class="fa fa-user-times text-ns"></i>&nbsp;&nbsp;Salir
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </ul>
+    </div>
+</nav> -->

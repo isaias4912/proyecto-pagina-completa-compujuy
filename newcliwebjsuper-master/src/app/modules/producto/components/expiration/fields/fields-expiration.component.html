@@ -1,0 +1,115 @@
+<form id="formExpiration" [formGroup]="formExpiration" class="form-group-min" >
+    <div class="row form-group">
+        <label class="col-form-label col-md-2" for="cmbTipo">Tipo</label>
+        <div class="col-md-3">
+            <select id="cmbTipo" name="cmbTipo" (change)="changeTipo()" class="form-control form-control-sm"
+                enter="{{f.tipo.value==1?'txtProducto':'btnSearchItemFac'}}" formControlName="tipo">
+                <option *ngFor="let tipo of [{label: 'Por producto', id: 1}, {label: 'Por factura', id: 2}]"
+                    [ngValue]="tipo.id">{{tipo.label}}
+                </option>
+            </select>
+
+        </div>
+    </div>
+    <div [hidden]="f.tipo.value == 2" class="row form-group">
+        <label class="col-form-label col-md-2">Busque el producto</label>
+        <div class="col-md-3">
+            <select-prod formControlName="producto" [name]="'txtProducto'" [type]="1" [nextFocus]="'txtCantProductos'">
+            </select-prod>
+            <span *ngIf="dataForm.submitted && formExpiration.invalid">
+                <div *ngIf="f.producto.errors?.required" class="text-danger">
+                    Campo obligatorio
+                </div>
+            </span>
+        </div>
+        <label class="col-form-label col-md-1" for="txtCantProductos"
+            title="Cantidad de productos que vencen">Cantidad</label>
+        <div class="col-md-3">
+            <input id="txtCantProductos" name="txtCantProductos" type="number" class="form-control form-control-sm"
+                formControlName="cantidadProductos" enter="fechaVencimiento" step="1" min="0.001" max="{{maxCantidad}}" />
+            <span *ngIf="dataForm.submitted && formExpiration.invalid">
+                <div *ngIf="f.cantidadProductos.errors?.required" class="text-danger">
+                    Campo obligatorio
+                </div>
+                <div *ngIf="f.cantidadProductos.errors?.min" class="text-danger">
+                    Ingrese un valor mayor
+                </div>
+                <div *ngIf="f.cantidadProductos.errors?.max" class="text-danger">
+                    Ingrese un valor menor
+                </div>
+            </span>
+        </div>
+    </div>
+    <div [hidden]="f.tipo.value == 1" class="row form-group">
+        <label class="col-form-label col-md-2" for="numItemFactura" title="Busque el item de factura">Producto</label>
+        <div class="col-md-3">
+            <select-fact-comp-prod formControlName="facturaDet" [name]="'numItemFactura'" [nextFocus]="'txtCantProductos'">
+            </select-fact-comp-prod>
+            <span *ngIf="dataForm.submitted && formExpiration.invalid">
+                <div *ngIf="f.facturaDet.errors?.required" class="text-danger">
+                    Campo obligatorio
+                </div>
+            </span>
+        </div>
+        <label class="col-form-label col-md-1" for="txtCantProductos"
+            title="Cantidad de productos que vencen">Cantidad</label>
+        <div class="col-md-3">
+            <input id="txtCantProductos" name="txtCantProductos" type="number" class="form-control form-control-sm"
+                formControlName="cantidadProductos" enter="fechaVencimiento" min="0.001" max="{{maxCantidad}}" />
+            <span *ngIf="dataForm.submitted && formExpiration.invalid">
+                <div *ngIf="f.cantidadProductos.errors?.required" class="text-danger">
+                    Campo obligatorio
+                </div>
+                <div *ngIf="f.cantidadProductos.errors?.min" class="text-danger">
+                    Ingrese un valor mayor
+                </div>
+                <div *ngIf="f.cantidadProductos.errors?.max" class="text-danger">
+                    Ingrese un valor menor
+                </div>
+            </span>
+        </div>
+    </div>
+    <div class="row form-group">
+        <label for="fechaVencimiento" class="col-form-label col-md-2">Fecha de vencimiento</label>
+        <div class="col-md-3">
+            <app-date formControlName="fechaVencimiento" [name]="'fechaVencimiento'"
+                [enter]="'txtLote'"></app-date>
+                <span *ngIf="dataForm.submitted && formExpiration.invalid">
+                    <div *ngIf="f.fechaVencimiento.errors?.required" class="text-danger">
+                        Campo obligatorio
+                    </div>
+                </span>
+        </div>
+        <label class="col-form-label col-md-1" for="txtLote">Lote</label>
+        <div class="col-md-3">
+            <input id="txtLote" name="txtLote" type="text" class="form-control form-control-sm" formControlName="lote"
+                enter="cmbAlerta" maxlength="250" />
+        </div>
+    </div>
+    <div class="row form-group">
+        <label class="col-form-label col-md-2" for="cmbAlerta">Activar alerta</label>
+        <div class="col-md-3">
+            <select id="cmbAlerta" name="cmbAlerta" formControlName="alertaVencimientos"
+                class="form-control form-control-sm"
+                enter="{{f.alertaVencimientos.value?'txtDiasAlerta':'txtDescripcion'}}">
+                <option *ngFor="let tipo of [{label: 'NO', value: false}, {label: 'SI', value: true}]"
+                    [ngValue]="tipo.value">{{tipo.label}}
+                </option>
+            </select>
+        </div>
+        <label *ngIf="f.alertaVencimientos.value" class="col-form-label col-md-1" for="txtDiasAlerta"
+            title="Días anteriores a la fecha de venc., en la que se activara la alerta">Dias ant. a la fecha de
+            venc.</label>
+        <div *ngIf="f.alertaVencimientos.value" class="col-md-3">
+            <input id="txtDiasAlerta" name="txtDiasAlerta" type="number" class="form-control form-control-sm"
+                formControlName="diasAlerta" enter="txtDescripcion" digits="true" min="1" max="100" />
+        </div>
+    </div>
+    <div class="row form-group">
+        <label class="col-form-label col-md-2" for="txtDescripcion">Descripcion</label>
+        <div class="col-md-9">
+            <input id="txtDescripcion" name="txtDescripcion" type="text" class="form-control form-control-sm"
+                formControlName="descripcion" enter="{{lastFocus}}" maxlength="500" />
+        </div>
+    </div>
+</form>

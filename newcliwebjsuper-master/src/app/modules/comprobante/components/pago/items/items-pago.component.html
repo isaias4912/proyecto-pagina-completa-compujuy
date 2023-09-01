@@ -1,0 +1,314 @@
+<div class="table-responsive">
+ss
+    <table *ngIf="fi.length && fi.length > 0" class="table table-min table-striped margin-bottom-5">
+        <thead>
+            <tr>
+                <th class="text-center" style="width: 200px;">Tipo</th>
+                <th class="text-center">Detalle del pago</th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            <ng-container *ngFor="let item of $any(fi).controls; let $index = index;" [formGroup]="item">
+                <tr>
+                    <td>
+                        <div class="form-row">
+                            <div class="col-md-12">
+                                <div class="position-relative form-group">
+                                    <label class="label-table-sm" for="selTipoPago{{$index}}">Tipo</label>
+                                    <div class="input-group input-group-sm item-pago-tipo">
+                                        <div class="input-group-prepend">
+                                            <span *ngIf="item.get('formaPago').value.descripcion=='EFECTIVO'"
+                                                class="text-dark input-group-text fa fa-money"></span>
+                                            <span *ngIf="item.get('formaPago').value.descripcion=='TARJETA DE CREDITO'"
+                                                class="text-dark input-group-text fa fa-credit-card"></span>
+                                            <span *ngIf="item.get('formaPago').value.descripcion=='TARJETA DE DEBITO'"
+                                                class="text-dark input-group-text fa fa-credit-card-alt"></span>
+                                            <span *ngIf="item.get('formaPago').value.descripcion=='CUENTA CORRIENTE'"
+                                                class="text-dark input-group-text fa fa-calculator"></span>
+                                        </div>
+                                        <select id="selTipoPago{{$index}}" name="selTipoPago{{$index}}"
+                                            formControlName="formaPago" (change)="changeValueTipo(item)"
+                                            class="form-control form-control-sm" enter="{{'monto'+$index}}">
+                                            <option *ngFor="let opt of formasPago" [ngValue]="opt">{{opt.descripcion}}
+                                            </option>
+                                        </select>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+
+                    <td>
+                        <!-- efectivo -->
+                        <div *ngIf="item.get('formaPago').value.descripcion=='EFECTIVO'" class="form-row item-pago">
+                            <div class="col-md-2">
+                                <div class="position-relative form-group">
+                                    <label for="monto{{$index}}" class="label-table-sm">Monto</label>
+                                    <div class="input-group input-group-sm item-monto">
+                                        <div class="input-group-prepend">
+                                            <span class="blue input-group-text fa fa-dollar"></span>
+                                        </div>
+                                        <input id="monto{{$index}}" name="monto{{$index}}" type="number"
+                                            formControlName="monto" (input)="changeValuePago()"
+                                            [readonly]="item.get('asociadaId').value!=null"
+                                            class="form-control form-control-sm" enter="{{'descripcion'+$index}}" />
+                                    </div>
+                                </div>
+                            </div>
+                            <ng-container *ngIf="asociada">
+                                <div class="col-md-5">
+                                    <div class="position-relative form-group">
+                                        <label for="asociadaId{{$index}}" class="label-table-sm">Asociación</label>
+                                        <select-trans formControlName="$$asociada" [showList]="true"
+                                            [name]="'asociadaId'+$index"></select-trans>
+                                    </div>
+                                </div>
+                            </ng-container>
+                            <div [ngClass]="{'col-md-10':!asociada, 'col-md-5':asociada }">
+                                <div class="position-relative form-group">
+                                    <label for="exampleState" class="label-table-sm">Descripción</label>
+                                    <input id="descripcion{{$index}}" name="descripcion{{$index}}" type="text"
+                                        formControlName="descripcion" class="form-control form-control-sm"
+                                        enter="{{'buttonAddPago'+$index}}" />
+                                </div>
+                            </div>
+                        </div>
+                        <!-- efectivo -->
+                        <div *ngIf="item.get('formaPago').value.descripcion=='CUENTA CORRIENTE'"
+                            class="form-row item-pago">
+                            <div class="col-md-2">
+                                <div class="position-relative form-group">
+                                    <label for="monto{{$index}}" class="label-table-sm">Monto</label>
+                                    <div class="input-group input-group-sm item-monto">
+                                        <div class="input-group-prepend">
+                                            <span class="blue input-group-text fa fa-dollar"></span>
+                                        </div>
+                                        <input id="monto{{$index}}" name="monto{{$index}}" type="number"
+                                            formControlName="monto" (input)="changeValuePago()"
+                                            [readonly]="item.get('asociadaId').value!=null"
+                                            class="form-control form-control-sm" enter="{{'descripcion'+$index}}" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-10">
+                                <div class="position-relative form-group">
+                                    <label for="exampleState" class="label-table-sm">Descripción</label>
+                                    <input id="descripcion{{$index}}" name="descripcion{{$index}}" type="text"
+                                        formControlName="descripcion" class="form-control form-control-sm"
+                                        enter="{{'buttonAddPago'+$index}}" />
+                                </div>
+                            </div>
+                        </div>
+                        <!-- tarjeta credito -->
+                        <div *ngIf="item.get('formaPago').value.descripcion=='TARJETA DE CREDITO'"
+                            class="form-row item-pago">
+                            <div class="col-md-2">
+                                <div class="position-relative form-group">
+                                    <label for="monto{{$index}}" class="label-table-sm">Monto</label>
+                                    <div class="input-group input-group-sm item-monto">
+                                        <div class="input-group-prepend">
+                                            <span class="blue input-group-text fa fa-dollar"></span>
+                                        </div>
+                                        <input id="monto{{$index}}" name="monto{{$index}}" type="number"
+                                            formControlName="monto" (input)="changeValuePago()"
+                                            class="form-control form-control-sm" enter="{{'tarjetaCred'+$index}}" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="position-relative form-group">
+                                    <label for="tarjetaCred{{$index}}" class="label-table-sm">Tarjeta</label>
+                                    <select id="tarjetaCred{{$index}}" name="tarjetaCred{{$index}}"
+                                        formControlName="tarjeta" class="form-control form-control-sm"
+                                        enter="{{'numero'+$index}}">
+                                        <option *ngFor="let opt of dataOptions.tarjetasCred" [ngValue]="opt">{{opt}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="position-relative form-group">
+                                    <label for="numero{{$index}}" class="label-table-sm">Número de trans.</label>
+                                    <input id="numero{{$index}}" name="numero{{$index}}" type="number"
+                                        formControlName="numero" class="form-control form-control-sm"
+                                        enter="{{'descripcion'+$index}}" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="position-relative form-group">
+                                    <label for="exampleState" class="label-table-sm">Descripción</label>
+                                    <input id="descripcion{{$index}}" name="descripcion{{$index}}" type="text"
+                                        formControlName="descripcion" class="form-control form-control-sm"
+                                        enter="{{'buttonAddPago'+$index}}" />
+                                </div>
+                            </div>
+                        </div>
+                        <!-- tarjeta debito -->
+                        <div *ngIf="item.get('formaPago').value.descripcion=='TARJETA DE DEBITO'"
+                            class="form-row item-pago">
+                            <div class="col-md-2">
+                                <div class="position-relative form-group">
+                                    <label for="monto{{$index}}" class="label-table-sm">Monto</label>
+                                    <div class="input-group input-group-sm item-monto">
+                                        <div class="input-group-prepend">
+                                            <span class="blue input-group-text fa fa-dollar"></span>
+                                        </div>
+                                        <input id="monto{{$index}}" name="monto{{$index}}" type="number"
+                                            formControlName="monto" (input)="changeValuePago()"
+                                            class="form-control form-control-sm" enter="{{'tarjetaCred'+$index}}" />
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="position-relative form-group">
+                                    <label for="tarjetaCred{{$index}}" class="label-table-sm">Tarjeta</label>
+                                    <select id="tarjetaCred{{$index}}" name="tarjetaCred{{$index}}"
+                                        formControlName="tarjeta" class="form-control form-control-sm"
+                                        enter="{{'numero'+$index}}">
+                                        <option *ngFor="let opt of dataOptions.tarjetasDeb" [ngValue]="opt">{{opt}}
+                                        </option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="position-relative form-group">
+                                    <label for="numero{{$index}}" class="label-table-sm">Número de trans.</label>
+                                    <input id="numero{{$index}}" name="numero{{$index}}" type="number"
+                                        formControlName="numero" class="form-control form-control-sm"
+                                        enter="{{'descripcion'+$index}}" />
+                                </div>
+                            </div>
+                            <div class="col-md-4">
+                                <div class="position-relative form-group">
+                                    <label for="exampleState" class="label-table-sm">Descripción</label>
+                                    <input id="descripcion{{$index}}" name="descripcion{{$index}}" type="text"
+                                        formControlName="descripcion" class="form-control form-control-sm"
+                                        enter="{{'buttonAddPago'+$index}}" />
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="buttons-small">
+                        <div class="float-right">
+                            <button [hidden]="!($index== (fi.controls.length-1))  || dataPago.saldo <= 0"
+                                id="buttonAddPago{{$index}}" name="buttonAddPago{{$index}}"
+                                (click)="addItem($index + 1);" type="button"
+                                class="btn-sm btn-transition btn btn-outline-success">
+                                <i class="fa fa-plus"></i>
+                            </button>
+                            <button [hidden]="$index== 0 && ($index== (fi.controls.length-1))"
+                                id="buttonRemovePago{{$index}}" name="buttonRemovePago{{$index}}"
+                                (click)="removeItem(item);" type="button"
+                                class="btn-sm btn-transition btn btn-outline-danger">
+                                <i class="fa fa-remove"></i>
+                            </button>
+                        </div>
+                    </td>
+                </tr>
+                <tr *ngIf="fi.invalid && item.get('formaPago').value.descripcion=='EFECTIVO'">
+                    <td>
+                        <div class="align-top" *ngIf="dataForm?.submitted && item.controls.formaPago.errors?.required"
+                            class="text-danger">
+                            Debe ingresar un tipo de pago
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-row">
+                            <div class="col-md-2">
+                                <div class="position-relative form-group">
+                                    <div class="align-top"
+                                        *ngIf="dataForm?.submitted && item.controls.monto.errors?.required"
+                                        class="text-danger">
+                                        Debe ingresar un monto
+                                    </div>
+                                    <div class="align-top"
+                                        *ngIf="dataForm?.submitted && item.controls.monto.errors?.min"
+                                        class="text-danger">
+                                        Debe ingresar un monto mayor
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr
+                    *ngIf="fi.invalid && item.get('formaPago').value.descripcion=='TARJETA DE CREDITO' || fi.invalid && item.get('formaPago').value.descripcion=='TARJETA DE DEBITO'">
+                    <td>
+                        <div class="align-top" *ngIf="dataForm?.submitted && item.controls.formaPago.errors?.required"
+                            class="text-danger">
+                            Debe ingresar un tipo de pago
+                        </div>
+                    </td>
+                    <td>
+                        <div class="form-row">
+                            <div class="col-md-2">
+                                <div class="position-relative form-group">
+                                    <div class="align-top"
+                                        *ngIf="dataForm?.submitted && item.controls.monto.errors?.required"
+                                        class="text-danger">
+                                        Debe ingresar un monto
+                                    </div>
+                                    <div class="align-top"
+                                        *ngIf="dataForm?.submitted && item.controls.monto.errors?.min"
+                                        class="text-danger">
+                                        Debe ingresar un monto mayor
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="position-relative form-group">
+                                    <div class="align-top"
+                                        *ngIf="dataForm?.submitted && item.controls.tarjeta.errors?.required"
+                                        class="text-danger">
+                                        Debe ingresar una tarjeta
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="position-relative form-group">
+                                    <div class="align-top"
+                                        *ngIf="dataForm?.submitted && item.controls.numero.errors?.required"
+                                        class="text-danger">
+                                        Debe ingresar un número de trans.
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                    <td></td>
+                </tr>
+                <tr *ngIf="formItems.invalid && dataForm.submitted">
+                    <td *ngIf="item.get('formaPago').value.descripcion=='EFECTIVO'" colspan="4" class="text-center">
+                        <div *ngIf="dataForm.submitted &&  formItems.errors?.pagoMenor" class="text-danger">
+                            La suma de los pagos debe ser igual o mayor al total
+                        </div>
+                    </td>
+                    <td *ngIf="item.get('formaPago').value.descripcion=='TARJETA DE CREDITO'" colspan="5"
+                        class="text-center">
+                        <div *ngIf="dataForm.submitted &&  formItems.errors?.pagoMenor" class="text-danger">
+                            La suma de los pagos debe ser igual o mayor al total
+                        </div>
+                    </td>
+                    <td *ngIf="item.get('formaPago').value.descripcion=='TARJETA DE DEBITO'" colspan="5"
+                        class="text-center">
+                        <div *ngIf="dataForm.submitted &&  formItems.errors?.pagoMenor" class="text-danger">
+                            La suma de los pagos debe ser igual o mayor al total
+                        </div>
+                    </td>
+                </tr>
+            </ng-container>
+        </tbody>
+        <tfoot>
+            <tr *ngIf="dataPago.pago > dataPago.total">
+                <td colspan="4">
+                    <div class="text-warning">
+                        El total de los pagos es mayor al total del comprobantes
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>
+<app-size-detector></app-size-detector>

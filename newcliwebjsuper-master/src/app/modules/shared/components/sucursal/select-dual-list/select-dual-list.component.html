@@ -1,0 +1,3 @@
+<select multiple="multiple" size="10" id="selectDual" name="selectDual" class="">
+    <option *ngFor="let sucursal of sucursales" [ngValue]="sucursal.id" id="option_{{sucursal.id}}"  >{{sucursal.nombre}}</option>
+</select>

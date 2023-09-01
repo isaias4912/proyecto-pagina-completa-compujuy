@@ -1,0 +1,58 @@
+<form id="formProdPadre" [formGroup]="formProdPadre" class="form-group-min">
+    <div class="row form-group">
+        <label class="col-form-label col-md-2" for="txtNombreProdPadre">Nombre</label>
+        <div class="col-md-4">
+            <input id="txtNombreProdPadre" name="txtNombreProdPadre" class="form-control form-control-sm" type="text"
+                formControlName="nombre" enter="txtNombreCortoProdPadre" />
+            <span *ngIf="dataForm.submitted && formProdPadre.invalid">
+                <div *ngIf="f.nombre.errors?.required" class="text-danger">
+                    Campo obligatorio
+                </div>
+                <div *ngIf="f.nombre.errors?.maxlength" class="text-danger">
+                    Campo demasiado largo
+                </div>
+            </span>
+        </div>
+        <label class="col-form-label col-md-2" for="txtNombreCortoProdPadre">Nombre Corto</label>
+        <div class="col-md-3">
+            <input type="text" id="txtNombreCortoProdPadre" class=" form-control form-control-sm"
+                formControlName="nombreCorto" name="txtNombreCortoProdPadre" required maxlength="20" minlength="2"
+                enter="txtFamiliaProdPadre" />
+            <div *ngIf="dataForm.submitted && formProdPadre.invalid">
+                <div *ngIf="f.nombreCorto.errors?.required" class="text-danger">
+                    Campo obligatorio
+                </div>
+                <div *ngIf="f.nombreCorto.errors?.maxlength" class="text-danger">
+                    Campo demasiado largo
+                </div>
+                <div *ngIf="f.nombreCorto.errors?.minlength" class="text-danger">
+                    Campo demasiado corto
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row form-group">
+        <label class="col-form-label col-md-2" for="txtFamiliaProdPadre">Familia</label>
+        <div class="col-md-4">
+            <select-family formControlName="familia" [name]="'txtFamiliaProd'" [multiple]="false">
+            </select-family>
+            <div *ngIf="dataForm.submitted && formProdPadre.invalid">
+                <div *ngIf="f.familia.errors?.required" class="text-danger">
+                    Campo obligatorio
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row form-group">
+        <label class="col-form-label col-md-2">Descripción</label>
+        <div class="col-md-9">
+            <!-- <ckeditor [editor]="Editor" formControlName="detalle"></ckeditor> -->
+            <textarea rows="3" formControlName="detalle" class=" form-control form-control-sm"></textarea>
+            <div *ngIf="dataForm.submitted && formProdPadre.invalid">
+                <div *ngIf="f.detalle.errors?.maxlength" class="text-danger">
+                    Campo demasiado largo
+                </div>
+            </div>
+        </div>
+    </div>
+</form>

@@ -1,0 +1,28 @@
+<app-modal [title]="title" [footer]="true" (eventCancel)="cancel()">
+    <detail-cbte #dv [tipoCbte]="TipoCbte.CBTE_PRESUPUESTO" [idEntity]="idEntity" [data]="data"></detail-cbte>
+    <!-- <detail-cbte #dv [data]="data"></detail-cbte> -->
+    <app-footer>
+        <div class="row">
+            <div class="col-lg-3 col-md-4 col-sm-12">
+                <button (click)="sendEmailCbte(dv.getCbte())" class="btn btn-block btn-transition btn-outline-info"><span
+                        class="fa fa-envelope"></span>&nbsp;&nbsp;Enviar por email
+                </button>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-12">
+                <div class="mb-2 mr-2 btn-group dropup d-flex">
+                    <button (click)="printCbte('A4')" class="btn btn-block btn-outline-alternate">Imprimir A4</button>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-12">
+                <div class="mb-2 mr-2 btn-group dropup d-flex">
+                    <button (click)="donwloadCbte()" class="btn btn-block btn-outline-alternate">Descargar PDF A4</button>
+                </div>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-12">
+                <button (click)="cancel()" id="btnCerrarDetailVen" name="btnCerrarDetailVen" class="btn btn-block btn-transition btn-outline-danger"><span
+                        class="fa fa-remove"></span>&nbsp;&nbsp;Cerrar
+                </button>
+            </div>
+        </div>
+    </app-footer>
+</app-modal>

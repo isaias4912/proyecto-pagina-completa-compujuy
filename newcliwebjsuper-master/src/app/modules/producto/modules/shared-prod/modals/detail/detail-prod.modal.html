@@ -1,0 +1,22 @@
+<app-modal [title]="title" [footer]="true" (eventCancel)="cancel()">
+    <detail-product #dp [idEntity]="idEntity" ></detail-product>
+    <app-footer>
+        <div class="row">
+            <div class="col-lg-3">
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-12">
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-12">
+                <button (click)="printDetail(dp.getProducto())" class="btn btn-block btn-transition btn-outline-alternate"><span
+                        class="fa fa-file-pdf-o"></span>&nbsp;&nbsp;Descargar PDF
+                </button>
+            </div>
+            <div class="col-lg-3 col-md-4 col-sm-2">
+                <button (click)="cancel()" id="btnCerrarDetailVen" name="btnCerrarDetailVen"
+                    class="btn btn-block btn-transition btn-outline-danger"><span
+                        class="fa fa-remove"></span>&nbsp;&nbsp;Cerrar
+                </button>
+            </div>
+        </div>
+    </app-footer>
+</app-modal>

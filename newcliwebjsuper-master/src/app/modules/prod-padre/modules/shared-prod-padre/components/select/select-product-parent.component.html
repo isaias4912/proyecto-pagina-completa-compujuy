@@ -1,0 +1,9 @@
+<div class="input-group input-group-sm">
+    <select id="{{name}}" class="form-control form-control-sm" name="{{name}}">
+    </select>
+    <a (click)="showSearchProdPadre()" class="input-group-append hand" title="Ver listado de productos padre y seleccionar">
+        <span class="input-group-text fa fa-list green-strong">
+        </span>
+    </a>
+</div>
+<a [hidden]="true" #buttonClickSelect2 (click)="selectValueSelect()"></a>
